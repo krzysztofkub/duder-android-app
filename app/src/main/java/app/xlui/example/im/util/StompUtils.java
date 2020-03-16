@@ -2,15 +2,19 @@ package app.xlui.example.im.util;
 
 import android.util.Log;
 
-import app.xlui.example.im.conf.Const;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import ua.naiksoftware.stomp.StompClient;
 
-import static app.xlui.example.im.conf.Const.TAG;
+import static app.xlui.example.im.util.Const.TAG;
 
 public class StompUtils {
-    @SuppressWarnings({"ResultOfMethodCallIgnored", "CheckResult"})
-    public static void lifecycle(StompClient stompClient) {
-        stompClient.lifecycle().subscribe(lifecycleEvent -> {
+    public static Disposable lifecycle(StompClient stompClient) {
+        return stompClient.lifecycle()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(lifecycleEvent -> {
             switch (lifecycleEvent.getType()) {
                 case OPENED:
                     Log.d(TAG, "Stomp connection opened");

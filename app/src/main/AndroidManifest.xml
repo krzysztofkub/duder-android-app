@@ -11,13 +11,17 @@
         android:supportsRtl="true"
         android:usesCleartextTraffic="true"
         android:theme="@style/AppTheme">
-        <activity android:name="app.xlui.example.im.activities.BroadcastActivity">
+        <activity android:name="app.xlui.example.im.activities.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:windowSoftInputMode="adjustPan"
+            android:name="app.xlui.example.im.activities.ChatActivity">
+        </activity>
+
     </application>
 
 </manifest>
