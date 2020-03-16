@@ -31,10 +31,10 @@
     </LinearLayout>
 
     <Button
-        android:id="@+id/send"
+        android:id="@+id/login"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/send" />
+        android:text="@string/login" />
 
     <TextView
         android:id="@+id/show"
