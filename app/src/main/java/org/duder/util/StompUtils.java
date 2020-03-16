@@ -1,4 +1,4 @@
-package app.xlui.example.im.util;
+package org.duder.util;
 
 import android.util.Log;
 
@@ -7,7 +7,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import ua.naiksoftware.stomp.StompClient;
 
-import static app.xlui.example.im.util.Const.TAG;
+import static org.duder.util.Const.TAG;
 
 public class StompUtils {
     public static Disposable lifecycle(StompClient stompClient) {

@@ -1,4 +1,4 @@
-package app.xlui.example.im.model;
+package org.duder.model;
 
 public class ChatMessage {
     private MessageType type;

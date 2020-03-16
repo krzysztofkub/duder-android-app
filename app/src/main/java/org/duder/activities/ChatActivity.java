@@ -1,8 +1,6 @@
-package app.xlui.example.im.activities;
+package org.duder.activities;
 
-import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
@@ -11,14 +9,14 @@ import android.widget.EditText;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
-
-import org.json.JSONArray;
-import org.json.JSONException;
+import org.duder.model.ChatMessage;
+import org.duder.util.Const;
+import org.duder.util.StompUtils;
+import org.duder.websocket.WebsocketConnector;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -27,10 +25,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import app.xlui.example.im.R;
-import app.xlui.example.im.util.Const;
-import app.xlui.example.im.model.ChatMessage;
-import app.xlui.example.im.util.StompUtils;
-import app.xlui.example.im.websocket.WebsocketConnector;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;

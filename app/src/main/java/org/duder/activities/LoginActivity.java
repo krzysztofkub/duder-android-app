@@ -1,4 +1,4 @@
-package app.xlui.example.im.activities;
+package org.duder.activities;
 
 import android.content.Intent;
 import android.os.Bundle;

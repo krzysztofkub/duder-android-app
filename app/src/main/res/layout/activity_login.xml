@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:gravity="center_horizontal|top"
     android:orientation="vertical"
-    tools:context="app.xlui.example.im.activities.LoginActivity">
+    tools:context="org.duder.activities.LoginActivity">
 
     <TextView
         android:layout_width="wrap_content"

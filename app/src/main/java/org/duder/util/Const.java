@@ -1,4 +1,4 @@
-package app.xlui.example.im.util;
+package org.duder.util;
 
 public class Const {
 	public static final String TAG = "duder";
