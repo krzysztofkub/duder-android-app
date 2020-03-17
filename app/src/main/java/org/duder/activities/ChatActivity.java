@@ -2,12 +2,14 @@ package org.duder.activities;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -16,6 +18,7 @@ import com.google.gson.reflect.TypeToken;
 import org.duder.model.ChatMessage;
 import org.duder.util.Const;
 import org.duder.util.StompUtils;
+import org.duder.util.messages.ChatMessageRecyclerViewAdapter;
 import org.duder.websocket.WebsocketConnector;
 
 import java.io.IOException;
@@ -38,35 +41,51 @@ import ua.naiksoftware.stomp.dto.StompHeader;
 import ua.naiksoftware.stomp.dto.StompMessage;
 
 public class ChatActivity extends AppCompatActivity {
+
     private String username;
-    private EditText mMessage;
-    private TextView mTextView;
-    private ScrollView mScrollView;
-    private Button mSend;
-    private StompClient stompClient;
-    private OkHttpClient okHttpClient = new OkHttpClient();
-    private Gson gson = new GsonBuilder().create();
-    private CompositeDisposable compositeDisposable;
+
+    // region View Controls
+    private TextView     tvChatTitle;
+    private RecyclerView rvChatMessages;
+    private EditText     etChatMessage;
+    private Button       btnChatSend;
+    // endregion
+
+    private ChatMessageRecyclerViewAdapter msgAdapter;
+    private StompClient                    stompClient;
+    private OkHttpClient                   okHttpClient = new OkHttpClient();
+    private Gson                           gson         = new GsonBuilder().create();
+    private CompositeDisposable            compositeDisposable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
-
         initialize(this.getIntent().getExtras());
+
         stompClient = WebsocketConnector.getWebsocketConnection(this);
         resetSubscriptions();
         printChatMessagesHistory();
         subscribeToWebsocket();
-        mSend.setOnClickListener(v -> sendMessage());
+
+        btnChatSend.setOnClickListener(v -> sendMessage());
     }
 
     private void initialize(Bundle bundle) {
         username = (String) bundle.get("username");
-        mTextView = findViewById(R.id.show);
-        mScrollView = findViewById(R.id.scrollView);
-        mMessage = findViewById(R.id.messageInput);
-        mSend = findViewById(R.id.send);
+        tvChatTitle = findViewById(R.id.tvChatTitle);
+        rvChatMessages = findViewById(R.id.rvChatMessages);
+        etChatMessage = findViewById(R.id.etChatMessage);
+        btnChatSend = findViewById(R.id.btnChatSend);
+
+        tvChatTitle.setText("think of something");
+        Toast.makeText(getApplicationContext(), "Joined as " + username, Toast.LENGTH_SHORT).show();
+
+        msgAdapter = new ChatMessageRecyclerViewAdapter(this, username);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        rvChatMessages.setLayoutManager(layoutManager);
+        rvChatMessages.setAdapter(msgAdapter);
     }
 
     private void subscribeToWebsocket() {
@@ -77,8 +96,8 @@ public class ChatActivity extends AppCompatActivity {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(topicMessage -> {
                     Log.d(Const.TAG, "Received " + topicMessage.getPayload());
-                    appendNewMessage(gson.fromJson(topicMessage.getPayload(), ChatMessage.class));
-
+                    msgAdapter.addMessage(gson.fromJson(topicMessage.getPayload(), ChatMessage.class));
+                    rvChatMessages.scrollToPosition(msgAdapter.getItemCount() - 1);
                 });
         compositeDisposable.add(dispTopic);
         stompClient.connect();
@@ -103,23 +122,26 @@ public class ChatActivity extends AppCompatActivity {
 
     private void appendNewMessage(ChatMessage chatMessage) {
         String textToAppend = null;
-        if (chatMessage.getType() == ChatMessage.MessageType.CHAT) {
-            textToAppend = chatMessage.getSender() + " : " + chatMessage.getContent();
-        } else if (chatMessage.getType() == ChatMessage.MessageType.JOIN) {
-            textToAppend = chatMessage.getSender() + " joined channel";
-        } else if (chatMessage.getType() == ChatMessage.MessageType.LEAVE) {
-            textToAppend = chatMessage.getSender() + " left channel";
-        }
 
-        if (textToAppend != null) {
-            textToAppend = textToAppend + " \n";
-            mTextView.append(textToAppend);
-            mScrollView.fullScroll(ScrollView.FOCUS_DOWN);
+        // KU TWOJEJ PAMIECI NIE WYWALAM TEGO
+        // Panie, co pan tu z if-ami wjechau, switchujemy enumy bo przeciez to az oko boli jak sie
+        // na tako ifologie paczy
+        switch (chatMessage.getType()) {
+            case CHAT:
+                textToAppend = chatMessage.getSender() + " : " + chatMessage.getContent();
+                break;
+            case JOIN:
+                textToAppend = chatMessage.getSender() + " joined channel";
+                break;
+            case LEAVE:
+                textToAppend = chatMessage.getSender() + " left channel";
+                break;
         }
     }
 
     private void printChatMessagesHistory() {
         List<ChatMessage> chatMessages = new ArrayList<>();
+
         //Android doesn't allow for rest api calls on main thread
         Thread thread = new Thread(() -> {
             Request request = new Request.Builder()
@@ -134,6 +156,7 @@ public class ChatActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         });
+
         thread.start();
         try {
             thread.join();
@@ -141,11 +164,12 @@ public class ChatActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        chatMessages.forEach(this::appendNewMessage);
+        chatMessages.forEach(msgAdapter::addMessage);
+        rvChatMessages.scrollToPosition(msgAdapter.getItemCount() - 1);
     }
 
     private void sendMessage() {
-        String message = mMessage.getText().toString();
+        String message = etChatMessage.getText().toString();
         if (TextUtils.isEmpty(message)) {
             return;
         }
@@ -155,7 +179,7 @@ public class ChatActivity extends AppCompatActivity {
         chatMessage.setSender(username);
         chatMessage.setContent(message);
         stompClient.send(Const.WS_SEND_MESSAGE_ENDPOINT, gson.toJson(chatMessage)).subscribe();
-        mMessage.setText("");
+        etChatMessage.setText("");
     }
 
     private void resetSubscriptions() {
@@ -168,7 +192,8 @@ public class ChatActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         stompClient.disconnect();
-        if (compositeDisposable != null) compositeDisposable.dispose();
+        if (compositeDisposable != null)
+            compositeDisposable.dispose();
         super.onDestroy();
     }
 }

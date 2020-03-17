@@ -2,13 +2,32 @@ package org.duder.model;
 
 public class ChatMessage {
     private MessageType type;
-    private String content;
-    private String sender;
+    private String      content;
+    private String      sender;
 
     public enum MessageType {
-        CHAT,
-        JOIN,
-        LEAVE
+        CHAT(0),
+        JOIN(1),
+        LEAVE(2);
+
+        private int intValue;
+
+        MessageType(int intValue) {
+            this.intValue = intValue;
+        }
+
+        public int getIntValue() {
+            return intValue;
+        }
+
+        public static MessageType of(int intValue) {
+            for (MessageType mt : MessageType.values()) {
+                if (mt.getIntValue() == intValue) {
+                    return mt;
+                }
+            }
+            throw new IllegalArgumentException("MessageType for " + intValue + " not found");
+        }
     }
 
     public MessageType getType() {
