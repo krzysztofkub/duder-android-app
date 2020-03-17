@@ -5,17 +5,17 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:gravity="right"
-    android:padding="10dp">
+    android:padding="5dp">
 
     <TextView
-        android:paddingHorizontal="30dp"
-        android:paddingVertical="10dp"
         android:id="@+id/tvContent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="20sp"
+        android:paddingHorizontal="30dp"
+        android:paddingVertical="10dp"
         android:text="sample message"
         android:textColor="#fff"
-        android:background="#3333ff" />
+        android:background="@color/selfMessageBackground"
+        android:textSize="15sp" />
 
 </LinearLayout>
