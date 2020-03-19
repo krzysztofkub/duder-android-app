@@ -120,25 +120,6 @@ public class ChatActivity extends AppCompatActivity {
         ).subscribe();
     }
 
-    private void appendNewMessage(ChatMessage chatMessage) {
-        String textToAppend = null;
-
-        // KU TWOJEJ PAMIECI NIE WYWALAM TEGO
-        // Panie, co pan tu z if-ami wjechau, switchujemy enumy bo przeciez to az oko boli jak sie
-        // na tako ifologie paczy
-        switch (chatMessage.getType()) {
-            case CHAT:
-                textToAppend = chatMessage.getSender() + " : " + chatMessage.getContent();
-                break;
-            case JOIN:
-                textToAppend = chatMessage.getSender() + " joined channel";
-                break;
-            case LEAVE:
-                textToAppend = chatMessage.getSender() + " left channel";
-                break;
-        }
-    }
-
     private void printChatMessagesHistory() {
         List<ChatMessage> chatMessages = new ArrayList<>();
 
