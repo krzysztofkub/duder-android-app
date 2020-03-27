@@ -7,10 +7,9 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import org.duder.R;
 import org.duder.model.ChatMessage;
 import org.duder.model.ChatMessage.MessageType;
-
-import app.xlui.example.im.R;
 
 public class ChatMessageViewHolder extends AbstractChatMessageViewHolder {
     TextView     tvContent;

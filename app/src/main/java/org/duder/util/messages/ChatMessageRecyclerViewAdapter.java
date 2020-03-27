@@ -7,12 +7,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.duder.R;
 import org.duder.model.ChatMessage;
 
 import java.util.LinkedList;
 import java.util.List;
 
-import app.xlui.example.im.R;
 
 public class ChatMessageRecyclerViewAdapter extends RecyclerView.Adapter<AbstractChatMessageViewHolder> {
 

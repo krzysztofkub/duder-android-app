@@ -4,9 +4,8 @@ import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.TextView;
 
+import org.duder.R;
 import org.duder.model.ChatMessage;
-
-import app.xlui.example.im.R;
 
 import static org.duder.model.ChatMessage.MessageType;
 

@@ -16,5 +16,5 @@
         android:text="sample message"
         android:textColor="#bbb"
         android:textSize="15sp"
-        android:background="@color/messageBackground"/>
+        android:background="@drawable/chat_even_background" />
 </LinearLayout>

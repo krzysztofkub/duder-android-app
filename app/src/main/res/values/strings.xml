@@ -3,4 +3,9 @@
 
     <string name="login_prompt">Please input you name:</string>
     <string name="login">Connect</string>
+    <string name="loginText">Login</string>
+    <string name="passwordHint">Password</string>
+    <string name="loginHint">Login</string>
+    <string name="forgot_password">Forgot password?</string>
+    <string name="sign_up">Sign up</string>
 </resources>

@@ -15,7 +15,7 @@
         android:paddingVertical="10dp"
         android:text="sample message"
         android:textColor="#fff"
-        android:background="@color/selfMessageBackground"
+        android:background="@color/primary_light"
         android:textSize="15sp" />
 
 </LinearLayout>

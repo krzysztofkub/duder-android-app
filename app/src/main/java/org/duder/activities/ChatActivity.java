@@ -15,11 +15,11 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
+import org.duder.R;
 import org.duder.model.ChatMessage;
 import org.duder.util.Const;
 import org.duder.util.StompUtils;
 import org.duder.util.messages.ChatMessageRecyclerViewAdapter;
-import org.duder.websocket.WebsocketConnector;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -27,7 +27,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import app.xlui.example.im.R;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
@@ -59,16 +58,19 @@ public class ChatActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // Resets launcher theme to base one - this needs to be called FIRST
+        setTheme(R.style.AppTheme);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
         initialize(this.getIntent().getExtras());
-
+/*
         stompClient = WebsocketConnector.getWebsocketConnection(this);
         resetSubscriptions();
         printChatMessagesHistory();
         subscribeToWebsocket();
 
-        btnChatSend.setOnClickListener(v -> sendMessage());
+        btnChatSend.setOnClickListener(v -> sendMessage());*/
     }
 
     private void initialize(Bundle bundle) {
