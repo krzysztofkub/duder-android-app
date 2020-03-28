@@ -20,6 +20,7 @@ import org.duder.model.ChatMessage;
 import org.duder.util.Const;
 import org.duder.util.StompUtils;
 import org.duder.util.messages.ChatMessageRecyclerViewAdapter;
+import org.duder.websocket.WebSocketConnector;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -64,13 +65,10 @@ public class ChatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
         initialize(this.getIntent().getExtras());
-/*
-        stompClient = WebsocketConnector.getWebsocketConnection(this);
-        resetSubscriptions();
-        printChatMessagesHistory();
-        subscribeToWebsocket();
 
-        btnChatSend.setOnClickListener(v -> sendMessage());*/
+        stompClient = WebSocketConnector.getWebSocketConnection();
+
+        btnChatSend.setOnClickListener(v -> sendMessage());
     }
 
     private void initialize(Bundle bundle) {

@@ -16,10 +16,15 @@ import android.widget.PopupWindow;
 import android.widget.Toast;
 
 import org.duder.R;
+import org.duder.websocket.WebSocketConnector;
 
-import java.util.Random;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
+import ua.naiksoftware.stomp.StompClient;
+import ua.naiksoftware.stomp.dto.StompHeader;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -94,23 +99,37 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
-        // We will send stuff to the server, might take some time, show that we are busy doing stuff
         showBusyIndicator();
+
+        // We will send stuff to the server, might take some time, show that we are busy doing stuff
         executor.submit(this::doLogin);
     }
 
     // TODO implement logic, this is called on separate thread
     private void doLogin() {
+
+        final String login = txtLogin.getText().toString();
+        final String password = txtPassword.getText().toString();
+
+        final StompHeader loginHeader = new StompHeader("login", login);
+        final StompHeader passwordHeader = new StompHeader("password", password);
+        List<StompHeader> headers = new ArrayList<>();
+        headers.add(loginHeader);
+        headers.add(passwordHeader);
+
+        final StompClient webSocketConnection = WebSocketConnector.getWebSocketConnection();
         try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
+            webSocketConnection.connect(headers);
+            Thread.sleep(1000);
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
         final Message message = new Message();
-        message.what = new Random().nextInt(2);
+        message.what = webSocketConnection.isConnected() ? LOGIN_SUCCEEDED : LOGIN_FAILED;
         handler.sendMessage(message);
     }
+
 
     private void showBusyIndicator() {
         final View activityView = getWindow().getDecorView();
@@ -144,6 +163,7 @@ public class LoginActivity extends AppCompatActivity {
 
         Log.i(TAG, "gotoChat - starting activity");
         startActivity(chatIntent);
+        finish();
     }
 
     @Override
