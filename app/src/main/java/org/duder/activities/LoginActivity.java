@@ -16,7 +16,7 @@ import android.widget.PopupWindow;
 import android.widget.Toast;
 
 import org.duder.R;
-import org.duder.websocket.WebSocketConnector;
+import org.duder.websocket.WebSocketClientProvider;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -117,10 +117,10 @@ public class LoginActivity extends AppCompatActivity {
         headers.add(loginHeader);
         headers.add(passwordHeader);
 
-        final StompClient webSocketConnection = WebSocketConnector.getWebSocketConnection();
+        final StompClient webSocketConnection = WebSocketClientProvider.getWebSocketClient();
         try {
             webSocketConnection.connect(headers);
-            Thread.sleep(1000);
+            Thread.sleep(3000);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -176,7 +176,7 @@ public class LoginActivity extends AppCompatActivity {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            Log.i(TAG, "Handler received msg: " + msg);
+            Log.i(TAG, "Handler received msg: " + msg.what);
             hideBusyIndicator();
             switch (msg.what) {
                 case LOGIN_FAILED:

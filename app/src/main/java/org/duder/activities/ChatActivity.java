@@ -20,7 +20,7 @@ import org.duder.model.ChatMessage;
 import org.duder.util.Const;
 import org.duder.util.StompUtils;
 import org.duder.util.messages.ChatMessageRecyclerViewAdapter;
-import org.duder.websocket.WebSocketConnector;
+import org.duder.websocket.WebSocketClientProvider;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -55,7 +55,6 @@ public class ChatActivity extends AppCompatActivity {
     private StompClient                    stompClient;
     private OkHttpClient                   okHttpClient = new OkHttpClient();
     private Gson                           gson         = new GsonBuilder().create();
-    private CompositeDisposable            compositeDisposable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +65,9 @@ public class ChatActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chat);
         initialize(this.getIntent().getExtras());
 
-        stompClient = WebSocketConnector.getWebSocketConnection();
+        stompClient = WebSocketClientProvider.getWebSocketClient();
+        subscribeToWebsocket();
+        printChatMessagesHistory();
 
         btnChatSend.setOnClickListener(v -> sendMessage());
     }
@@ -89,8 +90,6 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void subscribeToWebsocket() {
-        compositeDisposable.add(StompUtils.lifecycle(stompClient));
-
         Disposable dispTopic = stompClient.topic(Const.TOPIC_PUBLIC)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -99,8 +98,6 @@ public class ChatActivity extends AppCompatActivity {
                     msgAdapter.addMessage(gson.fromJson(topicMessage.getPayload(), ChatMessage.class));
                     rvChatMessages.scrollToPosition(msgAdapter.getItemCount() - 1);
                 });
-        compositeDisposable.add(dispTopic);
-        stompClient.connect();
 
         sendJoinMessage();
     }
@@ -161,20 +158,5 @@ public class ChatActivity extends AppCompatActivity {
         chatMessage.setContent(message);
         stompClient.send(Const.WS_SEND_MESSAGE_ENDPOINT, gson.toJson(chatMessage)).subscribe();
         etChatMessage.setText("");
-    }
-
-    private void resetSubscriptions() {
-        if (compositeDisposable != null) {
-            compositeDisposable.dispose();
-        }
-        compositeDisposable = new CompositeDisposable();
-    }
-
-    @Override
-    protected void onDestroy() {
-        stompClient.disconnect();
-        if (compositeDisposable != null)
-            compositeDisposable.dispose();
-        super.onDestroy();
     }
 }
