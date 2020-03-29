@@ -156,7 +156,7 @@ public class LoginActivity extends AppCompatActivity {
 
         final String login = txtLogin.getText().toString();
         final Bundle bundle = new Bundle();
-        bundle.putString("nickname", login); //sic!
+        bundle.putString("username", login); //sic!
 
         final Intent chatIntent = new Intent(LoginActivity.this, ChatActivity.class);
         chatIntent.putExtras(bundle);

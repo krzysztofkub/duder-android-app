@@ -73,7 +73,7 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void initialize(Bundle bundle) {
-        username = (String) bundle.get("username");
+        username = bundle.getString("username");
         tvChatTitle = findViewById(R.id.tvChatTitle);
         rvChatMessages = findViewById(R.id.rvChatMessages);
         etChatMessage = findViewById(R.id.etChatMessage);
@@ -91,6 +91,15 @@ public class ChatActivity extends AppCompatActivity {
 
     private void subscribeToWebsocket() {
         Disposable dispTopic = stompClient.topic(Const.TOPIC_PUBLIC)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(topicMessage -> {
+                    Log.d(Const.TAG, "Received " + topicMessage.getPayload());
+                    msgAdapter.addMessage(gson.fromJson(topicMessage.getPayload(), ChatMessage.class));
+                    rvChatMessages.scrollToPosition(msgAdapter.getItemCount() - 1);
+                });
+
+        Disposable dispUserReply = stompClient.topic(Const.USER_QUEUE)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(topicMessage -> {
