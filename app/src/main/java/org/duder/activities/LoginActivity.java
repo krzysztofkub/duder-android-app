@@ -23,7 +23,11 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import ua.naiksoftware.stomp.StompClient;
+import ua.naiksoftware.stomp.dto.LifecycleEvent;
 import ua.naiksoftware.stomp.dto.StompHeader;
 
 public class LoginActivity extends AppCompatActivity {
@@ -40,8 +44,9 @@ public class LoginActivity extends AppCompatActivity {
     private Handler         handler;
     private ExecutorService executor;
 
-    private static final int LOGIN_SUCCEEDED = 1;
-    private static final int LOGIN_FAILED    = 0;
+    private              Disposable connectDisposable;
+    private static final int        LOGIN_SUCCEEDED = 1;
+    private static final int        LOGIN_FAILED    = 0;
 
     private void initializeFromR() {
         txtLogin = findViewById(R.id.login_text_login);
@@ -75,6 +80,17 @@ public class LoginActivity extends AppCompatActivity {
         executor = Executors.newSingleThreadExecutor();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (connectDisposable != null) {
+            connectDisposable.dispose();
+        }
+
+        // This caused some leaks if not called
+        hideBusyIndicator();
+    }
+
     private void onLoginClicked(View view) {
         if (view != btnLogin) {
             Log.e(TAG, "onLoginClicked attached not to login button, but: " + view);
@@ -99,6 +115,10 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
+        if (connectDisposable != null) {
+            connectDisposable.dispose();
+        }
+
         showBusyIndicator();
 
         // We will send stuff to the server, might take some time, show that we are busy doing stuff
@@ -107,6 +127,23 @@ public class LoginActivity extends AppCompatActivity {
 
     // TODO implement logic, this is called on separate thread
     private void doLogin() {
+
+        final StompClient client = WebSocketClientProvider.getWebSocketClient();
+        connectDisposable = client
+                .lifecycle()
+                .observeOn(Schedulers.io())
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .subscribe(event -> {
+                    Message message = new Message();
+                    if (event.getType() == LifecycleEvent.Type.OPENED) {
+                        Log.i(TAG, "Login succeeded");
+                        message.what = LOGIN_SUCCEEDED;
+                    } else {
+                        Log.w(TAG, "Login falied", event.getException());
+                        message.what = LOGIN_FAILED;
+                    }
+                    handler.sendMessage(message);
+                });
 
         final String login = txtLogin.getText().toString();
         final String password = txtPassword.getText().toString();
@@ -117,19 +154,8 @@ public class LoginActivity extends AppCompatActivity {
         headers.add(loginHeader);
         headers.add(passwordHeader);
 
-        final StompClient webSocketConnection = WebSocketClientProvider.getWebSocketClient();
-        try {
-            webSocketConnection.connect(headers);
-            Thread.sleep(3000);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        final Message message = new Message();
-        message.what = webSocketConnection.isConnected() ? LOGIN_SUCCEEDED : LOGIN_FAILED;
-        handler.sendMessage(message);
+        client.connect(headers);
     }
-
 
     private void showBusyIndicator() {
         final View activityView = getWindow().getDecorView();
@@ -166,11 +192,6 @@ public class LoginActivity extends AppCompatActivity {
         finish();
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        hideBusyIndicator();
-    }
 
     private class LoginHandler extends Handler {
         @Override

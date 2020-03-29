@@ -18,7 +18,6 @@ import com.google.gson.reflect.TypeToken;
 import org.duder.R;
 import org.duder.model.ChatMessage;
 import org.duder.util.Const;
-import org.duder.util.StompUtils;
 import org.duder.util.messages.ChatMessageRecyclerViewAdapter;
 import org.duder.websocket.WebSocketClientProvider;
 
@@ -29,7 +28,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.OkHttpClient;
