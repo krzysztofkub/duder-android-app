@@ -17,14 +17,13 @@ import android.widget.Toast;
 
 import org.duder.R;
 import org.duder.websocket.WebSocketClientProvider;
+import org.duder.websocket.stomp.StompClient;
+import org.duder.websocket.stomp.dto.StompHeader;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
-import ua.naiksoftware.stomp.StompClient;
-import ua.naiksoftware.stomp.dto.StompHeader;
 
 public class LoginActivity extends AppCompatActivity {
 

@@ -18,9 +18,12 @@ import com.google.gson.reflect.TypeToken;
 import org.duder.R;
 import org.duder.model.ChatMessage;
 import org.duder.util.Const;
-import org.duder.util.StompUtils;
 import org.duder.util.messages.ChatMessageRecyclerViewAdapter;
 import org.duder.websocket.WebSocketClientProvider;
+import org.duder.websocket.stomp.StompClient;
+import org.duder.websocket.stomp.dto.StompCommand;
+import org.duder.websocket.stomp.dto.StompHeader;
+import org.duder.websocket.stomp.dto.StompMessage;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -29,16 +32,12 @@ import java.util.Arrays;
 import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
-import ua.naiksoftware.stomp.StompClient;
-import ua.naiksoftware.stomp.dto.StompCommand;
-import ua.naiksoftware.stomp.dto.StompHeader;
-import ua.naiksoftware.stomp.dto.StompMessage;
+
 
 public class ChatActivity extends AppCompatActivity {
 
@@ -52,7 +51,7 @@ public class ChatActivity extends AppCompatActivity {
     // endregion
 
     private ChatMessageRecyclerViewAdapter msgAdapter;
-    private StompClient                    stompClient;
+    private StompClient stompClient;
     private OkHttpClient                   okHttpClient = new OkHttpClient();
     private Gson                           gson         = new GsonBuilder().create();
 
