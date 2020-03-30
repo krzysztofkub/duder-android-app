@@ -3,6 +3,8 @@ package org.duder.websocket.stomp.dto;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import org.duder.websocket.stomp.exception.BadCredentialsException;
+
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
@@ -86,10 +88,14 @@ public class StompMessage {
             headers.add(new StompHeader(matcher.group(1), matcher.group(2)));
         }
 
-        reader.skip("\n\n");
-
         reader.useDelimiter(TERMINATE_MESSAGE_SYMBOL);
-        String payload = reader.hasNext() ? reader.next() : null;
+        String payload = reader.hasNext() ? reader.next().replaceAll("\n\n", "") : null;
+
+        if (command.equals(StompCommand.ERROR) &&
+                payload != null &&
+                payload.contains("BadCredentialsException")) {
+            throw new BadCredentialsException();
+        }
 
         return new StompMessage(command, headers, payload);
     }

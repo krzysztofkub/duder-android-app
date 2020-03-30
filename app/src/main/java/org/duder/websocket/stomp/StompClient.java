@@ -5,10 +5,12 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import org.duder.websocket.stomp.dto.ConnectionResponse;
 import org.duder.websocket.stomp.dto.LifecycleEvent;
 import org.duder.websocket.stomp.dto.StompCommand;
 import org.duder.websocket.stomp.dto.StompHeader;
 import org.duder.websocket.stomp.dto.StompMessage;
+import org.duder.websocket.stomp.exception.BadCredentialsException;
 import org.duder.websocket.stomp.pathmatcher.PathMatcher;
 import org.duder.websocket.stomp.pathmatcher.RabbitPathMatcher;
 import org.duder.websocket.stomp.pathmatcher.SimplePathMatcher;
@@ -99,7 +101,7 @@ public class StompClient {
      *
      * @param _headers HTTP headers to send in the INITIAL REQUEST, i.e. during the protocol upgrade
      */
-    public void connect(@Nullable List<StompHeader> _headers) {
+    public ConnectionResponse connect(@Nullable List<StompHeader> _headers) {
 
         Log.d(TAG, "Connect");
 
@@ -107,7 +109,7 @@ public class StompClient {
 
         if (isConnected()) {
             Log.d(TAG, "Already connected, ignore");
-            return;
+            return new ConnectionResponse();
         }
         lifecycleDisposable = connectionProvider.lifecycle()
                 .subscribe(lifecycleEvent -> {
@@ -139,6 +141,7 @@ public class StompClient {
                     }
                 });
 
+        ConnectionResponse connectionResponse = new ConnectionResponse();
         messagesDisposable = connectionProvider.messages()
                 .map(StompMessage::from)
                 .filter(heartBeatTask::consumeHeartBeat)
@@ -146,7 +149,21 @@ public class StompClient {
                 .filter(msg -> msg.getStompCommand().equals(StompCommand.CONNECTED))
                 .subscribe(stompMessage -> {
                     getConnectionStream().onNext(true);
+                }, error -> {
+                    if (error instanceof BadCredentialsException) {
+                        connectionResponse.setBadCredentials(true);
+                    }
                 });
+
+        //We need to wait for BadCredentialsException to be caught
+        //TODO think of better way to synchronize it
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        return connectionResponse;
     }
 
     synchronized private BehaviorSubject<Boolean> getConnectionStream() {

@@ -18,6 +18,7 @@ import android.widget.Toast;
 import org.duder.R;
 import org.duder.websocket.WebSocketClientProvider;
 import org.duder.websocket.stomp.StompClient;
+import org.duder.websocket.stomp.dto.ConnectionResponse;
 import org.duder.websocket.stomp.dto.StompHeader;
 
 import java.util.ArrayList;
@@ -40,7 +41,7 @@ public class LoginActivity extends AppCompatActivity {
     private ExecutorService executor;
 
     private static final int LOGIN_SUCCEEDED = 1;
-    private static final int LOGIN_FAILED    = 0;
+    private static final int BAD_CREDENTIALS = 0;
 
     private void initializeFromR() {
         txtLogin = findViewById(R.id.login_text_login);
@@ -117,15 +118,11 @@ public class LoginActivity extends AppCompatActivity {
         headers.add(passwordHeader);
 
         final StompClient webSocketConnection = WebSocketClientProvider.getWebSocketClient();
-        try {
-            webSocketConnection.connect(headers);
-            Thread.sleep(3000);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
+        ConnectionResponse connectionResponse = webSocketConnection.connect(headers);
 
         final Message message = new Message();
-        message.what = webSocketConnection.isConnected() ? LOGIN_SUCCEEDED : LOGIN_FAILED;
+        message.what = connectionResponse.isBadCredentials() ? BAD_CREDENTIALS : LOGIN_SUCCEEDED;
         handler.sendMessage(message);
     }
 
@@ -178,8 +175,8 @@ public class LoginActivity extends AppCompatActivity {
             Log.i(TAG, "Handler received msg: " + msg.what);
             hideBusyIndicator();
             switch (msg.what) {
-                case LOGIN_FAILED:
-                    Toast.makeText(LoginActivity.this, "Login failed", Toast.LENGTH_SHORT).show();
+                case BAD_CREDENTIALS:
+                    Toast.makeText(LoginActivity.this, "Bad credentials", Toast.LENGTH_SHORT).show();
                     break;
                 case LOGIN_SUCCEEDED:
                     gotoChat();
