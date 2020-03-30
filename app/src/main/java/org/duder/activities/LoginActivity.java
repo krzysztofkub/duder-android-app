@@ -23,6 +23,7 @@ import org.duder.websocket.stomp.dto.StompHeader;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -119,11 +120,13 @@ public class LoginActivity extends AppCompatActivity {
 
         final StompClient webSocketConnection = WebSocketClientProvider.getWebSocketClient();
 
-        ConnectionResponse connectionResponse = webSocketConnection.connect(headers);
+        final CompletableFuture<ConnectionResponse> futureConnect = webSocketConnection.connect(headers);
 
-        final Message message = new Message();
-        message.what = connectionResponse.isBadCredentials() ? BAD_CREDENTIALS : LOGIN_SUCCEEDED;
-        handler.sendMessage(message);
+        futureConnect.thenAccept(response -> {
+            final Message message = new Message();
+            message.what = response.isBadCredentials() ? BAD_CREDENTIALS : LOGIN_SUCCEEDED;
+            handler.sendMessage(message);
+        });
     }
 
 
