@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 
 import io.reactivex.BackpressureStrategy;
@@ -39,21 +40,21 @@ public class StompClient {
     private static final String TAG = StompClient.class.getSimpleName();
 
     public static final String SUPPORTED_VERSIONS = "1.1,1.2";
-    public static final String DEFAULT_ACK = "auto";
+    public static final String DEFAULT_ACK        = "auto";
 
-    private final ConnectionProvider connectionProvider;
-    private ConcurrentHashMap<String, String> topics;
-    private boolean legacyWhitespace;
+    private final ConnectionProvider                connectionProvider;
+    private       ConcurrentHashMap<String, String> topics;
+    private       boolean                           legacyWhitespace;
 
-    private PublishSubject<StompMessage> messageStream;
-    private BehaviorSubject<Boolean> connectionStream;
+    private PublishSubject<StompMessage>                      messageStream;
+    private BehaviorSubject<Boolean>                          connectionStream;
     private ConcurrentHashMap<String, Flowable<StompMessage>> streamMap;
-    private PathMatcher pathMatcher;
-    private Disposable lifecycleDisposable;
-    private Disposable messagesDisposable;
-    private PublishSubject<LifecycleEvent> lifecyclePublishSubject;
-    private List<StompHeader> headers;
-    private HeartBeatTask heartBeatTask;
+    private PathMatcher                                       pathMatcher;
+    private Disposable                                        lifecycleDisposable;
+    private Disposable                                        messagesDisposable;
+    private PublishSubject<LifecycleEvent>                    lifecyclePublishSubject;
+    private List<StompHeader>                                 headers;
+    private HeartBeatTask                                     heartBeatTask;
 
     public StompClient(ConnectionProvider connectionProvider) {
         this.connectionProvider = connectionProvider;
@@ -101,7 +102,7 @@ public class StompClient {
      *
      * @param _headers HTTP headers to send in the INITIAL REQUEST, i.e. during the protocol upgrade
      */
-    public ConnectionResponse connect(@Nullable List<StompHeader> _headers) {
+    public CompletableFuture<ConnectionResponse> connect(@Nullable List<StompHeader> _headers) {
 
         Log.d(TAG, "Connect");
 
@@ -109,7 +110,7 @@ public class StompClient {
 
         if (isConnected()) {
             Log.d(TAG, "Already connected, ignore");
-            return new ConnectionResponse();
+            return CompletableFuture.completedFuture(new ConnectionResponse());
         }
         lifecycleDisposable = connectionProvider.lifecycle()
                 .subscribe(lifecycleEvent -> {
@@ -120,7 +121,8 @@ public class StompClient {
                             headers.add(new StompHeader(StompHeader.HEART_BEAT,
                                     heartBeatTask.getClientHeartbeat() + "," + heartBeatTask.getServerHeartbeat()));
 
-                            if (_headers != null) headers.addAll(_headers);
+                            if (_headers != null)
+                                headers.addAll(_headers);
 
                             connectionProvider.send(new StompMessage(StompCommand.CONNECT, headers, null).compile(legacyWhitespace))
                                     .subscribe(() -> {
@@ -141,6 +143,7 @@ public class StompClient {
                     }
                 });
 
+        final CompletableFuture<ConnectionResponse> futureResponse = new CompletableFuture<>();
         ConnectionResponse connectionResponse = new ConnectionResponse();
         messagesDisposable = connectionProvider.messages()
                 .map(StompMessage::from)
@@ -149,21 +152,15 @@ public class StompClient {
                 .filter(msg -> msg.getStompCommand().equals(StompCommand.CONNECTED))
                 .subscribe(stompMessage -> {
                     getConnectionStream().onNext(true);
+                    futureResponse.complete(connectionResponse);
                 }, error -> {
                     if (error instanceof BadCredentialsException) {
                         connectionResponse.setBadCredentials(true);
+                        futureResponse.complete(connectionResponse);
                     }
                 });
 
-        //We need to wait for BadCredentialsException to be caught
-        //TODO think of better way to synchronize it
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        return connectionResponse;
+        return futureResponse;
     }
 
     synchronized private BehaviorSubject<Boolean> getConnectionStream() {
@@ -261,10 +258,10 @@ public class StompClient {
         else if (!streamMap.containsKey(destPath))
             streamMap.put(destPath,
                     subscribePath(destPath, headerList).andThen(
-                    getMessageStream()
-                            .filter(msg -> pathMatcher.matches(destPath, msg))
-                            .toFlowable(BackpressureStrategy.BUFFER)
-                            .share()).doFinally(() -> unsubscribePath(destPath).subscribe())
+                            getMessageStream()
+                                    .filter(msg -> pathMatcher.matches(destPath, msg))
+                                    .toFlowable(BackpressureStrategy.BUFFER)
+                                    .share()).doFinally(() -> unsubscribePath(destPath).subscribe())
             );
         return streamMap.get(destPath);
     }
@@ -272,7 +269,8 @@ public class StompClient {
     private Completable subscribePath(String destinationPath, @Nullable List<StompHeader> headerList) {
         String topicId = UUID.randomUUID().toString();
 
-        if (topics == null) topics = new ConcurrentHashMap<>();
+        if (topics == null)
+            topics = new ConcurrentHashMap<>();
 
         // Only continue if we don't already have a subscription to the topic
         if (topics.containsKey(destinationPath)) {
@@ -285,7 +283,8 @@ public class StompClient {
         headers.add(new StompHeader(StompHeader.ID, topicId));
         headers.add(new StompHeader(StompHeader.DESTINATION, destinationPath));
         headers.add(new StompHeader(StompHeader.ACK, DEFAULT_ACK));
-        if (headerList != null) headers.addAll(headerList);
+        if (headerList != null)
+            headers.addAll(headerList);
         return send(new StompMessage(StompCommand.SUBSCRIBE,
                 headers, null));
     }
