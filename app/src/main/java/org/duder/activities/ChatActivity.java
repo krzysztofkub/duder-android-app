@@ -30,7 +30,7 @@ import okhttp3.OkHttpClient;
 
 //https://android.jlelse.eu/rest-api-on-android-made-simple-or-how-i-learned-to-stop-worrying-and-love-the-rxjava-b3c2c949cad4
 public class ChatActivity extends AppCompatActivity {
-    private String username;
+    private String login;
 
     // region View Controls
     private TextView tvChatTitle;
@@ -73,16 +73,16 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void initialize(Bundle bundle) {
-        username = bundle.getString("username");
+        login = bundle.getString("login");
         tvChatTitle = findViewById(R.id.tvChatTitle);
         rvChatMessages = findViewById(R.id.rvChatMessages);
         etChatMessage = findViewById(R.id.etChatMessage);
         btnChatSend = findViewById(R.id.btnChatSend);
 
         tvChatTitle.setText("think of something");
-        Toast.makeText(getApplicationContext(), "Joined as " + username, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), "Joined as " + login, Toast.LENGTH_SHORT).show();
 
-        msgAdapter = new ChatMessageRecyclerViewAdapter(this, username);
+        msgAdapter = new ChatMessageRecyclerViewAdapter(this, login);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         rvChatMessages.setLayoutManager(layoutManager);
@@ -107,7 +107,7 @@ public class ChatActivity extends AppCompatActivity {
         }
         ChatMessage chatMessage = new ChatMessage();
         chatMessage.setType(ChatMessage.MessageType.CHAT);
-        chatMessage.setSender(username);
+        chatMessage.setSender(login);
         chatMessage.setContent(message);
 
         webSocketService.sendMessage(chatMessage);

@@ -133,7 +133,7 @@ public class LoginActivity extends AppCompatActivity {
 
         final String login = txtLogin.getText().toString();
         final Bundle bundle = new Bundle();
-        bundle.putString("username", login); //sic!
+        bundle.putString("login", login);
 
         final Intent chatIntent = new Intent(LoginActivity.this, ChatActivity.class);
         chatIntent.putExtras(bundle);
