@@ -1,20 +1,20 @@
-package org.duder.websocket.stomp;
+package org.duder.websocket;
 
 import android.annotation.SuppressLint;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import org.duder.websocket.dto.LifecycleEvent;
+import org.duder.websocket.dto.StompCommand;
+import org.duder.websocket.dto.StompHeader;
+import org.duder.websocket.dto.StompMessage;
+import org.duder.websocket.pathmatcher.PathMatcher;
+import org.duder.websocket.pathmatcher.RabbitPathMatcher;
+import org.duder.websocket.pathmatcher.SimplePathMatcher;
+import org.duder.websocket.provider.ConnectionProvider;
 import org.duder.websocket.stomp.dto.ConnectionResponse;
-import org.duder.websocket.stomp.dto.LifecycleEvent;
-import org.duder.websocket.stomp.dto.StompCommand;
-import org.duder.websocket.stomp.dto.StompHeader;
-import org.duder.websocket.stomp.dto.StompMessage;
 import org.duder.websocket.stomp.exception.BadCredentialsException;
-import org.duder.websocket.stomp.pathmatcher.PathMatcher;
-import org.duder.websocket.stomp.pathmatcher.RabbitPathMatcher;
-import org.duder.websocket.stomp.pathmatcher.SimplePathMatcher;
-import org.duder.websocket.stomp.provider.ConnectionProvider;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -32,24 +32,21 @@ import io.reactivex.subjects.BehaviorSubject;
 import io.reactivex.subjects.PublishSubject;
 
 
-/**
- * Created by naik on 05.05.16.
- */
-public class StompClient {
+class StompClient {
 
     private static final String TAG = StompClient.class.getSimpleName();
 
     public static final String SUPPORTED_VERSIONS = "1.1,1.2";
     public static final String DEFAULT_ACK        = "auto";
 
-    private final ConnectionProvider                connectionProvider;
+    private final ConnectionProvider connectionProvider;
     private       ConcurrentHashMap<String, String> topics;
     private       boolean                           legacyWhitespace;
 
     private PublishSubject<StompMessage>                      messageStream;
     private BehaviorSubject<Boolean>                          connectionStream;
     private ConcurrentHashMap<String, Flowable<StompMessage>> streamMap;
-    private PathMatcher                                       pathMatcher;
+    private PathMatcher pathMatcher;
     private Disposable                                        lifecycleDisposable;
     private Disposable                                        messagesDisposable;
     private PublishSubject<LifecycleEvent>                    lifecyclePublishSubject;

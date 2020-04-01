@@ -19,55 +19,61 @@ import org.duder.R;
 import org.duder.model.ChatMessage;
 import org.duder.util.Const;
 import org.duder.util.messages.ChatMessageRecyclerViewAdapter;
-import org.duder.websocket.WebSocketClientProvider;
-import org.duder.websocket.stomp.StompClient;
-import org.duder.websocket.stomp.dto.StompCommand;
-import org.duder.websocket.stomp.dto.StompHeader;
-import org.duder.websocket.stomp.dto.StompMessage;
+import org.duder.websocket.WebSocketService;
+import org.duder.websocket.dto.StompMessage;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
+import io.reactivex.functions.Consumer;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
 
 public class ChatActivity extends AppCompatActivity {
-
     private String username;
 
     // region View Controls
-    private TextView     tvChatTitle;
+    private TextView tvChatTitle;
     private RecyclerView rvChatMessages;
-    private EditText     etChatMessage;
-    private Button       btnChatSend;
+    private EditText etChatMessage;
+    private Button btnChatSend;
     // endregion
 
     private ChatMessageRecyclerViewAdapter msgAdapter;
-    private StompClient stompClient;
-    private OkHttpClient                   okHttpClient = new OkHttpClient();
-    private Gson                           gson         = new GsonBuilder().create();
+    private WebSocketService webSocketService;
+    private OkHttpClient okHttpClient = new OkHttpClient();
+    private Gson gson = new GsonBuilder().create();
+
+    // region StompMessage consumers
+    Consumer<StompMessage> publicMessageConsumer = topicMessage -> {
+        Log.d(Const.TAG, "Received " + topicMessage.getPayload());
+        msgAdapter.addMessage(gson.fromJson(topicMessage.getPayload(), ChatMessage.class));
+        rvChatMessages.scrollToPosition(msgAdapter.getItemCount() - 1);
+    };
+
+    Consumer<StompMessage> privateMessageConsumer = topicMessage -> {
+        Log.d(Const.TAG, "Received " + topicMessage.getPayload());
+        msgAdapter.addMessage(gson.fromJson(topicMessage.getPayload(), ChatMessage.class));
+        rvChatMessages.scrollToPosition(msgAdapter.getItemCount() - 1);
+    };
+    //endregion
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // Resets launcher theme to base one - this needs to be called FIRST
         setTheme(R.style.AppTheme);
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
         initialize(this.getIntent().getExtras());
-
-        stompClient = WebSocketClientProvider.getWebSocketClient();
-        subscribeToWebsocket();
+        webSocketService = WebSocketService.getWebSocketService();
+        webSocketService.subscribeToChat(publicMessageConsumer, privateMessageConsumer);
         printChatMessagesHistory();
-
         btnChatSend.setOnClickListener(v -> sendMessage());
     }
 
@@ -88,43 +94,6 @@ public class ChatActivity extends AppCompatActivity {
         rvChatMessages.setAdapter(msgAdapter);
     }
 
-    private void subscribeToWebsocket() {
-        Disposable dispTopic = stompClient.topic(Const.TOPIC_PUBLIC)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(topicMessage -> {
-                    Log.d(Const.TAG, "Received " + topicMessage.getPayload());
-                    msgAdapter.addMessage(gson.fromJson(topicMessage.getPayload(), ChatMessage.class));
-                    rvChatMessages.scrollToPosition(msgAdapter.getItemCount() - 1);
-                });
-
-        Disposable dispUserReply = stompClient.topic(Const.USER_QUEUE)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(topicMessage -> {
-                    Log.d(Const.TAG, "Received " + topicMessage.getPayload());
-                    msgAdapter.addMessage(gson.fromJson(topicMessage.getPayload(), ChatMessage.class));
-                    rvChatMessages.scrollToPosition(msgAdapter.getItemCount() - 1);
-                });
-
-        sendJoinMessage();
-    }
-
-    private void sendJoinMessage() {
-        ChatMessage chatMessage = new ChatMessage();
-        chatMessage.setType(ChatMessage.MessageType.JOIN);
-        chatMessage.setSender(username);
-
-        stompClient.send(new StompMessage(
-                StompCommand.SEND,
-                Arrays.asList(
-                        new StompHeader(StompHeader.DESTINATION, Const.WS_SEND_MESSAGE_ENDPOINT),
-                        new StompHeader("authorization", "this is a token generated by your code!")
-                ),
-                gson.toJson(chatMessage))
-        ).subscribe();
-    }
-
     private void printChatMessagesHistory() {
         List<ChatMessage> chatMessages = new ArrayList<>();
 
@@ -133,7 +102,6 @@ public class ChatActivity extends AppCompatActivity {
             Request request = new Request.Builder()
                     .url(Const.REST_ADDRESS + Const.GET_MESSAGE_HISTORY_ENDPOINT)
                     .build();
-
             try (Response response = okHttpClient.newCall(request).execute()) {
                 Type type = new TypeToken<List<ChatMessage>>() {
                 }.getType();
@@ -159,12 +127,12 @@ public class ChatActivity extends AppCompatActivity {
         if (TextUtils.isEmpty(message)) {
             return;
         }
-
         ChatMessage chatMessage = new ChatMessage();
         chatMessage.setType(ChatMessage.MessageType.CHAT);
         chatMessage.setSender(username);
         chatMessage.setContent(message);
-        stompClient.send(Const.WS_SEND_MESSAGE_ENDPOINT, gson.toJson(chatMessage)).subscribe();
+
+        webSocketService.sendMessage(chatMessage);
         etChatMessage.setText("");
     }
 }

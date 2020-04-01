@@ -1,8 +1,8 @@
-package org.duder.websocket.stomp.pathmatcher;
+package org.duder.websocket.pathmatcher;
 
 
-import org.duder.websocket.stomp.dto.StompHeader;
-import org.duder.websocket.stomp.dto.StompMessage;
+import org.duder.websocket.dto.StompHeader;
+import org.duder.websocket.dto.StompMessage;
 
 import java.util.ArrayList;
 

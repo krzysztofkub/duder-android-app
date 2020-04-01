@@ -1,9 +1,9 @@
-package org.duder.websocket.stomp.provider;
+package org.duder.websocket.provider;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import org.duder.websocket.stomp.dto.LifecycleEvent;
+import org.duder.websocket.dto.LifecycleEvent;
 
 import java.util.HashMap;
 import java.util.Map;

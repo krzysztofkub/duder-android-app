@@ -1,4 +1,4 @@
-package org.duder.websocket.stomp.dto;
+package org.duder.websocket.dto;
 
 /**
  * Created by naik on 05.05.16.

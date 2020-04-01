@@ -1,11 +1,11 @@
-package org.duder.websocket.stomp;
+package org.duder.websocket;
 
 import android.support.annotation.Nullable;
 import android.util.Log;
 
-import org.duder.websocket.stomp.dto.StompCommand;
-import org.duder.websocket.stomp.dto.StompHeader;
-import org.duder.websocket.stomp.dto.StompMessage;
+import org.duder.websocket.dto.StompCommand;
+import org.duder.websocket.dto.StompHeader;
+import org.duder.websocket.dto.StompMessage;
 
 import java.util.concurrent.TimeUnit;
 
@@ -13,7 +13,7 @@ import io.reactivex.Scheduler;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
-public class HeartBeatTask {
+class HeartBeatTask {
 
     private static final String TAG = HeartBeatTask.class.getSimpleName();
 

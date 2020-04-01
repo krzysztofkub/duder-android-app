@@ -16,13 +16,9 @@ import android.widget.PopupWindow;
 import android.widget.Toast;
 
 import org.duder.R;
-import org.duder.websocket.WebSocketClientProvider;
-import org.duder.websocket.stomp.StompClient;
+import org.duder.websocket.WebSocketService;
 import org.duder.websocket.stomp.dto.ConnectionResponse;
-import org.duder.websocket.stomp.dto.StompHeader;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -31,14 +27,14 @@ public class LoginActivity extends AppCompatActivity {
 
     private final static String TAG = "LoginActivity";
 
-    private EditText        txtLogin;
-    private EditText        txtPassword;
-    private Button          btnLogin;
-    private Button          btnSignUp;
-    private Button          btnForgotPassword;
-    private View            viewRoot;
-    private PopupWindow     busyIndicator;
-    private Handler         handler;
+    private EditText txtLogin;
+    private EditText txtPassword;
+    private Button btnLogin;
+    private Button btnSignUp;
+    private Button btnForgotPassword;
+    private View viewRoot;
+    private PopupWindow busyIndicator;
+    private Handler handler;
     private ExecutorService executor;
 
     private static final int LOGIN_SUCCEEDED = 1;
@@ -55,18 +51,20 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // Resets launcher theme to base one - this needs to be called FIRST
         setTheme(R.style.AppTheme);
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
         this.initializeFromR();
 
-        // TODO remove later - Im getting tired of filling the form all the time
         txtLogin.setText("dude");
         txtPassword.setText("duderowsky");
         btnLogin.setOnClickListener(this::onLoginClicked);
+        btnSignUp.setOnClickListener(this::onSignUpClicked);
+    }
+
+    private void onSignUpClicked(View view) {
+
     }
 
     @Override
@@ -77,12 +75,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void onLoginClicked(View view) {
-        if (view != btnLogin) {
-            Log.e(TAG, "onLoginClicked attached not to login button, but: " + view);
-            return;
-        }
-
-        // Initial validation - user must provide SOMETHING
         boolean hasErrors = false;
         final String login = txtLogin.getText().toString();
         if (login.trim().isEmpty()) {
@@ -99,28 +91,15 @@ public class LoginActivity extends AppCompatActivity {
         if (hasErrors) {
             return;
         }
-
         showBusyIndicator();
-
-        // We will send stuff to the server, might take some time, show that we are busy doing stuff
         executor.submit(this::doLogin);
     }
 
-    // TODO implement logic, this is called on separate thread
     private void doLogin() {
-
-        final String login = txtLogin.getText().toString();
-        final String password = txtPassword.getText().toString();
-
-        final StompHeader loginHeader = new StompHeader("login", login);
-        final StompHeader passwordHeader = new StompHeader("password", password);
-        List<StompHeader> headers = new ArrayList<>();
-        headers.add(loginHeader);
-        headers.add(passwordHeader);
-
-        final StompClient webSocketConnection = WebSocketClientProvider.getWebSocketClient();
-
-        final CompletableFuture<ConnectionResponse> futureConnect = webSocketConnection.connect(headers);
+        String login = txtLogin.getText().toString();
+        String password = txtPassword.getText().toString();
+        WebSocketService webSocketService = WebSocketService.getWebSocketService();
+        CompletableFuture<ConnectionResponse> futureConnect = webSocketService.connect(login, password);
 
         futureConnect.thenAccept(response -> {
             final Message message = new Message();
@@ -128,7 +107,6 @@ public class LoginActivity extends AppCompatActivity {
             handler.sendMessage(message);
         });
     }
-
 
     private void showBusyIndicator() {
         final View activityView = getWindow().getDecorView();

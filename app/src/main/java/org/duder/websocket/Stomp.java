@@ -1,26 +1,16 @@
-package org.duder.websocket.stomp;
+package org.duder.websocket;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import org.duder.websocket.stomp.provider.OkHttpConnectionProvider;
-import org.duder.websocket.stomp.provider.WebSocketsConnectionProvider;
+import org.duder.websocket.provider.OkHttpConnectionProvider;
+import org.duder.websocket.provider.WebSocketsConnectionProvider;
 
 import java.util.Map;
 
 import okhttp3.OkHttpClient;
 
-/**
- * Supported overlays:
- * - org.java_websocket.WebSocket ('org.java-websocket:Java-WebSocket:1.3.2')
- * - okhttp3.WebSocket ('com.squareup.okhttp3:okhttp:3.8.1')
- * <p>
- * You can add own relay, just implement ConnectionProvider for you stomp transport,
- * such as web socket.
- * <p>
- * Created by naik on 05.05.16.
- */
-public class Stomp {
+class Stomp {
 
     public static StompClient over(@NonNull ConnectionProvider connectionProvider, String uri) {
         return over(connectionProvider, uri, null, null);
@@ -64,7 +54,7 @@ public class Stomp {
         throw new IllegalArgumentException("ConnectionProvider type not supported: " + connectionProvider.toString());
     }
 
-    private static StompClient createStompClient(org.duder.websocket.stomp.provider.ConnectionProvider connectionProvider) {
+    private static StompClient createStompClient(org.duder.websocket.provider.ConnectionProvider connectionProvider) {
         return new StompClient(connectionProvider);
     }
 

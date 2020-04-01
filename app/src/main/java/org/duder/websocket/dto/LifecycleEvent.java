@@ -1,4 +1,4 @@
-package org.duder.websocket.stomp.dto;
+package org.duder.websocket.dto;
 
 
 import java.util.TreeMap;

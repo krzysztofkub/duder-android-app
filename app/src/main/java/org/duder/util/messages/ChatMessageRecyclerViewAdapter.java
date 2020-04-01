@@ -32,7 +32,6 @@ public class ChatMessageRecyclerViewAdapter extends RecyclerView.Adapter<Abstrac
         notifyItemInserted(messages.size() - 1);
     }
 
-
     @Override
     public int getItemViewType(int position) {
         return messages

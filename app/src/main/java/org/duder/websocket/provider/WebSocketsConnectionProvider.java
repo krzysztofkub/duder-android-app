@@ -1,10 +1,10 @@
-package org.duder.websocket.stomp.provider;
+package org.duder.websocket.provider;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
-import org.duder.websocket.stomp.dto.LifecycleEvent;
+import org.duder.websocket.dto.LifecycleEvent;
 import org.java_websocket.WebSocket;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.drafts.Draft_6455;

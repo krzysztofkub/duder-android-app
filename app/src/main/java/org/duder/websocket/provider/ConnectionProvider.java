@@ -1,6 +1,6 @@
-package org.duder.websocket.stomp.provider;
+package org.duder.websocket.provider;
 
-import org.duder.websocket.stomp.dto.LifecycleEvent;
+import org.duder.websocket.dto.LifecycleEvent;
 
 import io.reactivex.Completable;
 import io.reactivex.Observable;
