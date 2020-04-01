@@ -13,29 +13,22 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
 
 import org.duder.R;
+import org.duder.api.ApiClient;
 import org.duder.model.ChatMessage;
 import org.duder.util.Const;
 import org.duder.util.messages.ChatMessageRecyclerViewAdapter;
 import org.duder.websocket.WebSocketService;
 import org.duder.websocket.dto.StompMessage;
 
-import java.io.IOException;
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 
-
+//https://android.jlelse.eu/rest-api-on-android-made-simple-or-how-i-learned-to-stop-worrying-and-love-the-rxjava-b3c2c949cad4
 public class ChatActivity extends AppCompatActivity {
     private String username;
 
@@ -48,6 +41,7 @@ public class ChatActivity extends AppCompatActivity {
 
     private ChatMessageRecyclerViewAdapter msgAdapter;
     private WebSocketService webSocketService;
+    private ApiClient apiClient;
     private OkHttpClient okHttpClient = new OkHttpClient();
     private Gson gson = new GsonBuilder().create();
 
@@ -73,6 +67,7 @@ public class ChatActivity extends AppCompatActivity {
         initialize(this.getIntent().getExtras());
         webSocketService = WebSocketService.getWebSocketService();
         webSocketService.subscribeToChat(publicMessageConsumer, privateMessageConsumer);
+        apiClient = ApiClient.getApiClient();
         printChatMessagesHistory();
         btnChatSend.setOnClickListener(v -> sendMessage());
     }
@@ -95,31 +90,14 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void printChatMessagesHistory() {
-        List<ChatMessage> chatMessages = new ArrayList<>();
+        Disposable disposable = apiClient.getChatState()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(messages -> {
+                    messages.forEach(msgAdapter::addMessage);
+                    rvChatMessages.scrollToPosition(msgAdapter.getItemCount() - 1);
+                });
 
-        //Android doesn't allow for rest api calls on main thread
-        Thread thread = new Thread(() -> {
-            Request request = new Request.Builder()
-                    .url(Const.REST_ADDRESS + Const.GET_MESSAGE_HISTORY_ENDPOINT)
-                    .build();
-            try (Response response = okHttpClient.newCall(request).execute()) {
-                Type type = new TypeToken<List<ChatMessage>>() {
-                }.getType();
-                chatMessages.addAll(gson.fromJson(response.body().string(), type));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
-
-        thread.start();
-        try {
-            thread.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        chatMessages.forEach(msgAdapter::addMessage);
-        rvChatMessages.scrollToPosition(msgAdapter.getItemCount() - 1);
     }
 
     private void sendMessage() {
