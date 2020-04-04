@@ -2,32 +2,38 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.duder">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
+        android:theme="@style/AppThemeWithoutActionBar"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme.Launcher"
         android:usesCleartextTraffic="true">
-        <activity android:name="org.duder.activities.SplashActivity">
+
+        <activity android:name=".activities.SplashActivity"
+            android:theme="@style/AppTheme.Launcher">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="org.duder.activities.LoginActivity" />
-        <activity android:name="org.duder.activities.RegistrationActivity">
+        <activity android:name=".activities.LoginActivity" />
+        <activity android:name=".activities.RegistrationActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.duder.activities.LoginActivity" />
         </activity>
         <activity
-            android:name="org.duder.activities.ChatActivity"
+            android:name=".activities.MainActivity"
+            android:theme="@style/AppTheme"
+            android:label="@string/title_activity_main"/>
+        <activity
+            android:name=".activities.ChatActivity"
             android:windowSoftInputMode="adjustPan" />
-
     </application>
-
-    <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>

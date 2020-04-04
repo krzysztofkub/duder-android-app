@@ -51,7 +51,6 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
@@ -135,18 +134,13 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    private void gotoChat() {
-        Log.i(TAG, "gotoChat");
-
+    private void gotoMainActivity() {
         final String login = txtLogin.getText().toString();
         final Bundle bundle = new Bundle();
         bundle.putString("login", login);
-
-        final Intent chatIntent = new Intent(LoginActivity.this, ChatActivity.class);
-        chatIntent.putExtras(bundle);
-
-        Log.i(TAG, "gotoChat - starting activity");
-        startActivity(chatIntent);
+        final Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtras(bundle);
+        startActivity(intent);
         finish();
     }
 
@@ -167,7 +161,7 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(LoginActivity.this, "Bad credentials", Toast.LENGTH_SHORT).show();
                     break;
                 case LOGIN_SUCCEEDED:
-                    gotoChat();
+                    gotoMainActivity();
                     break;
                 default:
                     Log.e(TAG, "LoginHandler received unrecognized code: " + msg.what);

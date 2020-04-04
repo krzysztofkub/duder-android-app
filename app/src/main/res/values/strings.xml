@@ -11,4 +11,9 @@
     <string name="nicknameHint">Nickname</string>
     <string name="forgot_password">Forgot password?</string>
     <string name="sign_up">Sign up</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Events</string>
+    <string name="title_notifications">Duders</string>
+    <string name="title_chat">Chat</string>
 </resources>

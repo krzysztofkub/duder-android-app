@@ -18,7 +18,7 @@ import org.duder.R;
 import org.duder.api.ApiClient;
 import org.duder.model.ChatMessage;
 import org.duder.util.Const;
-import org.duder.util.messages.ChatMessageRecyclerViewAdapter;
+import org.duder.ui.chat.ChatMessageRecyclerViewAdapter;
 import org.duder.websocket.WebSocketService;
 import org.duder.websocket.dto.StompMessage;
 
@@ -61,7 +61,6 @@ public class ChatActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
         initialize(this.getIntent().getExtras());

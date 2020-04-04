@@ -1,4 +1,4 @@
-package org.duder.util.messages;
+package org.duder.ui.chat;
 
 import android.graphics.Color;
 import android.support.annotation.NonNull;

@@ -11,13 +11,11 @@ import android.widget.Toast;
 
 import org.duder.R;
 import org.duder.api.ApiClient;
-import org.duder.model.Code;
 import org.duder.model.User;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-import okhttp3.ResponseBody;
 
 public class RegistrationActivity extends AppCompatActivity {
 
@@ -43,7 +41,6 @@ public class RegistrationActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration);
         apiClient = ApiClient.getApiClient();
