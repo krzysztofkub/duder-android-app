@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/registration.layout.main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="12dp"
+    tools:context="org.duder.activities.RegistrationActivity">
+
+    <ImageView
+        android:tint="@color/primary"
+        android:id="@+id/registration.image.logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:src="@drawable/duder_logo"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/registration.layout.main" />
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/registration.layout.registration_form"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/loginFormPadding"
+        app:layout_constraintLeft_toLeftOf="@+id/registration.layout.main"
+        app:layout_constraintRight_toRightOf="@+id/registration.layout.main"
+        app:layout_constraintTop_toBottomOf="@+id/registration.image.logo">
+
+        <EditText
+            android:id="@+id/registration.text.login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/loginFormMargin"
+            android:ems="10"
+            android:hint="@string/loginHint"
+            android:inputType="textPersonName"
+            style="@android:style/Widget.EditText"
+            app:layout_constraintBottom_toTopOf="@+id/registration.text.nickname"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/registration.text.nickname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/loginFormMargin"
+            android:ems="10"
+            android:hint="@string/nicknameHint"
+            android:inputType="textPersonName"
+            style="@android:style/Widget.EditText"
+            app:layout_constraintBottom_toTopOf="@+id/registration.text.password"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/registration.text.login" />
+
+        <EditText
+            android:id="@+id/registration.text.password"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/loginFormMargin"
+            android:ems="10"
+            android:hint="@string/passwordHint"
+            android:inputType="textPassword"
+            style="@android:style/Widget.EditText"
+            app:layout_constraintBottom_toTopOf="@+id/registration.text.confirm.password"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/registration.text.nickname" />
+
+        <EditText
+            android:id="@+id/registration.text.confirm.password"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/loginFormMargin"
+            android:ems="10"
+            android:hint="@string/passwordConfirmHint"
+            android:inputType="textPassword"
+            style="@android:style/Widget.EditText"
+            app:layout_constraintBottom_toTopOf="@+id/registration.button.registration"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/registration.text.password" />
+
+        <Button
+            android:id="@+id/registration.button.registration"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="40dp"
+            android:background="@color/accent"
+            android:paddingHorizontal="50dp"
+            android:text="@string/registerText"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/registration.text.confirm.password" />
+
+    </android.support.constraint.ConstraintLayout>
+
+
+</android.support.constraint.ConstraintLayout>

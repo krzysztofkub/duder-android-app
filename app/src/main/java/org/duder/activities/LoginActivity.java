@@ -57,14 +57,21 @@ public class LoginActivity extends AppCompatActivity {
 
         this.initializeFromR();
 
-        txtLogin.setText("dude");
-        txtPassword.setText("duderowsky");
+        String login = this.getIntent().getStringExtra("login");
+        if (login != null) {
+            txtLogin.setText(login);
+        } else {
+            txtLogin.setText("dude");
+            txtPassword.setText("duderowsky");
+        }
+
         btnLogin.setOnClickListener(this::onLoginClicked);
         btnSignUp.setOnClickListener(this::onSignUpClicked);
     }
 
     private void onSignUpClicked(View view) {
-
+        final Intent registrationIntent = new Intent(this, RegistrationActivity.class);
+        startActivity(registrationIntent);
     }
 
     @Override

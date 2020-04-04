@@ -17,6 +17,11 @@
             </intent-filter>
         </activity>
         <activity android:name="org.duder.activities.LoginActivity" />
+        <activity android:name="org.duder.activities.RegistrationActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.duder.activities.LoginActivity" />
+        </activity>
         <activity
             android:name="org.duder.activities.ChatActivity"
             android:windowSoftInputMode="adjustPan" />
