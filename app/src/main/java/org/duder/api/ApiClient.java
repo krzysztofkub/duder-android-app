@@ -34,11 +34,15 @@ public class ApiClient {
         return apiClient;
     }
 
-    public Single<List<ChatMessage>> getChatState() {
-        return apiService.getChatState();
+    public Single<List<ChatMessage>> getChatState(String sessionToken) {
+        return apiService.getChatState(sessionToken);
     }
 
     public Single<Response<ResponseBody>> registerUser(User user) {
         return apiService.registerUser(user);
+    }
+
+    public Single<Response<ResponseBody>> loginUser(String login, String password) {
+        return apiService.loginUser(login, password);
     }
 }

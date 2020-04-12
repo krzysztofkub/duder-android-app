@@ -23,12 +23,7 @@ public class EventFragment extends Fragment {
                 ViewModelProviders.of(this).get(EventViewModel.class);
         View root = inflater.inflate(R.layout.fragment_events, container, false);
         final TextView textView = root.findViewById(R.id.text_events);
-        eventViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });
+        eventViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
         return root;
     }
 }
