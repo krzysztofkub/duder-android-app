@@ -112,7 +112,6 @@ public class LoginActivity extends AppCompatActivity {
         }
         showBusyIndicator();
         user = new User(txtLogin.getText().toString(), txtPassword.getText().toString());
-//        executor.submit(this::doLoginToWebsocket);
         executor.submit(this::doLoginToRest);
     }
 
