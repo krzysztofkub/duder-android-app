@@ -17,8 +17,9 @@ import com.google.gson.GsonBuilder;
 import org.duder.R;
 import org.duder.api.ApiClient;
 import org.duder.model.ChatMessage;
-import org.duder.util.Const;
 import org.duder.ui.chat.ChatMessageRecyclerViewAdapter;
+import org.duder.util.Const;
+import org.duder.util.UserSession;
 import org.duder.websocket.WebSocketService;
 import org.duder.websocket.dto.StompMessage;
 
@@ -26,7 +27,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
-import okhttp3.OkHttpClient;
 
 
 public class ChatActivity extends AppCompatActivity {
@@ -42,7 +42,6 @@ public class ChatActivity extends AppCompatActivity {
     private ChatMessageRecyclerViewAdapter msgAdapter;
     private WebSocketService webSocketService;
     private ApiClient apiClient;
-    private OkHttpClient okHttpClient = new OkHttpClient();
     private Gson gson = new GsonBuilder().create();
 
     // region StompMessage consumers
@@ -78,7 +77,7 @@ public class ChatActivity extends AppCompatActivity {
         etChatMessage = findViewById(R.id.etChatMessage);
         btnChatSend = findViewById(R.id.btnChatSend);
 
-        tvChatTitle.setText("think of something");
+        tvChatTitle.setText("Public");
         Toast.makeText(getApplicationContext(), "Joined as " + login, Toast.LENGTH_SHORT).show();
 
         msgAdapter = new ChatMessageRecyclerViewAdapter(this, login);
@@ -89,14 +88,14 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void printChatMessagesHistory() {
-        Disposable disposable = apiClient.getChatState()
+        UserSession userSession = UserSession.getUserSession();
+        Disposable disposable = apiClient.getChatState(userSession.getUser().getSessionToken())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(messages -> {
                     messages.forEach(msgAdapter::addMessage);
                     rvChatMessages.scrollToPosition(msgAdapter.getItemCount() - 1);
                 });
-
     }
 
     private void sendMessage() {

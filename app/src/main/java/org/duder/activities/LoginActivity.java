@@ -15,13 +15,24 @@ import android.widget.EditText;
 import android.widget.PopupWindow;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+
 import org.duder.R;
+import org.duder.api.ApiClient;
+import org.duder.model.User;
+import org.duder.util.UserSession;
 import org.duder.websocket.WebSocketService;
 import org.duder.websocket.stomp.dto.ConnectionResponse;
 
+import java.net.ResponseCache;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+import okhttp3.ResponseBody;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -35,6 +46,8 @@ public class LoginActivity extends AppCompatActivity {
     private View viewRoot;
     private PopupWindow busyIndicator;
     private Handler handler;
+
+    private User user;
     private ExecutorService executor;
 
     private static final int LOGIN_SUCCEEDED = 1;
@@ -77,7 +90,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         handler = new LoginHandler();
-        executor = Executors.newSingleThreadExecutor();
+        executor = Executors.newFixedThreadPool(2);
     }
 
     private void onLoginClicked(View view) {
@@ -98,15 +111,40 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
         showBusyIndicator();
-        executor.submit(this::doLogin);
+        user = new User(txtLogin.getText().toString(), txtPassword.getText().toString());
+        executor.submit(this::doLoginToRest);
     }
 
-    private void doLogin() {
-        String login = txtLogin.getText().toString();
-        String password = txtPassword.getText().toString();
-        WebSocketService webSocketService = WebSocketService.getWebSocketService();
-        CompletableFuture<ConnectionResponse> futureConnect = webSocketService.connect(login, password);
+    private void doLoginToRest() {
+        ApiClient apiClient = ApiClient.getApiClient();
+        Disposable disposable = apiClient.loginUser(user.getLogin(), user.getPassword())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(response -> {
+                    switch (response.code()) {
+                        case 200:
+                            User userFromResponse = new Gson().fromJson(response.body().string(), User.class);
+                            user.setNickname(userFromResponse.getNickname());
+                            user.setSessionToken(userFromResponse.getSessionToken());
+                            UserSession.createUserSession(user);
+                            doLoginToWebsocket();
+                            break;
+                        case 422:
+                            hideBusyIndicator();
+                            Toast.makeText(this, "Bad credentials", Toast.LENGTH_SHORT).show();
+                            txtLogin.setError("Baaad login or password, try again DUuuuude");
+                            break;
+                        default:
+                            hideBusyIndicator();
+                            Toast.makeText(this, "Unknown response", Toast.LENGTH_SHORT).show();
+                            break;
+                    }
+                });
+    }
 
+    private void doLoginToWebsocket() {
+        WebSocketService webSocketService = WebSocketService.getWebSocketService();
+        CompletableFuture<ConnectionResponse> futureConnect = webSocketService.connect(user.getLogin(), user.getPassword());
         futureConnect.thenAccept(response -> {
             final Message message = new Message();
             message.what = response.isBadCredentials() ? BAD_CREDENTIALS : LOGIN_SUCCEEDED;
