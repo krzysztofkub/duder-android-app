@@ -11,7 +11,7 @@ public class Const {
     public static final String USER_QUEUE = "/user/queue/reply";
 
     public static final String REST_ADDRESS = "http://" + IP_ADDRESS + ":8080";
-    public static final String GET_MESSAGE_HISTORY_ENDPOINT = "/api/getChatState";
+    public static final String GET_MESSAGE_HISTORY_ENDPOINT = "/api/chat/getChatState";
     public static final String REGISTER_USER = "/user/register";
     public static final String LOGIN_USER = "/user/login";
 }
