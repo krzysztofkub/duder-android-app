@@ -5,4 +5,29 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
+    <!-- General Values -->
+    <dimen name="element_spacing_extra_small">4dp</dimen>
+    <dimen name="element_spacing_small">8dp</dimen>
+    <dimen name="element_spacing_medium_small">10dp</dimen>
+    <dimen name="element_spacing_normal">12dp</dimen>
+    <dimen name="element_spacing_medium_large">16dp</dimen>
+    <dimen name="element_spacing_large">24dp</dimen>
+    <dimen name="element_spacing_larger">36dp</dimen>
+    <dimen name="element_spacing_extra_large">48dp</dimen>
+    <dimen name="element_spacing_super_large">56dp</dimen>
+
+    <!-- Text Values -->
+    <dimen name="body_text_size_medium_small">14sp</dimen>
+    <dimen name="body_text_size_normal">16sp</dimen>
+    <dimen name="body_text_size_title">18sp</dimen>
+
+    <!-- Event Post -->
+    <dimen name="image_height">250dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+
+    <!-- Event Create -->
+    <dimen name="eventCreateFormPadding">5dp</dimen>
+
+    <!-- Instructions -->
+    <dimen name="arrow_size">100dp</dimen>
 </resources>

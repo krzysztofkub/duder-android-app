@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="org.duder.activities.MainActivity">
+    tools:context="org.duder.view.activity.MainActivity">
     <item
         android:id="@+id/action_chat"
         android:icon="@drawable/chat_icon"

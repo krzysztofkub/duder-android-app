@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/card_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/element_spacing_normal"
+    app:cardCornerRadius="8dp"
+    android:background="@color/color_accent">
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/primary">
+
+        <ImageView
+            android:id="@+id/image_view"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/image_height"
+            android:transitionName="@string/transition_name"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_image_24dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <TextView
+            android:id="@+id/title_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/icons"
+            android:paddingLeft="@dimen/element_spacing_normal"
+            android:paddingTop="@dimen/element_spacing_normal"
+            android:paddingRight="@dimen/element_spacing_normal"
+            android:textSize="@dimen/body_text_size_title"
+            android:ellipsize="end"
+            android:lines="1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/image_view"
+            app:layout_constraintHorizontal_bias="0"
+            tools:text="Really great title Really great"/>
+
+        <TextView
+            android:id="@+id/participants_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/icons"
+            android:padding="@dimen/element_spacing_small"
+            android:textSize="@dimen/body_text_size_medium_small"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/hobbies_text"
+            app:layout_constraintTop_toBottomOf="@id/title_text"
+            tools:text="Participants number: 1"/>
+
+        <TextView
+            android:id="@+id/timestamp_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/icons"
+            android:padding="@dimen/element_spacing_small"
+            android:textSize="@dimen/body_text_size_medium_small"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/hobbies_text"
+            app:layout_constraintTop_toBottomOf="@id/title_text"
+            tools:text="timestamp"/>
+
+        <TextView
+            android:id="@+id/hobbies_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/icons"
+            android:padding="@dimen/element_spacing_small"
+            android:textSize="@dimen/body_text_size_medium_small"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/timestamp_text"
+            tools:text="SPORT"/>
+
+    </android.support.constraint.ConstraintLayout>
+</android.support.v7.widget.CardView>
+

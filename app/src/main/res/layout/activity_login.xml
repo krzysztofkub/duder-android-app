@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="12dp"
-    tools:context="org.duder.activities.LoginActivity">
+    tools:context="org.duder.view.activity.LoginActivity">
 
     <Button
         android:id="@+id/login.button.sign_up"

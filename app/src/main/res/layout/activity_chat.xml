@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="12dp"
-    tools:context="org.duder.activities.ChatActivity">
+    tools:context="org.duder.view.activity.ChatActivity">
 
     <LinearLayout
         android:id="@+id/linLayChatTop"

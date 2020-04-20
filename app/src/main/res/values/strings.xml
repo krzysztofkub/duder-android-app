@@ -16,4 +16,12 @@
     <string name="title_dashboard">Events</string>
     <string name="title_notifications">Duders</string>
     <string name="title_chat">Chat</string>
+
+    <!-- Events -->
+    <string name="no_events">No Events Found</string>
+    <string name="no_more_events">No More Events Found</string>
+    <string name="transition_name">image_transition</string>
+    <string name="participant">Participants: %1$d</string>
+    <string name="eventCreateText">Create event</string>
+    <string name="eventNameHint">Name</string>
 </resources>
