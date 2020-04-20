@@ -57,7 +57,6 @@ public class EventFragment extends BaseFragment {
 
     private void initLayout() {
         setProgressBarColor();
-
         LinearLayoutManager layoutManager = new LinearLayoutManager(mContext);
         eventsList.setLayoutManager(layoutManager);
         eventsList.setAdapter(viewModel.getEventPostAdapter());
