@@ -18,7 +18,7 @@ import org.duder.view.activity.CreateEventActivity;
 import org.duder.view.activity.RegistrationActivity;
 import org.duder.viewModel.HomeViewModel;
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends BaseFragment {
 
     private HomeViewModel homeViewModel;
 
@@ -26,13 +26,8 @@ public class HomeFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         homeViewModel =  ViewModelProviders.of(this).get(HomeViewModel.class);
         View root = inflater.inflate(R.layout.fragment_home, container, false);
-        final Button button = root.findViewById(R.id.event_button);
-        button.setOnClickListener(v -> createEvent());
+        final TextView textView = root.findViewById(R.id.text_home);
+        homeViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
         return root;
-    }
-
-    private void createEvent() {
-        final Intent registrationIntent = new Intent(getContext(), CreateEventActivity.class);
-        startActivity(registrationIntent);
     }
 }

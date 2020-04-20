@@ -51,25 +51,4 @@ public class HobbyViewModel extends AbstractViewModel {
     public MutableLiveData<FragmentState> getState() {
         return state;
     }
-
-    public void createEvent(Event event) {
-        addSub(ApiClient.getApiClient().createEvent(event, UserSession.getUserSession().getAccount().getSessionToken())
-                .toObservable()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnNext(r -> state.postValue(FragmentState.loading()))
-                .subscribe(response -> {
-                    if (response.isSuccessful()) {
-                        state.postValue(FragmentState.success());
-                    } else {
-                        Log.e(TAG, response.message());
-                        state.postValue(FragmentState.error(new RuntimeException("Something went wrong: " + response.errorBody().string())));
-                    }
-
-                }, error -> {
-                    Log.e(TAG, error.getMessage());
-                    state.postValue(FragmentState.error(error));
-                })
-        );
-    }
 }

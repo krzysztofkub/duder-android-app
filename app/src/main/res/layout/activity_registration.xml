@@ -90,7 +90,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="40dp"
-            android:background="@color/accent"
+            android:background="@color/success"
             android:paddingHorizontal="50dp"
             android:text="@string/registerText"
             app:layout_constraintLeft_toLeftOf="parent"

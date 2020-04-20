@@ -1,12 +1,12 @@
 package org.duder.view.fragment;
 
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Context;
+import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,18 +18,19 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import org.duder.R;
+import org.duder.view.activity.CreateEventActivity;
 import org.duder.view.adapter.listener.LazyLoadRecyclerViewListener;
 import org.duder.viewModel.EventViewModel;
 import org.duder.viewModel.state.FragmentState;
 
-public class EventFragment extends Fragment {
+public class EventFragment extends BaseFragment {
 
     private static final String TAG = EventFragment.class.getSimpleName();
 
-    private Context mContext;
     private EventViewModel viewModel;
     private ProgressBar progressBar;
     private RecyclerView eventsList;
+    private FloatingActionButton addEventButton;
     private LazyLoadRecyclerViewListener lazyListener;
 
 
@@ -38,6 +39,7 @@ public class EventFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_events, container, false);
         progressBar = root.findViewById(R.id.progress_spinner);
         eventsList = root.findViewById(R.id.events_list);
+        addEventButton = root.findViewById(R.id.btn_add_event);
         init();
         viewModel.loadMoreEvents();
         return root;
@@ -68,6 +70,10 @@ public class EventFragment extends Fragment {
             }
         };
         eventsList.addOnScrollListener(lazyListener);
+        addEventButton.setOnClickListener(v -> {
+            final Intent registrationIntent = new Intent(getContext(), CreateEventActivity.class);
+            startActivity(registrationIntent);
+        });
     }
 
     private void setProgressBarColor() {
@@ -103,11 +109,5 @@ public class EventFragment extends Fragment {
             case ERROR:
                 Log.e(TAG, "Something went wrong", state.getError());
         }
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        mContext = context;
     }
 }

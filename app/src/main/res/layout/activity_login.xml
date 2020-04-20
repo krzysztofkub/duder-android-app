@@ -78,7 +78,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/loginFormMargin"
-            android:background="@color/accent"
+            android:background="@color/success"
             android:paddingHorizontal="50dp"
             android:text="@string/loginText"
             app:layout_constraintBottom_toTopOf="@id/login.button.forgot_password"

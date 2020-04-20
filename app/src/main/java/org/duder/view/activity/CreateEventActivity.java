@@ -6,7 +6,6 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.format.Time;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -16,18 +15,11 @@ import android.widget.Toast;
 
 import org.duder.R;
 import org.duder.model.event.Event;
-import org.duder.service.ApiClient;
-import org.duder.util.UserSession;
+import org.duder.viewModel.EventViewModel;
 import org.duder.viewModel.HobbyViewModel;
 import org.duder.viewModel.state.FragmentState;
 
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.Calendar;
-import java.util.Date;
-
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 
 public class CreateEventActivity extends BaseActivity {
 
@@ -40,7 +32,8 @@ public class CreateEventActivity extends BaseActivity {
     private TextView txtTime;
     private TextView txtName;
 
-    private HobbyViewModel viewModel;
+    private HobbyViewModel hobbyViewModel;
+    private EventViewModel eventViewModel;
     private RecyclerView hobbies;
     private ProgressBar progressBar;
 
@@ -50,7 +43,7 @@ public class CreateEventActivity extends BaseActivity {
         setContentView(R.layout.activity_create_event);
         initLayout();
         init();
-        viewModel.loadHobbies();
+        hobbyViewModel.loadHobbies();
     }
 
     private void init() {
@@ -60,7 +53,8 @@ public class CreateEventActivity extends BaseActivity {
     }
 
     private void initViewModel() {
-        viewModel = ViewModelProviders.of(this).get(HobbyViewModel.class);
+        hobbyViewModel = ViewModelProviders.of(this).get(HobbyViewModel.class);
+        eventViewModel = ViewModelProviders.of(this).get(EventViewModel.class);
     }
 
     private void initLayout() {
@@ -78,13 +72,14 @@ public class CreateEventActivity extends BaseActivity {
     private void initSubscriptions() {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         hobbies.setLayoutManager(layoutManager);
-        hobbies.setAdapter(viewModel.getHobbyAdapter());
+        hobbies.setAdapter(hobbyViewModel.getHobbyAdapter());
 
         btnDatePicker.setOnClickListener(v -> onDateClicked());
         btnTimePicker.setOnClickListener(v -> onTimeClicked());
         btnCreateEvent.setOnClickListener(v -> onCreateEventClicked());
 
-        viewModel.getState().observe(this, this::update);
+        hobbyViewModel.getState().observe(this, this::update);
+        eventViewModel.getState().observe(this, this::update);
     }
 
     private void update(FragmentState state) {
@@ -167,6 +162,6 @@ public class CreateEventActivity extends BaseActivity {
         Calendar calendar = Calendar.getInstance();
         calendar.set(Integer.parseInt(dateParts[2]), Integer.parseInt(dateParts[1]) - 1, Integer.parseInt(dateParts[0]), Integer.parseInt(timeParts[0]), Integer.parseInt(timeParts[1]));
         Event event = new Event(name, HobbyViewModel.hobbiesSelected, calendar.getTimeInMillis());
-        viewModel.createEvent(event);
+        eventViewModel.createEvent(event);
     }
 }
