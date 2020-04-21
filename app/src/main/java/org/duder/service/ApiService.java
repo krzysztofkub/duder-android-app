@@ -16,6 +16,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
+import retrofit2.http.Url;
 
 public interface ApiService {
     @GET(Const.GET_MESSAGE_HISTORY_ENDPOINT)
@@ -32,6 +33,9 @@ public interface ApiService {
 
     @POST(Const.EVENTS)
     Single<Response<ResponseBody>> createEvent(@Body Event event, @Header("Authorization") String sessionToken);
+
+    @GET
+    Single<Response<ResponseBody>> getEvent(@Url String url, @Header("Authorization") String sessionToken);
 
     @GET(Const.HOBBIES)
     Single<List<String>> findHobbies(@Header("Authorization") String sessionToken);

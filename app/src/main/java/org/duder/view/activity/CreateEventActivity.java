@@ -3,6 +3,7 @@ package org.duder.view.activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,11 +16,19 @@ import android.widget.Toast;
 
 import org.duder.R;
 import org.duder.model.event.Event;
+import org.duder.service.ApiClient;
+import org.duder.util.Const;
+import org.duder.util.UserSession;
 import org.duder.viewModel.EventViewModel;
-import org.duder.viewModel.HobbyViewModel;
+import org.duder.viewModel.CreateEventViewModel;
 import org.duder.viewModel.state.FragmentState;
 
 import java.util.Calendar;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
+
+import static org.duder.util.Const.CREATED_EVENT_URI;
 
 public class CreateEventActivity extends BaseActivity {
 
@@ -32,8 +41,7 @@ public class CreateEventActivity extends BaseActivity {
     private TextView txtTime;
     private TextView txtName;
 
-    private HobbyViewModel hobbyViewModel;
-    private EventViewModel eventViewModel;
+    private CreateEventViewModel createEventViewModel;
     private RecyclerView hobbies;
     private ProgressBar progressBar;
 
@@ -41,9 +49,8 @@ public class CreateEventActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_event);
-        initLayout();
         init();
-        hobbyViewModel.loadHobbies();
+        createEventViewModel.loadHobbies();
     }
 
     private void init() {
@@ -53,8 +60,7 @@ public class CreateEventActivity extends BaseActivity {
     }
 
     private void initViewModel() {
-        hobbyViewModel = ViewModelProviders.of(this).get(HobbyViewModel.class);
-        eventViewModel = ViewModelProviders.of(this).get(EventViewModel.class);
+        createEventViewModel = ViewModelProviders.of(this).get(CreateEventViewModel.class);
     }
 
     private void initLayout() {
@@ -65,21 +71,19 @@ public class CreateEventActivity extends BaseActivity {
         txtTime = findViewById(R.id.in_time);
         txtName = findViewById(R.id.event_name);
         progressBar = findViewById(R.id.progress_spinner);
-
         hobbies = findViewById(R.id.hobby_list);
     }
 
     private void initSubscriptions() {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         hobbies.setLayoutManager(layoutManager);
-        hobbies.setAdapter(hobbyViewModel.getHobbyAdapter());
+        hobbies.setAdapter(createEventViewModel.getHobbyAdapter());
 
         btnDatePicker.setOnClickListener(v -> onDateClicked());
         btnTimePicker.setOnClickListener(v -> onTimeClicked());
         btnCreateEvent.setOnClickListener(v -> onCreateEventClicked());
 
-        hobbyViewModel.getState().observe(this, this::update);
-        eventViewModel.getState().observe(this, this::update);
+        createEventViewModel.getState().observe(this, this::update);
     }
 
     private void update(FragmentState state) {
@@ -93,6 +97,9 @@ public class CreateEventActivity extends BaseActivity {
             case SUCCESS: //created event
                 progressBar.setVisibility(View.GONE);
                 Toast.makeText(this, "Created event", Toast.LENGTH_LONG).show();
+                Intent data = new Intent();
+                data.putExtra(CREATED_EVENT_URI, (String) state.getData());
+                setResult(RESULT_OK, data);
                 finish();
                 break;
             case ERROR:
@@ -150,7 +157,7 @@ public class CreateEventActivity extends BaseActivity {
             txtTime.setError("what time?");
             hasErrors = true;
         }
-        if (HobbyViewModel.hobbiesSelected.size() == 0) {
+        if (CreateEventViewModel.hobbiesSelected.size() == 0) {
             Toast.makeText(this, "Please pick a category", Toast.LENGTH_LONG).show();
             hasErrors = true;
         }
@@ -161,7 +168,7 @@ public class CreateEventActivity extends BaseActivity {
         String[] timeParts = time.split(":");
         Calendar calendar = Calendar.getInstance();
         calendar.set(Integer.parseInt(dateParts[2]), Integer.parseInt(dateParts[1]) - 1, Integer.parseInt(dateParts[0]), Integer.parseInt(timeParts[0]), Integer.parseInt(timeParts[1]));
-        Event event = new Event(name, HobbyViewModel.hobbiesSelected, calendar.getTimeInMillis());
-        eventViewModel.createEvent(event);
+        Event event = new Event(name, CreateEventViewModel.hobbiesSelected, calendar.getTimeInMillis());
+        createEventViewModel.createEvent(event);
     }
 }

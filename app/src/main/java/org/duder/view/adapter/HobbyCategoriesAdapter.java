@@ -8,11 +8,10 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 
 import org.duder.R;
-import org.duder.viewModel.HobbyViewModel;
 
 import java.util.List;
 
-import static org.duder.viewModel.HobbyViewModel.*;
+import static org.duder.viewModel.CreateEventViewModel.*;
 
 public class HobbyCategoriesAdapter extends RecyclerView.Adapter<HobbyCategoriesAdapter.ViewHolder> {
     private List<String> hobbies;

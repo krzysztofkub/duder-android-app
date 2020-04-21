@@ -56,6 +56,10 @@ public class ApiClient {
         return apiService.createEvent(event, sessionToken);
     }
 
+    public Single<Response<ResponseBody>> getEvent(String url, String sessionToken) {
+        return apiService.getEvent(url, sessionToken);
+    }
+
     public Single<List<String>> getHobbies(String sessionToken) {
         return apiService.findHobbies(sessionToken);
     }

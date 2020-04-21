@@ -3,15 +3,24 @@ package org.duder.viewModel.state;
 public class FragmentState {
     private final Status status;
     private final Throwable error;
+    private final Object data;
 
-    public FragmentState(Status status) {
+    private FragmentState(Status status) {
         this.status = status;
         error = null;
+        data = null;
     }
 
-    public FragmentState(Status status, Throwable error) {
+    private FragmentState(Status status, Throwable error) {
         this.status = status;
         this.error = error;
+        data = null;
+    }
+
+    private FragmentState(Status status, Object data) {
+        this.status = status;
+        this.data = data;
+        error = null;
     }
 
     public static FragmentState loading() {
@@ -20,6 +29,10 @@ public class FragmentState {
 
     public static FragmentState success() {
         return new FragmentState(Status.SUCCESS);
+    }
+
+    public static FragmentState success(Object data) {
+        return new FragmentState(Status.SUCCESS, data);
     }
 
     public static FragmentState complete() {
@@ -36,5 +49,9 @@ public class FragmentState {
 
     public Throwable getError() {
         return error;
+    }
+
+    public Object getData() {
+        return data;
     }
 }

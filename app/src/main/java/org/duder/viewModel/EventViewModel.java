@@ -3,6 +3,9 @@ package org.duder.viewModel;
 import android.arch.lifecycle.MutableLiveData;
 import android.util.Log;
 
+import com.google.gson.Gson;
+
+import org.duder.model.user.Account;
 import org.duder.service.ApiClient;
 import org.duder.model.event.Event;
 import org.duder.util.UserSession;
@@ -10,6 +13,9 @@ import org.duder.view.adapter.EventPostAdapter;
 import org.duder.viewModel.state.FragmentState;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -43,31 +49,42 @@ public class EventViewModel extends AbstractViewModel {
         currentPage++;
     }
 
-    private void updateAdapter(List<Event> data) {
-        data = data != null ? data : new ArrayList<>();
-        eventPostAdapter.getEvents().addAll(data);
-        eventPostAdapter.notifyDataSetChanged();
+    public void fetchAndAddNewEvent(String locationUri) {
+        state.postValue(FragmentState.loading());
+        addSub(
+                ApiClient.getApiClient().getEvent(locationUri, UserSession.getUserSession().getAccount().getSessionToken())
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(response -> {
+                                    Log.i(TAG, "Fetched event " + response.body());
+                                    if (response.code() == 200) {
+                                        Event event = new Gson().fromJson(response.body().string(), Event.class);
+                                        updateAdapter(event);
+                                        state.postValue(FragmentState.success());
+                                    } else {
+                                        Log.e(TAG, "Cant fetch newly created event with location url = " + locationUri);
+                                        state.postValue(FragmentState.complete());
+                                    }
+                                },
+                                error -> {
+                                    Log.e(TAG, error.getMessage(), error);
+                                    state.postValue(FragmentState.error(error));
+                                })
+        );
     }
 
-    public void createEvent(Event event) {
-        addSub(ApiClient.getApiClient().createEvent(event, UserSession.getUserSession().getAccount().getSessionToken())
-                .toObservable()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnNext(r -> state.postValue(FragmentState.loading()))
-                .subscribe(response -> {
-                    if (response.isSuccessful()) {
-                        state.postValue(FragmentState.success());
-                    } else {
-                        Log.e(TAG, response.message());
-                        state.postValue(FragmentState.error(new RuntimeException("Something went wrong: " + response.errorBody().string())));
-                    }
+    private void updateAdapter(Event event) {
+        List<Event> list = new ArrayList<>();
+        list.add(event);
+        updateAdapter(list);
+    }
 
-                }, error -> {
-                    Log.e(TAG, error.getMessage());
-                    state.postValue(FragmentState.error(error));
-                })
-        );
+    private void updateAdapter(List<Event> data) {
+        data = data != null ? data : new ArrayList<>();
+        List<Event> events = eventPostAdapter.getEvents();
+        events.addAll(data);
+        Collections.sort(events, Comparator.comparingLong(Event::getTimestamp));
+        eventPostAdapter.notifyDataSetChanged();
     }
 
     public MutableLiveData<FragmentState> getState() {
