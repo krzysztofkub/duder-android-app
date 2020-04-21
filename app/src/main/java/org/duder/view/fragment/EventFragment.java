@@ -6,6 +6,7 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
@@ -33,7 +34,6 @@ public class EventFragment extends BaseFragment {
     private FloatingActionButton addEventButton;
     private LazyLoadRecyclerViewListener lazyListener;
 
-
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_events, container, false);
@@ -52,7 +52,7 @@ public class EventFragment extends BaseFragment {
     }
 
     private void initViewModel() {
-        viewModel = ViewModelProviders.of(this).get(EventViewModel.class);
+        viewModel = ViewModelProviders.of(getActivity()).get(EventViewModel.class);
     }
 
     private void initLayout() {
@@ -87,7 +87,7 @@ public class EventFragment extends BaseFragment {
     }
 
     private void initSubscriptions() {
-        viewModel.getState().observe(this, this::update);
+        viewModel.getState().observe(getViewLifecycleOwner(), this::update);
     }
 
     private void update(FragmentState state) {

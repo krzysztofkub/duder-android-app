@@ -1,7 +1,6 @@
 package org.duder.viewModel;
 
 import android.arch.lifecycle.ViewModel;
-import android.widget.ListAdapter;
 
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
