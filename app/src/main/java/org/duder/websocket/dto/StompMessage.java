@@ -1,7 +1,8 @@
 package org.duder.websocket.dto;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import org.duder.websocket.stomp.exception.BadCredentialsException;
 

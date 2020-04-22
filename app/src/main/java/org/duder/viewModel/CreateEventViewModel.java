@@ -1,7 +1,8 @@
 package org.duder.viewModel;
 
-import android.arch.lifecycle.MutableLiveData;
 import android.util.Log;
+
+import androidx.lifecycle.MutableLiveData;
 
 import org.duder.model.event.Event;
 import org.duder.service.ApiClient;

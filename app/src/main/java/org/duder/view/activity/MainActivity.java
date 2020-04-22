@@ -2,18 +2,18 @@ package org.duder.view.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.BottomNavigationView;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.duder.R;
 import org.duder.view.fragment.DuderFragment;
 import org.duder.view.fragment.EventFragment;
 import org.duder.view.fragment.HomeFragment;
-
-import java.util.List;
 
 public class MainActivity extends BaseActivity {
 
@@ -31,19 +31,10 @@ public class MainActivity extends BaseActivity {
         BottomNavigationView navView = findViewById(R.id.bottom_nav_view);
         navView.setOnNavigationItemSelectedListener(this::onNavigationItemSelectedListener);
 
-//        if (savedInstanceState == null) { //Creating first time
-            fm.beginTransaction().add(R.id.nav_host_fragment, duderFragment, "duder_fragment").hide(duderFragment).commit();
-            fm.beginTransaction().add(R.id.nav_host_fragment, eventFragment, "event_fragment").hide(eventFragment).commit();
-            fm.beginTransaction().add(R.id.nav_host_fragment, homeFragment, "home_fragment").commit();
-//        } else { //Screen was rotated, fragments are attached to fm
-//            setActiveFragment();
-//        }
+        fm.beginTransaction().add(R.id.nav_host_fragment, duderFragment, "duder_fragment").hide(duderFragment).commit();
+        fm.beginTransaction().add(R.id.nav_host_fragment, eventFragment, "event_fragment").hide(eventFragment).commit();
+        fm.beginTransaction().add(R.id.nav_host_fragment, homeFragment, "home_fragment").commit();
     }
-
-//    private void setActiveFragment() {
-//        List<Fragment> fragments = fm.getFragments();
-//        active = fragments.stream().filter(f -> !f.isHidden()).findAny().orElse(homeFragment);
-//    }
 
     private boolean onNavigationItemSelectedListener(MenuItem item) {
         switch (item.getItemId()) {

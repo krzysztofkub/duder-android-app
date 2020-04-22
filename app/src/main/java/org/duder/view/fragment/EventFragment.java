@@ -1,22 +1,25 @@
 package org.duder.view.fragment;
 
 import android.app.Activity;
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.duder.R;
 import org.duder.view.activity.CreateEventActivity;
@@ -36,6 +39,7 @@ public class EventFragment extends BaseFragment {
     private RecyclerView eventsList;
     private FloatingActionButton addEventButton;
     private LazyLoadRecyclerViewListener lazyListener;
+    private SwipeRefreshLayout swipeLayout;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -43,14 +47,16 @@ public class EventFragment extends BaseFragment {
         progressBar = root.findViewById(R.id.progress_spinner);
         eventsList = root.findViewById(R.id.events_list);
         addEventButton = root.findViewById(R.id.btn_add_event);
+        swipeLayout = root.findViewById(R.id.swipe_layout);
         init();
-        viewModel.loadMoreEvents();
+        viewModel.loadEventsBatch(false);
         return root;
     }
 
     private void init() {
         initViewModel();
         initLayout();
+        initListeners();
         initSubscriptions();
     }
 
@@ -60,18 +66,26 @@ public class EventFragment extends BaseFragment {
 
     private void initLayout() {
         setProgressBarColor();
+        swipeLayout.setColorSchemeResources(R.color.primary);
+    }
+
+    private void initListeners() {
         LinearLayoutManager layoutManager = new LinearLayoutManager(mContext);
         eventsList.setLayoutManager(layoutManager);
         eventsList.setAdapter(viewModel.getEventPostAdapter());
-
         //Setup infinite scrolling
         lazyListener = new LazyLoadRecyclerViewListener(layoutManager) {
             @Override
             public void onLoadMore() {
-                viewModel.loadMoreEvents();
+                viewModel.loadEventsBatch(false);
             }
         };
         eventsList.addOnScrollListener(lazyListener);
+
+        swipeLayout.setOnRefreshListener(() -> {
+            viewModel.refreshEvents();
+        });
+
         addEventButton.setOnClickListener(v -> {
             final Intent intent = new Intent(mContext, CreateEventActivity.class);
             startActivityForResult(intent, CREATE_EVENT_REQUEST);
@@ -96,7 +110,9 @@ public class EventFragment extends BaseFragment {
     private void update(FragmentState state) {
         switch (state.getStatus()) {
             case LOADING:
-                progressBar.setVisibility(View.VISIBLE);
+                if (!swipeLayout.isRefreshing()) {
+                    progressBar.setVisibility(View.VISIBLE);
+                }
                 break;
             case COMPLETE:
                 progressBar.setVisibility(View.GONE);
@@ -105,8 +121,9 @@ public class EventFragment extends BaseFragment {
                 if (eventsList.getAdapter().getItemCount() == 0) {
                     Toast.makeText(mContext, R.string.no_events, Toast.LENGTH_LONG).show();
                 }
-                lazyListener.setWasOnBottom(false);
+                lazyListener.setLoading(false);
                 progressBar.setVisibility(View.GONE);
+                swipeLayout.setRefreshing(false);
                 break;
             case ERROR:
                 Log.e(TAG, "Something went wrong", state.getError());

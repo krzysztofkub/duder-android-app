@@ -1,12 +1,13 @@
 package org.duder.view.adapter.listener;
 
-import android.support.annotation.NonNull;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 public abstract class LazyLoadRecyclerViewListener extends RecyclerView.OnScrollListener {
     private LinearLayoutManager layoutManager;
-    private boolean wasOnBottom = false;
+    private boolean isLoading = false;
     private static final int VISIBLE_THRESHOLD = 3; //Number of items left in list before we start loading more
 
     public LazyLoadRecyclerViewListener(LinearLayoutManager layoutManager) {
@@ -24,10 +25,10 @@ public abstract class LazyLoadRecyclerViewListener extends RecyclerView.OnScroll
         int firstVisibleItem = layoutManager.findFirstVisibleItemPosition();
         boolean shouldFetchMoreItems = totalItemCount - visibleItemCount <= firstVisibleItem + VISIBLE_THRESHOLD;
 
-        if (!wasOnBottom && shouldFetchMoreItems) {
+        if (!isLoading && shouldFetchMoreItems) {
             //End of list has been reached
             onLoadMore();
-            wasOnBottom = true;
+            isLoading = true;
         }
     }
 
@@ -36,10 +37,10 @@ public abstract class LazyLoadRecyclerViewListener extends RecyclerView.OnScroll
     }
 
     private void reset() {
-        wasOnBottom = true;
+        isLoading = true;
     }
 
-    public void setWasOnBottom(boolean wasOnBottom) {
-        this.wasOnBottom = wasOnBottom;
+    public void setLoading(boolean loading) {
+        this.isLoading = loading;
     }
 }

@@ -7,7 +7,7 @@
     android:animateLayoutChanges="true"
     tools:context=".view.fragment.EventFragment">
 
-    <android.support.design.widget.FloatingActionButton
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/btn_add_event"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -18,7 +18,12 @@
         android:layout_margin="@dimen/element_spacing_medium_large"
         />
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/swipe_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/events_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -29,6 +34,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <ProgressBar
         android:id="@+id/progress_spinner"

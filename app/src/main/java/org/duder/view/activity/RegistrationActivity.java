@@ -2,21 +2,17 @@ package org.duder.view.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.fasterxml.jackson.databind.ser.Serializers;
-
 import org.duder.R;
-import org.duder.service.ApiClient;
 import org.duder.model.user.Account;
+import org.duder.service.ApiClient;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 public class RegistrationActivity extends BaseActivity {

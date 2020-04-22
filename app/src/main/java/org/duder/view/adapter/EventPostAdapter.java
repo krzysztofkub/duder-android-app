@@ -1,12 +1,13 @@
 package org.duder.view.adapter;
 
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
 
@@ -14,6 +15,9 @@ import org.duder.R;
 import org.duder.model.event.Event;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
@@ -42,6 +46,24 @@ public class EventPostAdapter extends RecyclerView.Adapter<EventPostAdapter.View
     @Override
     public int getItemCount() {
         return events.size();
+    }
+
+    public void addEvent(Event event) {
+        List<Event> list = new ArrayList<>();
+        list.add(event);
+        addEvents(list);
+    }
+
+    public void addEvents(List<Event> data) {
+        data = data != null ? data : new ArrayList<>();
+        events.addAll(data);
+        Collections.sort(events, Comparator.comparingLong(Event::getTimestamp));
+        notifyDataSetChanged();
+    }
+
+    public void clearEvents() {
+        events.clear();
+        notifyDataSetChanged();
     }
 
     public List<Event> getEvents() {

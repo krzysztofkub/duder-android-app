@@ -1,7 +1,8 @@
 package org.duder.websocket;
 
-import android.support.annotation.Nullable;
 import android.util.Log;
+
+import androidx.annotation.Nullable;
 
 import org.duder.websocket.dto.StompCommand;
 import org.duder.websocket.dto.StompHeader;

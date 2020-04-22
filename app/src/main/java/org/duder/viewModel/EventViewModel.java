@@ -1,19 +1,18 @@
 package org.duder.viewModel;
 
-import android.arch.lifecycle.MutableLiveData;
 import android.util.Log;
+
+import androidx.lifecycle.MutableLiveData;
 
 import com.google.gson.Gson;
 
-import org.duder.model.user.Account;
-import org.duder.service.ApiClient;
 import org.duder.model.event.Event;
+import org.duder.service.ApiClient;
 import org.duder.util.UserSession;
 import org.duder.view.adapter.EventPostAdapter;
 import org.duder.viewModel.state.FragmentState;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -30,7 +29,7 @@ public class EventViewModel extends AbstractViewModel {
     private EventPostAdapter eventPostAdapter = new EventPostAdapter(new ArrayList<>());
     private int currentPage = 0;
 
-    public void loadMoreEvents() {
+    public void loadEventsBatch(boolean clearEventsBefore) {
         state.postValue(FragmentState.loading());
         addSub(
                 ApiClient.getApiClient().getEvents(currentPage, GET_EVENT_NUMBER, UserSession.getUserSession().getAccount().getSessionToken())
@@ -38,7 +37,10 @@ public class EventViewModel extends AbstractViewModel {
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(response -> {
                                     Log.i(TAG, "Fetched " + response.size() + " events");
-                                    updateAdapter(response);
+                                    if (clearEventsBefore) {
+                                        eventPostAdapter.clearEvents();
+                                    }
+                                    eventPostAdapter.addEvents(response);
                                     state.postValue(FragmentState.success());
                                 },
                                 error -> {
@@ -59,7 +61,7 @@ public class EventViewModel extends AbstractViewModel {
                                     Log.i(TAG, "Fetched event " + response.body());
                                     if (response.code() == 200) {
                                         Event event = new Gson().fromJson(response.body().string(), Event.class);
-                                        updateAdapter(event);
+                                        eventPostAdapter.addEvent(event);
                                         state.postValue(FragmentState.success());
                                     } else {
                                         Log.e(TAG, "Cant fetch newly created event with location url = " + locationUri);
@@ -73,18 +75,9 @@ public class EventViewModel extends AbstractViewModel {
         );
     }
 
-    private void updateAdapter(Event event) {
-        List<Event> list = new ArrayList<>();
-        list.add(event);
-        updateAdapter(list);
-    }
-
-    private void updateAdapter(List<Event> data) {
-        data = data != null ? data : new ArrayList<>();
-        List<Event> events = eventPostAdapter.getEvents();
-        events.addAll(data);
-        Collections.sort(events, Comparator.comparingLong(Event::getTimestamp));
-        eventPostAdapter.notifyDataSetChanged();
+    public void refreshEvents() {
+        currentPage = 0;
+        loadEventsBatch(true);
     }
 
     public MutableLiveData<FragmentState> getState() {

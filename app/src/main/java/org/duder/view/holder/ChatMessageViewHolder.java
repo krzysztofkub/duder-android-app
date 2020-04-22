@@ -1,11 +1,12 @@
 package org.duder.view.holder;
 
 import android.graphics.Color;
-import android.support.annotation.NonNull;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
 
 import org.duder.R;
 import org.duder.model.chat.ChatMessage;

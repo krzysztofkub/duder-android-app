@@ -2,11 +2,8 @@ package org.duder.view.activity;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -14,19 +11,16 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import org.duder.R;
 import org.duder.model.event.Event;
-import org.duder.service.ApiClient;
-import org.duder.util.Const;
-import org.duder.util.UserSession;
-import org.duder.viewModel.EventViewModel;
 import org.duder.viewModel.CreateEventViewModel;
 import org.duder.viewModel.state.FragmentState;
 
 import java.util.Calendar;
-
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 
 import static org.duder.util.Const.CREATED_EVENT_URI;
 
