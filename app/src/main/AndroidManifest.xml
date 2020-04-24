@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="org.duder">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -13,7 +14,7 @@
         android:supportsRtl="true"
         android:usesCleartextTraffic="true">
 
-        <activity android:name=".activities.SplashActivity"
+        <activity android:name=".view.activity.SplashActivity"
             android:theme="@style/AppTheme.Launcher">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,18 +22,28 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.LoginActivity" />
-        <activity android:name=".activities.RegistrationActivity">
+        <activity android:name=".view.activity.LoginActivity" />
+        <activity
+            android:name=".view.activity.RegistrationActivity"
+            android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.duder.activities.LoginActivity" />
+                android:value="org.duder.view.activity.LoginActivity" />
         </activity>
         <activity
-            android:name=".activities.MainActivity"
+            android:name=".view.activity.MainActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:theme="@style/AppTheme"
             android:label="@string/title_activity_main"/>
         <activity
-            android:name=".activities.ChatActivity"
+            android:name=".view.activity.CreateEventActivity"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.duder.view.activity.MainActivity" />
+        </activity>
+        <activity
+            android:name=".view.activity.ChatActivity"
             android:windowSoftInputMode="adjustPan" />
     </application>
 

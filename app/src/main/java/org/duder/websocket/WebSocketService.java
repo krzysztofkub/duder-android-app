@@ -5,7 +5,7 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import org.duder.model.ChatMessage;
+import org.duder.model.chat.ChatMessage;
 import org.duder.util.Const;
 import org.duder.websocket.dto.StompHeader;
 import org.duder.websocket.dto.StompMessage;
@@ -32,7 +32,7 @@ public class WebSocketService {
         stompClient = initialize();
     }
 
-    public static WebSocketService getWebSocketService() {
+    synchronized public static WebSocketService getWebSocketService() {
         if (webSocketService == null) {
             webSocketService = new WebSocketService();
         }

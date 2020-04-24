@@ -7,19 +7,19 @@
 
     <fragment
         android:id="@+id/navigation_home"
-        android:name="org.duder.ui.home.HomeFragment"
+        android:name="org.duder.view.fragment.HomeFragment"
         android:label="@string/title_home"
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="org.duder.ui.events.EventFragment"
+        android:id="@+id/navigation_events"
+        android:name="org.duder.view.fragment.EventFragment"
         android:label="@string/title_dashboard"
         tools:layout="@layout/fragment_events" />
 
     <fragment
-        android:id="@+id/navigation_notifications"
-        android:name="org.duder.ui.duders.DudersFragment"
+        android:id="@+id/navigation_duders"
+        android:name="org.duder.view.fragment.DuderFragment"
         android:label="@string/title_notifications"
         tools:layout="@layout/fragment_duders" />
 </navigation>
