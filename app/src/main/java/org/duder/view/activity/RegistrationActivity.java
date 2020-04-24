@@ -35,6 +35,7 @@ public class RegistrationActivity extends BaseActivity {
         txtConfirmPassword = findViewById(R.id.registration_text_confirm_password);
         btnRegistration = findViewById(R.id.registration_button_registration);
         viewRoot = txtLogin.getRootView();
+        getSupportActionBar().setHomeButtonEnabled(true);
     }
 
     @Override

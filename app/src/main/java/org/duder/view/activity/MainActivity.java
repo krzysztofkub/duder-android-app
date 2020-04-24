@@ -27,6 +27,7 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setTitle("Home");
 
         BottomNavigationView navView = findViewById(R.id.bottom_nav_view);
         navView.setOnNavigationItemSelectedListener(this::onNavigationItemSelectedListener);
@@ -41,14 +42,17 @@ public class MainActivity extends BaseActivity {
             case R.id.navigation_home:
                 fm.beginTransaction().hide(active).show(homeFragment).commit();
                 active = homeFragment;
+                setTitle("Home");
                 return true;
             case R.id.navigation_events:
                 fm.beginTransaction().hide(active).show(eventFragment).commit();
                 active = eventFragment;
+                setTitle("Events");
                 return true;
             case R.id.navigation_duders:
                 fm.beginTransaction().hide(active).show(duderFragment).commit();
                 active = duderFragment;
+                setTitle("Duders");
                 return true;
             default:
                 return false;
