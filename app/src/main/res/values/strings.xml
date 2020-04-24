@@ -24,4 +24,6 @@
     <string name="participant">Participants: %1$d</string>
     <string name="eventCreateText">Create event</string>
     <string name="eventNameHint">Name</string>
+    <string name="dateHint">Event start date</string>
+    <string name="timeHint">Event start time</string>
 </resources>

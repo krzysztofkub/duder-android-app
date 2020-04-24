@@ -11,7 +11,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/registration.layout.registration_form"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="@dimen/eventCreateFormPadding"
         app:layout_constraintLeft_toLeftOf="@+id/create.event.layout"
@@ -20,102 +20,71 @@
         <EditText
             android:id="@+id/event_name"
             style="@android:style/Widget.EditText"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/loginFormMargin"
             android:ems="10"
             android:hint="@string/eventNameHint"
-            android:inputType="textPersonName"
             app:layout_constraintBottom_toTopOf="@+id/pick_date_time"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
             android:id="@+id/pick_date_time"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/loginFormMargin"
-            app:layout_constraintTop_toBottomOf="@+id/event_name"
-            app:layout_constraintBottom_toTopOf="@+id/hobby_list">
+            app:layout_constraintBottom_toTopOf="@+id/hobby_list"
+            app:layout_constraintTop_toBottomOf="@+id/event_name">
 
-        <EditText
-            android:id="@+id/in_date"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/loginFormMargin"
-            android:ems="7"
-            android:inputType="none"
-            android:focusable="false"
-            app:layout_constraintBottom_toTopOf="@+id/in_time"
-            app:layout_constraintLeft_toLeftOf="parent" />
+            <EditText
+                android:id="@+id/in_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_margin="@dimen/loginFormMargin"
+                android:focusable="false"
+                android:hint="@string/dateHint"
+                android:inputType="none"
+                app:layout_constraintBottom_toTopOf="@+id/hobby_list"
+                app:layout_constraintLeft_toLeftOf="parent" />
 
-        <Button
-            android:id="@+id/btn_date"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/loginFormMargin"
-            android:text="DATE"
-            app:layout_constraintBottom_toTopOf="@+id/btn_time"
-            app:layout_constraintLeft_toRightOf="@+id/in_date" />
+            <EditText
+                android:id="@+id/in_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_margin="@dimen/loginFormMargin"
+                android:focusable="false"
+                android:hint="@string/timeHint"
+                android:inputType="none"
+                app:layout_constraintLeft_toRightOf="@+id/in_date" />
 
-        <EditText
-            android:id="@+id/in_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/loginFormMargin"
-            android:ems="7"
-            android:inputType="none"
-            android:focusable="false"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/in_date" />
-
-        <Button
-            android:id="@+id/btn_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/loginFormMargin"
-            android:text="TIME"
-            app:layout_constraintLeft_toRightOf="@+id/in_time"
-            app:layout_constraintTop_toBottomOf="@+id/btn_date" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/hobby_list"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="@dimen/loginFormMargin"
             android:layout_marginLeft="@dimen/element_spacing_normal"
             android:layout_marginRight="@dimen/element_spacing_normal"
-            android:layout_margin="@dimen/loginFormMargin"
             android:clipToPadding="false"
-            app:layout_constraintTop_toBottomOf="@+id/pick_date_time"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             android:nestedScrollingEnabled="false"
-            app:layout_constraintBottom_toTopOf="@+id/event_create_button"/>
-
-        <Button
-            android:id="@+id/event_create_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="40dp"
-            android:background="@color/success"
-            android:paddingHorizontal="50dp"
-            android:text="@string/eventCreateText"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/hobby_list" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/pick_date_time" />
 
         <ProgressBar
             android:id="@+id/progress_spinner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/element_spacing_normal"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:visibility="gone"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

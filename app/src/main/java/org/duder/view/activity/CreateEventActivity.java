@@ -15,6 +15,11 @@ import android.widget.Toast;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
+
+import com.google.android.flexbox.FlexDirection;
+import com.google.android.flexbox.FlexboxLayoutManager;
+import com.google.android.flexbox.JustifyContent;
 
 import org.duder.R;
 import org.duder.model.event.Event;
@@ -29,9 +34,6 @@ public class CreateEventActivity extends BaseActivity {
 
     private static final String TAG = CreateEventActivity.class.getSimpleName();
 
-    private Button btnDatePicker;
-    private Button btnTimePicker;
-    private Button btnCreateEvent;
     private TextView txtDate;
     private TextView txtTime;
     private TextView txtName;
@@ -52,6 +54,7 @@ public class CreateEventActivity extends BaseActivity {
         initViewModel();
         initLayout();
         initSubscriptions();
+        initListeners();
     }
 
     private void initViewModel() {
@@ -59,9 +62,6 @@ public class CreateEventActivity extends BaseActivity {
     }
 
     private void initLayout() {
-        btnDatePicker = findViewById(R.id.btn_date);
-        btnTimePicker = findViewById(R.id.btn_time);
-        btnCreateEvent = findViewById(R.id.event_create_button);
         txtDate = findViewById(R.id.in_date);
         txtTime = findViewById(R.id.in_time);
         txtName = findViewById(R.id.event_name);
@@ -71,15 +71,18 @@ public class CreateEventActivity extends BaseActivity {
     }
 
     private void initSubscriptions() {
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        FlexboxLayoutManager layoutManager = new FlexboxLayoutManager(this);
+        layoutManager.setFlexDirection(FlexDirection.ROW);
+        layoutManager.setJustifyContent(JustifyContent.CENTER);
         hobbies.setLayoutManager(layoutManager);
         hobbies.setAdapter(createEventViewModel.getHobbyAdapter());
 
-        btnDatePicker.setOnClickListener(v -> onDateClicked());
-        btnTimePicker.setOnClickListener(v -> onTimeClicked());
-        btnCreateEvent.setOnClickListener(v -> onCreateEventClicked());
-
         createEventViewModel.getState().observe(this, this::update);
+    }
+
+    private void initListeners() {
+        txtDate.setOnClickListener(v -> onDateClicked());
+        txtTime.setOnClickListener(v -> onTimeClicked());
     }
 
     private void update(FragmentState state) {
@@ -103,7 +106,6 @@ public class CreateEventActivity extends BaseActivity {
                 progressBar.setVisibility(View.GONE);
                 Toast.makeText(this, "Something went wrong", Toast.LENGTH_LONG).show();
         }
-
     }
 
     @Override

@@ -1,9 +1,10 @@
 package org.duder.view.adapter;
 
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
+import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -12,7 +13,7 @@ import org.duder.R;
 
 import java.util.List;
 
-import static org.duder.viewModel.CreateEventViewModel.*;
+import static org.duder.viewModel.CreateEventViewModel.hobbiesSelected;
 
 public class HobbyCategoriesAdapter extends RecyclerView.Adapter<HobbyCategoriesAdapter.ViewHolder> {
     private List<String> hobbies;
@@ -24,19 +25,22 @@ public class HobbyCategoriesAdapter extends RecyclerView.Adapter<HobbyCategories
     @NonNull
     @Override
     public HobbyCategoriesAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.hobby_checkbox, viewGroup, false);
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.hobby_toggle_button, viewGroup, false);
         return new HobbyCategoriesAdapter.ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
         viewHolder.bind(hobbies.get(i));
-        viewHolder.checkBox.setOnClickListener(v -> {
-            final boolean isChecked = viewHolder.checkBox.isChecked();
-            String text = viewHolder.checkBox.getText().toString();
-            if (isChecked && !hobbiesSelected.contains(text)) {
+        viewHolder.toggleButton.setOnCheckedChangeListener((toggleButton, isChecked) -> {
+            String text = toggleButton.getText().toString();
+            if (isChecked) {
+                toggleButton.setTextColor(Color.parseColor("#FFFFFF"));
+                toggleButton.setBackgroundResource(R.drawable.hobby_toggle_button_on);
                 hobbiesSelected.add(text);
-            } else if (!isChecked){
+            } else {
+                toggleButton.setTextColor(Color.parseColor("#757575"));
+                toggleButton.setBackgroundResource(R.drawable.hobby_toggle_button_off);
                 hobbiesSelected.remove(text);
             }
         });
@@ -53,15 +57,17 @@ public class HobbyCategoriesAdapter extends RecyclerView.Adapter<HobbyCategories
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
-        private CheckBox checkBox;
+        private ToggleButton toggleButton;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            checkBox = itemView.findViewById(R.id.checkBox);
+            toggleButton = itemView.findViewById(R.id.hobbu_toggle_btn);
         }
 
         private void bind(String hobby) {
-            checkBox.setText(hobby);
+            toggleButton.setText(hobby);
+            toggleButton.setTextOn(hobby);
+            toggleButton.setTextOff(hobby);
         }
     }
 }

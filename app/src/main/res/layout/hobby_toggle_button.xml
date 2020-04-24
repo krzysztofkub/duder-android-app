@@ -5,10 +5,15 @@
     android:layout_height="wrap_content"
     android:id="@+id/linLayMsgMain"
     android:orientation="horizontal">
-    <CheckBox
-        android:id="@+id/checkBox"
+
+    <ToggleButton
+        android:id="@+id/hobbu_toggle_btn"
+        android:textColor="#757575"
+        android:textSize="13sp"
+        android:text="AAAAAAAAAAAAAAAAAAAAAAA"
+        android:layout_margin="5dp"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Pizza"/>
+        android:layout_height="25dp"
+        android:background="@drawable/hobby_toggle_button_off" />
 
 </LinearLayout>
