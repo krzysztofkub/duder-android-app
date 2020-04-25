@@ -19,6 +19,8 @@
     <!-- Text Values -->
     <dimen name="body_text_size_medium_small">14sp</dimen>
     <dimen name="body_text_size_normal">16sp</dimen>
+    <dimen name="body_text_size_medium_large">20sp</dimen>
+    <dimen name="body_text_size_large">22sp</dimen>
     <dimen name="body_text_size_title">18sp</dimen>
 
     <!-- Event Post -->
@@ -27,6 +29,7 @@
 
     <!-- Event Create -->
     <dimen name="eventCreateFormPadding">5dp</dimen>
+    <dimen name="eventCreateFormMargin">5dp</dimen>
 
     <!-- Instructions -->
     <dimen name="arrow_size">100dp</dimen>

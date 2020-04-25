@@ -5,6 +5,7 @@ import java.util.List;
 
 public class EventBuilder {
     private String name;
+    private String description;
     private List<String> hobbies;
     private int numberOfParticipants;
     private Long timestamp;
@@ -29,7 +30,12 @@ public class EventBuilder {
         return this;
     }
 
+    public EventBuilder description(String description) {
+        this.description = description;
+        return this;
+    }
+
     public Event createEvent() {
-        return new Event(name, hobbies, numberOfParticipants, timestamp);
+        return new Event(name, description, hobbies, numberOfParticipants, timestamp);
     }
 }

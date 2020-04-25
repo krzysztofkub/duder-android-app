@@ -2,19 +2,25 @@ package org.duder.view.activity;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.flexbox.FlexDirection;
+import com.google.android.flexbox.FlexboxLayoutManager;
+import com.google.android.flexbox.JustifyContent;
 
 import org.duder.R;
 import org.duder.model.event.Event;
@@ -29,16 +35,16 @@ public class CreateEventActivity extends BaseActivity {
 
     private static final String TAG = CreateEventActivity.class.getSimpleName();
 
-    private Button btnDatePicker;
-    private Button btnTimePicker;
-    private Button btnCreateEvent;
     private TextView txtDate;
     private TextView txtTime;
     private TextView txtName;
+    private TextView txtDesc;
+    private RecyclerView hobbies;
+    private View scrollView;
+    private ProgressBar progressBar;
+    private RelativeLayout createEventForm;
 
     private CreateEventViewModel createEventViewModel;
-    private RecyclerView hobbies;
-    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +58,7 @@ public class CreateEventActivity extends BaseActivity {
         initViewModel();
         initLayout();
         initSubscriptions();
+        initListeners();
     }
 
     private void initViewModel() {
@@ -59,27 +66,42 @@ public class CreateEventActivity extends BaseActivity {
     }
 
     private void initLayout() {
-        btnDatePicker = findViewById(R.id.btn_date);
-        btnTimePicker = findViewById(R.id.btn_time);
-        btnCreateEvent = findViewById(R.id.event_create_button);
         txtDate = findViewById(R.id.in_date);
         txtTime = findViewById(R.id.in_time);
         txtName = findViewById(R.id.event_name);
+        txtDesc = findViewById(R.id.event_description);
         progressBar = findViewById(R.id.progress_spinner);
         hobbies = findViewById(R.id.hobby_list);
+        scrollView = findViewById(R.id.event_description_scroll);
+        createEventForm = findViewById(R.id.layout_create_event_form);
+        createEventForm.setVisibility(View.GONE);
         setTitle("Create Event");
     }
 
     private void initSubscriptions() {
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        FlexboxLayoutManager layoutManager = new FlexboxLayoutManager(this);
+        layoutManager.setFlexDirection(FlexDirection.ROW);
+        layoutManager.setJustifyContent(JustifyContent.CENTER);
         hobbies.setLayoutManager(layoutManager);
         hobbies.setAdapter(createEventViewModel.getHobbyAdapter());
 
-        btnDatePicker.setOnClickListener(v -> onDateClicked());
-        btnTimePicker.setOnClickListener(v -> onTimeClicked());
-        btnCreateEvent.setOnClickListener(v -> onCreateEventClicked());
-
         createEventViewModel.getState().observe(this, this::update);
+    }
+
+    private void initListeners() {
+        txtDate.setOnClickListener(v -> onDateClicked());
+        txtTime.setOnClickListener(v -> onTimeClicked());
+        scrollView.setOnTouchListener((v, e) -> {
+            txtDesc.performClick();
+            txtDesc.requestFocus();
+            showKeyboard();
+            return false;
+        });
+    }
+
+    private void showKeyboard() {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.showSoftInput(txtDesc, InputMethodManager.SHOW_IMPLICIT);
     }
 
     private void update(FragmentState state) {
@@ -89,9 +111,11 @@ public class CreateEventActivity extends BaseActivity {
                 break;
             case COMPLETE: //fetched hobbies list
                 progressBar.setVisibility(View.GONE);
+                createEventForm.setVisibility(View.VISIBLE);
                 break;
             case SUCCESS: //created event
                 progressBar.setVisibility(View.GONE);
+                createEventForm.setVisibility(View.VISIBLE);
                 Toast.makeText(this, "Created event", Toast.LENGTH_LONG).show();
                 Intent data = new Intent();
                 data.putExtra(CREATED_EVENT_URI, (String) state.getData());
@@ -103,7 +127,6 @@ public class CreateEventActivity extends BaseActivity {
                 progressBar.setVisibility(View.GONE);
                 Toast.makeText(this, "Something went wrong", Toast.LENGTH_LONG).show();
         }
-
     }
 
     @Override
@@ -112,7 +135,16 @@ public class CreateEventActivity extends BaseActivity {
             case android.R.id.home:
                 finish();
                 break;
+            case R.id.action_save:
+                onCreateEventClicked();
+                break;
         }
+        return true;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.top_nav_menu_with_save, menu);
         return true;
     }
 
@@ -150,7 +182,12 @@ public class CreateEventActivity extends BaseActivity {
         boolean hasErrors = false;
         String name = txtName.getText().toString();
         if (name.trim().isEmpty()) {
-            txtName.setError("WHAT YOU WANT TO DO?");
+            txtName.setError("Give it a name Bro?");
+            hasErrors = true;
+        }
+        String desc = txtDesc.getText().toString();
+        if (desc.trim().isEmpty()) {
+            txtDesc.setError("WHAT YOU WANT TO DO?");
             hasErrors = true;
         }
         String date = txtDate.getText().toString();
@@ -174,7 +211,7 @@ public class CreateEventActivity extends BaseActivity {
         String[] timeParts = time.split(":");
         Calendar calendar = Calendar.getInstance();
         calendar.set(Integer.parseInt(dateParts[2]), Integer.parseInt(dateParts[1]) - 1, Integer.parseInt(dateParts[0]), Integer.parseInt(timeParts[0]), Integer.parseInt(timeParts[1]));
-        Event event = new Event(name, CreateEventViewModel.hobbiesSelected, calendar.getTimeInMillis());
+        Event event = new Event(name, desc, CreateEventViewModel.hobbiesSelected, calendar.getTimeInMillis());
         createEventViewModel.createEvent(event);
     }
 }
