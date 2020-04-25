@@ -11,12 +11,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import org.duder.R;
 
+import java.util.ArrayList;
 import java.util.List;
-
-import static org.duder.viewModel.CreateEventViewModel.hobbiesSelected;
 
 public class HobbyCategoriesAdapter extends RecyclerView.Adapter<HobbyCategoriesAdapter.ViewHolder> {
     private List<String> hobbies;
+    private List<String> selectedHobbies = new ArrayList<>();
 
     public HobbyCategoriesAdapter(List<String> hobbies) {
         this.hobbies = hobbies;
@@ -37,13 +37,17 @@ public class HobbyCategoriesAdapter extends RecyclerView.Adapter<HobbyCategories
             if (isChecked) {
                 toggleButton.setTextColor(Color.parseColor("#FFFFFF"));
                 toggleButton.setBackgroundResource(R.drawable.hobby_toggle_button_on);
-                hobbiesSelected.add(text);
+                selectedHobbies.add(text);
             } else {
                 toggleButton.setTextColor(Color.parseColor("#757575"));
                 toggleButton.setBackgroundResource(R.drawable.hobby_toggle_button_off);
-                hobbiesSelected.remove(text);
+                selectedHobbies.remove(text);
             }
         });
+    }
+
+    public List<String> getSelectedHobbies() {
+        return selectedHobbies;
     }
 
     @Override

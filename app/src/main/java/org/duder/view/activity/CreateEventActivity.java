@@ -40,7 +40,6 @@ public class CreateEventActivity extends BaseActivity {
     private TextView txtName;
     private TextView txtDesc;
     private RecyclerView hobbies;
-    private View scrollView;
     private ProgressBar progressBar;
     private RelativeLayout createEventForm;
 
@@ -72,7 +71,6 @@ public class CreateEventActivity extends BaseActivity {
         txtDesc = findViewById(R.id.event_description);
         progressBar = findViewById(R.id.progress_spinner);
         hobbies = findViewById(R.id.hobby_list);
-        scrollView = findViewById(R.id.event_description_scroll);
         createEventForm = findViewById(R.id.layout_create_event_form);
         createEventForm.setVisibility(View.GONE);
         setTitle("Create Event");
@@ -91,12 +89,6 @@ public class CreateEventActivity extends BaseActivity {
     private void initListeners() {
         txtDate.setOnClickListener(v -> onDateClicked());
         txtTime.setOnClickListener(v -> onTimeClicked());
-        scrollView.setOnTouchListener((v, e) -> {
-            txtDesc.performClick();
-            txtDesc.requestFocus();
-            showKeyboard();
-            return false;
-        });
     }
 
     private void showKeyboard() {
@@ -200,7 +192,7 @@ public class CreateEventActivity extends BaseActivity {
             txtTime.setError("what time?");
             hasErrors = true;
         }
-        if (CreateEventViewModel.hobbiesSelected.size() == 0) {
+        if (createEventViewModel.getHobbyAdapter().getSelectedHobbies().size() == 0) {
             Toast.makeText(this, "Please pick a category", Toast.LENGTH_LONG).show();
             hasErrors = true;
         }
@@ -211,7 +203,7 @@ public class CreateEventActivity extends BaseActivity {
         String[] timeParts = time.split(":");
         Calendar calendar = Calendar.getInstance();
         calendar.set(Integer.parseInt(dateParts[2]), Integer.parseInt(dateParts[1]) - 1, Integer.parseInt(dateParts[0]), Integer.parseInt(timeParts[0]), Integer.parseInt(timeParts[1]));
-        Event event = new Event(name, desc, CreateEventViewModel.hobbiesSelected, calendar.getTimeInMillis());
+        Event event = new Event(name, desc, createEventViewModel.getHobbyAdapter().getSelectedHobbies(), calendar.getTimeInMillis());
         createEventViewModel.createEvent(event);
     }
 }

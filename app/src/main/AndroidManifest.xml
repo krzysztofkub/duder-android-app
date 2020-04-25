@@ -37,7 +37,6 @@
             android:label="@string/title_activity_main"/>
         <activity
             android:name=".view.activity.CreateEventActivity"
-            android:windowSoftInputMode="adjustPan"
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

@@ -21,7 +21,6 @@ public class CreateEventViewModel extends AbstractViewModel {
     private static final String TAG = CreateEventViewModel.class.getSimpleName();
     private MutableLiveData<FragmentState> state = new MutableLiveData<>();
     private HobbyCategoriesAdapter hobbyAdapter = new HobbyCategoriesAdapter(new ArrayList<>());
-    public static List<String> hobbiesSelected = new ArrayList<>();
 
     public void loadHobbies() {
         state.postValue(FragmentState.loading());
