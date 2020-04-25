@@ -1,8 +1,8 @@
 package org.duder.service;
 
+import org.duder.model.chat.ChatMessage;
 import org.duder.model.event.Event;
 import org.duder.model.user.Account;
-import org.duder.model.chat.ChatMessage;
 import org.duder.util.Const;
 
 import java.util.List;

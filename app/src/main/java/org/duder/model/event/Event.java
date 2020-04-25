@@ -2,7 +2,6 @@ package org.duder.model.event;
 
 import org.duder.model.user.Account;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 

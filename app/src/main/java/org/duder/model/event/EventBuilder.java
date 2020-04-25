@@ -1,6 +1,5 @@
 package org.duder.model.event;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 public class EventBuilder {

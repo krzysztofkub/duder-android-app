@@ -21,8 +21,8 @@ import java.util.List;
 public class ChatMessageRecyclerViewAdapter extends RecyclerView.Adapter<AbstractChatMessageViewHolder> {
 
     private List<ChatMessage> messages;
-    private LayoutInflater    inflater;
-    private String            username;
+    private LayoutInflater inflater;
+    private String username;
 
     // Username - to check later whether show message on the left or right
     public ChatMessageRecyclerViewAdapter(Context context, String username) {

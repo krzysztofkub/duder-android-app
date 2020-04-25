@@ -17,8 +17,8 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 
 import org.duder.R;
-import org.duder.service.ApiClient;
 import org.duder.model.user.Account;
+import org.duder.service.ApiClient;
 import org.duder.util.UserSession;
 import org.duder.websocket.WebSocketService;
 import org.duder.websocket.stomp.dto.ConnectionResponse;

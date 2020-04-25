@@ -27,7 +27,7 @@ import org.duder.view.adapter.listener.LazyLoadRecyclerViewListener;
 import org.duder.viewModel.EventViewModel;
 import org.duder.viewModel.state.FragmentState;
 
-import static org.duder.util.Const.*;
+import static org.duder.util.Const.CREATED_EVENT_URI;
 
 public class EventFragment extends BaseFragment {
 
@@ -133,7 +133,7 @@ public class EventFragment extends BaseFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == CREATE_EVENT_REQUEST && resultCode == Activity.RESULT_OK) {
+        if (requestCode == CREATE_EVENT_REQUEST && resultCode == Activity.RESULT_OK) {
             String locationUri = data.getStringExtra(CREATED_EVENT_URI);
             viewModel.fetchAndAddNewEvent(locationUri);
         }

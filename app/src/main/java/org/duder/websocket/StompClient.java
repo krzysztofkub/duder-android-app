@@ -38,21 +38,21 @@ class StompClient {
     private static final String TAG = StompClient.class.getSimpleName();
 
     public static final String SUPPORTED_VERSIONS = "1.1,1.2";
-    public static final String DEFAULT_ACK        = "auto";
+    public static final String DEFAULT_ACK = "auto";
 
     private final ConnectionProvider connectionProvider;
-    private       ConcurrentHashMap<String, String> topics;
-    private       boolean                           legacyWhitespace;
+    private ConcurrentHashMap<String, String> topics;
+    private boolean legacyWhitespace;
 
-    private PublishSubject<StompMessage>                      messageStream;
-    private BehaviorSubject<Boolean>                          connectionStream;
+    private PublishSubject<StompMessage> messageStream;
+    private BehaviorSubject<Boolean> connectionStream;
     private ConcurrentHashMap<String, Flowable<StompMessage>> streamMap;
     private PathMatcher pathMatcher;
-    private Disposable                                        lifecycleDisposable;
-    private Disposable                                        messagesDisposable;
-    private PublishSubject<LifecycleEvent>                    lifecyclePublishSubject;
-    private List<StompHeader>                                 headers;
-    private HeartBeatTask                                     heartBeatTask;
+    private Disposable lifecycleDisposable;
+    private Disposable messagesDisposable;
+    private PublishSubject<LifecycleEvent> lifecyclePublishSubject;
+    private List<StompHeader> headers;
+    private HeartBeatTask heartBeatTask;
 
     public StompClient(ConnectionProvider connectionProvider) {
         this.connectionProvider = connectionProvider;

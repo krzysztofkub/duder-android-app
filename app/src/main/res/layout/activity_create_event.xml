@@ -31,8 +31,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_above="@id/pick_date_time"
-            android:layout_below="@id/event_name"
-            >
+            android:layout_below="@id/event_name">
 
 
             <EditText
@@ -51,8 +50,7 @@
             android:id="@+id/pick_date_time"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_above="@id/hobby_list"
-            >
+            android:layout_above="@id/hobby_list">
 
             <EditText
                 android:id="@+id/in_date"

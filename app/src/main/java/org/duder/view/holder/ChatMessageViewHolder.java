@@ -13,9 +13,9 @@ import org.duder.model.chat.ChatMessage;
 import org.duder.model.chat.ChatMessage.MessageType;
 
 public class ChatMessageViewHolder extends AbstractChatMessageViewHolder {
-    TextView     tvContent;
+    TextView tvContent;
     LinearLayout linLayMsgMain;
-    String       currentUser;
+    String currentUser;
 
     public ChatMessageViewHolder(@NonNull View itemView, String currentUser) {
         super(itemView);

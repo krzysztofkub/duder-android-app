@@ -13,9 +13,6 @@ import org.duder.view.adapter.EventPostAdapter;
 import org.duder.viewModel.state.FragmentState;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;

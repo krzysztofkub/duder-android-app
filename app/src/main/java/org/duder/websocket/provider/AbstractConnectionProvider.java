@@ -11,8 +11,6 @@ import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.subjects.PublishSubject;
 
-;
-
 /**
  * Created by forresthopkinsa on 8/8/2017.
  * <p>
