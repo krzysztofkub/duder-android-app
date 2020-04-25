@@ -2,15 +2,18 @@ package org.duder.view.activity;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,11 +43,12 @@ public class CreateEventActivity extends BaseActivity {
     private TextView txtTime;
     private TextView txtName;
     private TextView txtDesc;
-
-    private CreateEventViewModel createEventViewModel;
     private RecyclerView hobbies;
+    private View scrollView;
     private ProgressBar progressBar;
     private RelativeLayout createEventForm;
+
+    private CreateEventViewModel createEventViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +76,7 @@ public class CreateEventActivity extends BaseActivity {
         txtDesc = findViewById(R.id.event_description);
         progressBar = findViewById(R.id.progress_spinner);
         hobbies = findViewById(R.id.hobby_list);
+        scrollView = findViewById(R.id.event_description_scroll);
         createEventForm = findViewById(R.id.layout_create_event_form);
         createEventForm.setVisibility(View.GONE);
         setTitle("Create Event");
@@ -90,6 +95,17 @@ public class CreateEventActivity extends BaseActivity {
     private void initListeners() {
         txtDate.setOnClickListener(v -> onDateClicked());
         txtTime.setOnClickListener(v -> onTimeClicked());
+        scrollView.setOnTouchListener((v, e) -> {
+            txtDesc.performClick();
+            txtDesc.requestFocus();
+            showKeyboard();
+            return false;
+        });
+    }
+
+    private void showKeyboard() {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.showSoftInput(txtDesc, InputMethodManager.SHOW_IMPLICIT);
     }
 
     private void update(FragmentState state) {
