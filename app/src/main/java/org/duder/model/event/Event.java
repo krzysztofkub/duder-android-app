@@ -8,19 +8,22 @@ import java.util.Objects;
 
 public class Event {
     private String name;
+    private String description;
     private List<String> hobbies;
     private int numberOfParticipants;
     private Long timestamp;
     private Account host;
 
-    public Event(String name, List<String> hobbies, Long timestamp) {
+    public Event(String name, String description, List<String> hobbies, Long timestamp) {
         this.name = name;
+        this.description = description;
         this.hobbies = hobbies;
         this.timestamp = timestamp;
     }
 
-    public Event(String name, List<String> hobbies, int numberOfParticipants, Long timestamp) {
+    public Event(String name, String description, List<String> hobbies, int numberOfParticipants, Long timestamp) {
         this.name = name;
+        this.description = description;
         this.hobbies = hobbies;
         this.numberOfParticipants = numberOfParticipants;
         this.timestamp = timestamp;
@@ -66,6 +69,14 @@ public class Event {
         this.host = host;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -73,6 +84,7 @@ public class Event {
         Event event = (Event) o;
         return numberOfParticipants == event.numberOfParticipants &&
                 name.equals(event.name) &&
+                description.equals(event.description) &&
                 hobbies.equals(event.hobbies) &&
                 timestamp.equals(event.timestamp) &&
                 host.equals(event.getHost());
@@ -80,6 +92,6 @@ public class Event {
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, hobbies, numberOfParticipants, timestamp, host);
+        return Objects.hash(name, description, hobbies, numberOfParticipants, timestamp, host);
     }
 }

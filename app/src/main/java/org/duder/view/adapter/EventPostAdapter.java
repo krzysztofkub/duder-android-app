@@ -26,6 +26,7 @@ public class EventPostAdapter extends RecyclerView.Adapter<EventPostAdapter.View
 
     private final List<Event> events;
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yy");
+    private final int SHORTEN_DESCRIPTION_LENGTH = 39;
 
     public EventPostAdapter(List<Event> events) {
         this.events = events;
@@ -73,6 +74,7 @@ public class EventPostAdapter extends RecyclerView.Adapter<EventPostAdapter.View
     class ViewHolder extends RecyclerView.ViewHolder {
         private ImageView image_view;
         private TextView title_text;
+        private TextView desc_text;
         private TextView participants_text;
         private TextView hobbies_text;
         private TextView timestamp_text;
@@ -81,6 +83,7 @@ public class EventPostAdapter extends RecyclerView.Adapter<EventPostAdapter.View
             super(itemView);
             image_view = itemView.findViewById(R.id.image_view);
             title_text = itemView.findViewById(R.id.title_text);
+            desc_text = itemView.findViewById(R.id.desc_text);
             participants_text = itemView.findViewById(R.id.participants_text);
             hobbies_text = itemView.findViewById(R.id.hobbies_text);
             timestamp_text = itemView.findViewById(R.id.timestamp_text);
@@ -99,11 +102,19 @@ public class EventPostAdapter extends RecyclerView.Adapter<EventPostAdapter.View
                     .centerCrop()
                     .into(image_view);
             title_text.setText(event.getName());
+            desc_text.setText(getShortenText(event.getDescription()));
             participants_text.setText(itemView.getContext().getString(R.string.participant, event.getNumberOfParticipants()));
             AtomicReference<String> hobbies = new AtomicReference<>("");
             event.getHobbies().forEach(h -> hobbies.set(h + " " + hobbies));
             hobbies_text.setText(hobbies.get());
             timestamp_text.setText(simpleDateFormat.format(new Date(event.getTimestamp())));
+        }
+
+        private String getShortenText(String description) {
+            if (description.length() > SHORTEN_DESCRIPTION_LENGTH) {
+                return description.substring(0, SHORTEN_DESCRIPTION_LENGTH) + "...";
+            }
+            return description;
         }
     }
 }

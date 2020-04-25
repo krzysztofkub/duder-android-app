@@ -9,10 +9,10 @@
     android:padding="12dp"
     tools:context="org.duder.view.activity.CreateEventActivity">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/registration.layout.registration_form"
+    <RelativeLayout
+        android:id="@+id/layout.create_event_form"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:padding="@dimen/eventCreateFormPadding"
         app:layout_constraintLeft_toLeftOf="@+id/create.event.layout"
         app:layout_constraintRight_toRightOf="@+id/create.event.layout">
@@ -20,30 +20,50 @@
         <EditText
             android:id="@+id/event_name"
             style="@android:style/Widget.EditText"
+            android:textSize="@dimen/body_text_size_large"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/loginFormMargin"
             android:ems="10"
             android:hint="@string/eventNameHint"
-            app:layout_constraintBottom_toTopOf="@+id/pick_date_time"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_alignParentTop="true"/>
+
+        <ScrollView
+            android:id="@+id/event_description_scroll"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@id/pick_date_time"
+            android:layout_margin="@dimen/loginFormMargin"
+            android:layout_below="@id/event_name">
+
+            <EditText
+                android:id="@+id/event_description"
+                style="@android:style/Widget.EditText"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="4dp"
+                android:hint="@string/eventDescription"
+                android:background="@null"
+                app:layout_constraintBottom_toTopOf="@+id/pick_date_time"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/event_name" />
+
+        </ScrollView>
 
         <LinearLayout
             android:id="@+id/pick_date_time"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/loginFormMargin"
-            app:layout_constraintBottom_toTopOf="@+id/hobby_list"
-            app:layout_constraintTop_toBottomOf="@+id/event_name">
+            android:layout_above="@id/hobby_list">
 
             <EditText
                 android:id="@+id/in_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:layout_margin="@dimen/loginFormMargin"
+                android:layout_weight="1"
                 android:focusable="false"
                 android:hint="@string/dateHint"
                 android:inputType="none"
@@ -54,8 +74,8 @@
                 android:id="@+id/in_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:layout_margin="@dimen/loginFormMargin"
+                android:layout_weight="1"
                 android:focusable="false"
                 android:hint="@string/timeHint"
                 android:inputType="none"
@@ -72,21 +92,18 @@
             android:layout_marginRight="@dimen/element_spacing_normal"
             android:clipToPadding="false"
             android:nestedScrollingEnabled="false"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/pick_date_time" />
-
-        <ProgressBar
-            android:id="@+id/progress_spinner"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/element_spacing_normal"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"/>
+    </RelativeLayout>
+    <ProgressBar
+        android:id="@+id/progress_spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/element_spacing_normal"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
