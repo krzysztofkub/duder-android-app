@@ -10,8 +10,7 @@
         android:id="@+id/hobbu_toggle_btn"
         android:textColor="#757575"
         android:textSize="13sp"
-        android:text="AAAAAAAAAAAAAAAAAAAAAAA"
-        android:layout_margin="5dp"
+        android:layout_margin="2dp"
         android:layout_width="wrap_content"
         android:layout_height="25dp"
         android:background="@drawable/hobby_toggle_button_off" />

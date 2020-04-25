@@ -6,14 +6,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="12dp"
+    android:padding="@dimen/eventCreateFormPadding"
     tools:context="org.duder.view.activity.CreateEventActivity">
 
     <RelativeLayout
         android:id="@+id/layout.create_event_form"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="@dimen/eventCreateFormPadding"
         app:layout_constraintLeft_toLeftOf="@+id/create.event.layout"
         app:layout_constraintRight_toRightOf="@+id/create.event.layout">
 
@@ -23,7 +22,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_margin="@dimen/loginFormMargin"
             android:ems="10"
             android:hint="@string/eventNameHint"
             android:textSize="@dimen/body_text_size_large" />
@@ -34,7 +32,7 @@
             android:layout_height="match_parent"
             android:layout_above="@id/pick_date_time"
             android:layout_below="@id/event_name"
-            android:layout_margin="@dimen/loginFormMargin">
+            >
 
 
             <EditText
@@ -54,14 +52,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_above="@id/hobby_list"
-            android:layout_margin="@dimen/loginFormMargin">
+            >
 
             <EditText
                 android:id="@+id/in_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/loginFormMargin"
                 android:layout_weight="1"
+                android:textAlignment="center"
                 android:focusable="false"
                 android:hint="@string/dateHint"
                 android:inputType="none"
@@ -72,8 +70,8 @@
                 android:id="@+id/in_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/loginFormMargin"
                 android:layout_weight="1"
+                android:textAlignment="center"
                 android:focusable="false"
                 android:hint="@string/timeHint"
                 android:inputType="none"
@@ -87,7 +85,6 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:layout_margin="@dimen/loginFormMargin"
             android:layout_marginLeft="@dimen/element_spacing_normal"
             android:layout_marginRight="@dimen/element_spacing_normal"
             android:clipToPadding="false"

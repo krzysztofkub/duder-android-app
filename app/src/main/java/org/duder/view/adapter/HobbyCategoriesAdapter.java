@@ -25,7 +25,7 @@ public class HobbyCategoriesAdapter extends RecyclerView.Adapter<HobbyCategories
     @NonNull
     @Override
     public HobbyCategoriesAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.hobby_toggle_button, viewGroup, false);
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.hobby_list_item, viewGroup, false);
         return new HobbyCategoriesAdapter.ViewHolder(view);
     }
 

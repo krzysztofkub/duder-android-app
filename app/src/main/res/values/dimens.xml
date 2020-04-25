@@ -29,6 +29,7 @@
 
     <!-- Event Create -->
     <dimen name="eventCreateFormPadding">5dp</dimen>
+    <dimen name="eventCreateFormMargin">5dp</dimen>
 
     <!-- Instructions -->
     <dimen name="arrow_size">100dp</dimen>
