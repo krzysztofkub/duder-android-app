@@ -1,4 +1,4 @@
-package org.duder.websocket.stomp.exception;
+package org.duder.websocket.exception;
 
 public class BadCredentialsException extends RuntimeException {
 }

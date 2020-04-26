@@ -5,7 +5,7 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import org.duder.model.chat.ChatMessage;
+import ord.duder.dto.chat.ChatMessage;
 
 public abstract class AbstractChatMessageViewHolder extends RecyclerView.ViewHolder {
 

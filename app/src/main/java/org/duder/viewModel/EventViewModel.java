@@ -6,7 +6,6 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.google.gson.Gson;
 
-import org.duder.model.event.Event;
 import org.duder.service.ApiClient;
 import org.duder.util.UserSession;
 import org.duder.view.adapter.EventPostAdapter;
@@ -16,6 +15,7 @@ import java.util.ArrayList;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import ord.duder.dto.event.EventPreview;
 
 public class EventViewModel extends AbstractViewModel {
 
@@ -29,7 +29,7 @@ public class EventViewModel extends AbstractViewModel {
     public void loadEventsBatch(boolean clearEventsBefore) {
         state.postValue(FragmentState.loading());
         addSub(
-                ApiClient.getApiClient().getEvents(currentPage, GET_EVENT_NUMBER, UserSession.getUserSession().getAccount().getSessionToken())
+                ApiClient.getApiClient().getEvents(currentPage, GET_EVENT_NUMBER, UserSession.getUserSession().getLoggedAccount().getSessionToken())
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(response -> {
@@ -51,13 +51,13 @@ public class EventViewModel extends AbstractViewModel {
     public void fetchAndAddNewEvent(String locationUri) {
         state.postValue(FragmentState.loading());
         addSub(
-                ApiClient.getApiClient().getEvent(locationUri, UserSession.getUserSession().getAccount().getSessionToken())
+                ApiClient.getApiClient().getEvent(locationUri, UserSession.getUserSession().getLoggedAccount().getSessionToken())
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(response -> {
                                     Log.i(TAG, "Fetched event " + response.body());
                                     if (response.code() == 200) {
-                                        Event event = new Gson().fromJson(response.body().string(), Event.class);
+                                        EventPreview event = new Gson().fromJson(response.body().string(), EventPreview.class);
                                         eventPostAdapter.addEvent(event);
                                         state.postValue(FragmentState.success());
                                     } else {

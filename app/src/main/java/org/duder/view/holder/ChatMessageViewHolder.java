@@ -9,8 +9,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 
 import org.duder.R;
-import org.duder.model.chat.ChatMessage;
-import org.duder.model.chat.ChatMessage.MessageType;
+
+import ord.duder.dto.chat.ChatMessage;
+import ord.duder.dto.chat.MessageType;
 
 public class ChatMessageViewHolder extends AbstractChatMessageViewHolder {
     TextView tvContent;

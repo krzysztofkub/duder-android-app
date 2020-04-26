@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.squareup.picasso.Picasso;
 
 import org.duder.R;
-import org.duder.model.event.Event;
+
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -22,13 +22,15 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
+import ord.duder.dto.event.EventPreview;
+
 public class EventPostAdapter extends RecyclerView.Adapter<EventPostAdapter.ViewHolder> {
 
-    private final List<Event> events;
+    private final List<EventPreview> events;
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yy");
     private final int SHORTEN_DESCRIPTION_LENGTH = 39;
 
-    public EventPostAdapter(List<Event> events) {
+    public EventPostAdapter(List<EventPreview> events) {
         this.events = events;
     }
 
@@ -49,16 +51,16 @@ public class EventPostAdapter extends RecyclerView.Adapter<EventPostAdapter.View
         return events.size();
     }
 
-    public void addEvent(Event event) {
-        List<Event> list = new ArrayList<>();
+    public void addEvent(EventPreview event) {
+        List<EventPreview> list = new ArrayList<>();
         list.add(event);
         addEvents(list);
     }
 
-    public void addEvents(List<Event> data) {
+    public void addEvents(List<EventPreview> data) {
         data = data != null ? data : new ArrayList<>();
         events.addAll(data);
-        Collections.sort(events, Comparator.comparingLong(Event::getTimestamp));
+        Collections.sort(events, Comparator.comparingLong(EventPreview::getTimestamp));
         notifyDataSetChanged();
     }
 
@@ -67,7 +69,7 @@ public class EventPostAdapter extends RecyclerView.Adapter<EventPostAdapter.View
         notifyDataSetChanged();
     }
 
-    public List<Event> getEvents() {
+    public List<EventPreview> getEvents() {
         return events;
     }
 
@@ -89,7 +91,7 @@ public class EventPostAdapter extends RecyclerView.Adapter<EventPostAdapter.View
             timestamp_text = itemView.findViewById(R.id.timestamp_text);
         }
 
-        private void bind(Event event) {
+        private void bind(EventPreview event) {
             Picasso
                     .with(itemView.getContext())
                     .cancelRequest(image_view);

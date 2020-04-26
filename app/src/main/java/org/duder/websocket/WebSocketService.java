@@ -5,7 +5,6 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import org.duder.model.chat.ChatMessage;
 import org.duder.util.Const;
 import org.duder.websocket.dto.StompHeader;
 import org.duder.websocket.dto.StompMessage;
@@ -19,6 +18,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
+import ord.duder.dto.chat.ChatMessage;
 
 import static org.duder.util.Const.TAG;
 

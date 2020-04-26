@@ -4,7 +4,6 @@ import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
 
-import org.duder.model.event.Event;
 import org.duder.service.ApiClient;
 import org.duder.util.UserSession;
 import org.duder.view.adapter.HobbyCategoriesAdapter;
@@ -16,6 +15,7 @@ import java.util.List;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.Headers;
+import ord.duder.dto.event.CreateEvent;
 
 public class CreateEventViewModel extends AbstractViewModel {
     private static final String TAG = CreateEventViewModel.class.getSimpleName();
@@ -24,7 +24,7 @@ public class CreateEventViewModel extends AbstractViewModel {
 
     public void loadHobbies() {
         state.postValue(FragmentState.loading());
-        addSub(ApiClient.getApiClient().getHobbies(UserSession.getUserSession().getAccount().getSessionToken())
+        addSub(ApiClient.getApiClient().getHobbies(UserSession.getUserSession().getLoggedAccount().getSessionToken())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(response -> {
@@ -39,8 +39,8 @@ public class CreateEventViewModel extends AbstractViewModel {
         );
     }
 
-    public void createEvent(Event event) {
-        addSub(ApiClient.getApiClient().createEvent(event, UserSession.getUserSession().getAccount().getSessionToken())
+    public void createEvent(CreateEvent event) {
+        addSub(ApiClient.getApiClient().createEvent(event, UserSession.getUserSession().getLoggedAccount().getSessionToken())
                 .toObservable()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

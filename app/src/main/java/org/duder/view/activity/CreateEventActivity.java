@@ -23,11 +23,13 @@ import com.google.android.flexbox.FlexboxLayoutManager;
 import com.google.android.flexbox.JustifyContent;
 
 import org.duder.R;
-import org.duder.model.event.Event;
 import org.duder.viewModel.CreateEventViewModel;
 import org.duder.viewModel.state.FragmentState;
 
 import java.util.Calendar;
+
+import ord.duder.dto.event.CreateEvent;
+import ord.duder.dto.event.EventPreview;
 
 import static org.duder.util.Const.CREATED_EVENT_URI;
 
@@ -203,7 +205,7 @@ public class CreateEventActivity extends BaseActivity {
         String[] timeParts = time.split(":");
         Calendar calendar = Calendar.getInstance();
         calendar.set(Integer.parseInt(dateParts[2]), Integer.parseInt(dateParts[1]) - 1, Integer.parseInt(dateParts[0]), Integer.parseInt(timeParts[0]), Integer.parseInt(timeParts[1]));
-        Event event = new Event(name, desc, createEventViewModel.getHobbyAdapter().getSelectedHobbies(), calendar.getTimeInMillis());
+        CreateEvent event = new CreateEvent(name, desc, createEventViewModel.getHobbyAdapter().getSelectedHobbies(), calendar.getTimeInMillis());
         createEventViewModel.createEvent(event);
     }
 }

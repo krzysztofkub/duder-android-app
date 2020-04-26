@@ -15,7 +15,7 @@ import org.duder.websocket.pathmatcher.RabbitPathMatcher;
 import org.duder.websocket.pathmatcher.SimplePathMatcher;
 import org.duder.websocket.provider.ConnectionProvider;
 import org.duder.websocket.stomp.dto.ConnectionResponse;
-import org.duder.websocket.stomp.exception.BadCredentialsException;
+import org.duder.websocket.exception.BadCredentialsException;
 
 import java.util.ArrayList;
 import java.util.Collections;

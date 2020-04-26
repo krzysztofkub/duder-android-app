@@ -9,11 +9,11 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import org.duder.R;
-import org.duder.model.user.Account;
 import org.duder.service.ApiClient;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import ord.duder.dto.user.RegisterAccount;
 
 public class RegistrationActivity extends BaseActivity {
 
@@ -80,7 +80,7 @@ public class RegistrationActivity extends BaseActivity {
             return;
         }
 
-        Account account = new Account(login, nickname, password);
+        RegisterAccount account = new RegisterAccount(login, nickname, password);
 
         addSub(apiClient.registerUser(account)
                 .subscribeOn(Schedulers.io())
