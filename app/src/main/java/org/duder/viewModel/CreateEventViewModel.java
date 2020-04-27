@@ -5,12 +5,14 @@ import android.util.Log;
 import androidx.lifecycle.MutableLiveData;
 
 import org.duder.dto.event.CreateEvent;
+import org.duder.model.Event;
 import org.duder.service.ApiClient;
 import org.duder.util.UserSession;
 import org.duder.view.adapter.HobbyCategoriesAdapter;
 import org.duder.viewModel.state.FragmentState;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -39,8 +41,9 @@ public class CreateEventViewModel extends AbstractViewModel {
         );
     }
 
-    public void createEvent(CreateEvent event) {
-        addSub(ApiClient.getApiClient().createEvent(event, UserSession.getUserSession().getLoggedAccount().getSessionToken())
+    public void createEvent(Event event) {
+        CreateEvent createEvent = mapEventToCreateEventDto(event);
+        addSub(ApiClient.getApiClient().createEvent(createEvent, UserSession.getUserSession().getLoggedAccount().getSessionToken())
                 .toObservable()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -59,6 +62,20 @@ public class CreateEventViewModel extends AbstractViewModel {
                     state.postValue(FragmentState.error(error));
                 })
         );
+    }
+
+    private CreateEvent mapEventToCreateEventDto(Event event) {
+        String[] dateParts = event.getDate().split("-");
+        String[] timeParts = event.getTime().split(":");
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Integer.parseInt(dateParts[2]), Integer.parseInt(dateParts[1]) - 1, Integer.parseInt(dateParts[0]), Integer.parseInt(timeParts[0]), Integer.parseInt(timeParts[1]));
+        return CreateEvent
+                .builder()
+                .name(event.getName())
+                .description(event.getDescription())
+                .timestamp(calendar.getTimeInMillis())
+                .hobbies(hobbyAdapter.getSelectedHobbies())
+                .build();
     }
 
     private void updateAdapter(List<String> hobbies) {
