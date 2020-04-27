@@ -17,6 +17,8 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 
 import org.duder.R;
+import org.duder.dto.user.LoggedAccount;
+import org.duder.dto.user.LoginResponse;
 import org.duder.service.ApiClient;
 import org.duder.util.UserSession;
 import org.duder.websocket.WebSocketService;
@@ -28,8 +30,6 @@ import java.util.concurrent.Executors;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
-import ord.duder.dto.user.LoggedAccount;
-import ord.duder.dto.user.LoginResponse;
 
 public class LoginActivity extends BaseActivity {
 

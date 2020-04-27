@@ -9,11 +9,11 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import org.duder.R;
+import org.duder.dto.user.RegisterAccount;
 import org.duder.service.ApiClient;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
-import ord.duder.dto.user.RegisterAccount;
 
 public class RegistrationActivity extends BaseActivity {
 

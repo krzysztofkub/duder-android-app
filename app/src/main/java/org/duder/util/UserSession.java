@@ -1,6 +1,6 @@
 package org.duder.util;
 
-import ord.duder.dto.user.LoggedAccount;
+import org.duder.dto.user.LoggedAccount;
 
 public class UserSession {
     private LoggedAccount account;

@@ -2,14 +2,12 @@ package org.duder.view.activity;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -23,13 +21,11 @@ import com.google.android.flexbox.FlexboxLayoutManager;
 import com.google.android.flexbox.JustifyContent;
 
 import org.duder.R;
+import org.duder.dto.event.CreateEvent;
 import org.duder.viewModel.CreateEventViewModel;
 import org.duder.viewModel.state.FragmentState;
 
 import java.util.Calendar;
-
-import ord.duder.dto.event.CreateEvent;
-import ord.duder.dto.event.EventPreview;
 
 import static org.duder.util.Const.CREATED_EVENT_URI;
 
@@ -91,11 +87,6 @@ public class CreateEventActivity extends BaseActivity {
     private void initListeners() {
         txtDate.setOnClickListener(v -> onDateClicked());
         txtTime.setOnClickListener(v -> onTimeClicked());
-    }
-
-    private void showKeyboard() {
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.showSoftInput(txtDesc, InputMethodManager.SHOW_IMPLICIT);
     }
 
     private void update(FragmentState state) {

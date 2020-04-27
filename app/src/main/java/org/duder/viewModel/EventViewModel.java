@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.google.gson.Gson;
 
+import org.duder.dto.event.EventPreview;
 import org.duder.service.ApiClient;
 import org.duder.util.UserSession;
 import org.duder.view.adapter.EventPostAdapter;
@@ -15,7 +16,6 @@ import java.util.ArrayList;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
-import ord.duder.dto.event.EventPreview;
 
 public class EventViewModel extends AbstractViewModel {
 

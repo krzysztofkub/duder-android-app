@@ -1,5 +1,9 @@
 package org.duder.service;
 
+import org.duder.dto.chat.ChatMessage;
+import org.duder.dto.event.CreateEvent;
+import org.duder.dto.event.EventPreview;
+import org.duder.dto.user.RegisterAccount;
 import org.duder.util.Const;
 
 import java.util.List;
@@ -7,10 +11,6 @@ import java.util.List;
 import io.reactivex.Maybe;
 import io.reactivex.Single;
 import okhttp3.ResponseBody;
-import ord.duder.dto.chat.ChatMessage;
-import ord.duder.dto.event.CreateEvent;
-import ord.duder.dto.event.EventPreview;
-import ord.duder.dto.user.RegisterAccount;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;

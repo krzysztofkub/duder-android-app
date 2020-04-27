@@ -4,6 +4,7 @@ import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
 
+import org.duder.dto.event.CreateEvent;
 import org.duder.service.ApiClient;
 import org.duder.util.UserSession;
 import org.duder.view.adapter.HobbyCategoriesAdapter;
@@ -15,7 +16,6 @@ import java.util.List;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.Headers;
-import ord.duder.dto.event.CreateEvent;
 
 public class CreateEventViewModel extends AbstractViewModel {
     private static final String TAG = CreateEventViewModel.class.getSimpleName();

@@ -10,12 +10,11 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.duder.R;
+import org.duder.dto.event.HobbyName;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import ord.duder.dto.event.HobbyName;
 
 public class HobbyCategoriesAdapter extends RecyclerView.Adapter<HobbyCategoriesAdapter.ViewHolder> {
     private List<String> hobbies;

@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.squareup.picasso.Picasso;
 
 import org.duder.R;
-
+import org.duder.dto.event.EventPreview;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -21,8 +21,6 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
-
-import ord.duder.dto.event.EventPreview;
 
 public class EventPostAdapter extends RecyclerView.Adapter<EventPostAdapter.ViewHolder> {
 

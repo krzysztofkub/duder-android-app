@@ -16,8 +16,8 @@ import org.duder.view.holder.ChatMessageViewHolder;
 import java.util.LinkedList;
 import java.util.List;
 
-import ord.duder.dto.chat.ChatMessage;
-import ord.duder.dto.chat.MessageType;
+import org.duder.dto.chat.ChatMessage;
+import org.duder.dto.chat.MessageType;
 
 
 public class ChatMessageRecyclerViewAdapter extends RecyclerView.Adapter<AbstractChatMessageViewHolder> {
