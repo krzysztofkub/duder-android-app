@@ -145,7 +145,7 @@ public class LoginActivity extends BaseActivity {
 
     private void doLoginToWebsocket() {
         WebSocketService webSocketService = WebSocketService.getWebSocketService();
-        CompletableFuture<ConnectionResponse> futureConnect = webSocketService.connect(account.getLogin(), account.getPassword());
+        CompletableFuture<ConnectionResponse> futureConnect = webSocketService.connect(account.getSessionToken());
         futureConnect.thenAccept(response -> {
             final Message message = new Message();
             message.what = response.isBadCredentials() ? BAD_CREDENTIALS : LOGIN_SUCCEEDED;

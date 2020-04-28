@@ -62,12 +62,10 @@ public class WebSocketService {
         return stompClient;
     }
 
-    public CompletableFuture<ConnectionResponse> connect(String login, String password) {
-        final StompHeader loginHeader = new StompHeader("login", login);
-        final StompHeader passwordHeader = new StompHeader("password", password);
+    public CompletableFuture<ConnectionResponse> connect(String sessionToken) {
+        final StompHeader loginHeader = new StompHeader("Authorization", sessionToken);
         List<StompHeader> headers = new ArrayList<>();
         headers.add(loginHeader);
-        headers.add(passwordHeader);
 
         return stompClient.connect(headers);
     }
