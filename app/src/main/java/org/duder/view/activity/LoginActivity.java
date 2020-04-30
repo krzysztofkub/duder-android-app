@@ -17,7 +17,8 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 
 import org.duder.R;
-import org.duder.model.user.Account;
+import org.duder.dto.user.LoggedAccount;
+import org.duder.dto.user.LoginResponse;
 import org.duder.service.ApiClient;
 import org.duder.util.UserSession;
 import org.duder.websocket.WebSocketService;
@@ -28,7 +29,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 public class LoginActivity extends BaseActivity {
@@ -44,7 +44,7 @@ public class LoginActivity extends BaseActivity {
     private PopupWindow busyIndicator;
     private Handler handler;
 
-    private Account account;
+    private LoggedAccount account;
     private ExecutorService executor;
 
     private static final int LOGIN_SUCCEEDED = 1;
@@ -108,19 +108,22 @@ public class LoginActivity extends BaseActivity {
             return;
         }
         showBusyIndicator();
-        account = new Account(txtLogin.getText().toString(), txtPassword.getText().toString());
+        account = LoggedAccount.builder()
+                .login(txtLogin.getText().toString())
+                .password(txtPassword.getText().toString())
+                .build();
         executor.submit(this::doLoginToRest);
     }
 
     private void doLoginToRest() {
         ApiClient apiClient = ApiClient.getApiClient();
-        Disposable disposable = apiClient.loginUser(account.getLogin(), account.getPassword())
+        addSub(apiClient.loginUser(account.getLogin(), account.getPassword())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(response -> {
                     switch (response.code()) {
                         case 200:
-                            Account accountFromResponse = new Gson().fromJson(response.body().string(), Account.class);
+                            LoginResponse accountFromResponse = new Gson().fromJson(response.body().string(), LoginResponse.class);
                             account.setNickname(accountFromResponse.getNickname());
                             account.setSessionToken(accountFromResponse.getSessionToken());
                             UserSession.createUserSession(account);
@@ -136,12 +139,13 @@ public class LoginActivity extends BaseActivity {
                             Toast.makeText(this, "Unknown response", Toast.LENGTH_SHORT).show();
                             break;
                     }
-                });
+                })
+        );
     }
 
     private void doLoginToWebsocket() {
         WebSocketService webSocketService = WebSocketService.getWebSocketService();
-        CompletableFuture<ConnectionResponse> futureConnect = webSocketService.connect(account.getLogin(), account.getPassword());
+        CompletableFuture<ConnectionResponse> futureConnect = webSocketService.connect(account.getSessionToken());
         futureConnect.thenAccept(response -> {
             final Message message = new Message();
             message.what = response.isBadCredentials() ? BAD_CREDENTIALS : LOGIN_SUCCEEDED;

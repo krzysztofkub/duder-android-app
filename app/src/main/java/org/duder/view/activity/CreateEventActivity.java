@@ -2,14 +2,12 @@ package org.duder.view.activity;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -23,7 +21,7 @@ import com.google.android.flexbox.FlexboxLayoutManager;
 import com.google.android.flexbox.JustifyContent;
 
 import org.duder.R;
-import org.duder.model.event.Event;
+import org.duder.model.Event;
 import org.duder.viewModel.CreateEventViewModel;
 import org.duder.viewModel.state.FragmentState;
 
@@ -40,7 +38,6 @@ public class CreateEventActivity extends BaseActivity {
     private TextView txtName;
     private TextView txtDesc;
     private RecyclerView hobbies;
-    private View scrollView;
     private ProgressBar progressBar;
     private RelativeLayout createEventForm;
 
@@ -72,7 +69,6 @@ public class CreateEventActivity extends BaseActivity {
         txtDesc = findViewById(R.id.event_description);
         progressBar = findViewById(R.id.progress_spinner);
         hobbies = findViewById(R.id.hobby_list);
-        scrollView = findViewById(R.id.event_description_scroll);
         createEventForm = findViewById(R.id.layout_create_event_form);
         createEventForm.setVisibility(View.GONE);
         setTitle("Create Event");
@@ -91,17 +87,6 @@ public class CreateEventActivity extends BaseActivity {
     private void initListeners() {
         txtDate.setOnClickListener(v -> onDateClicked());
         txtTime.setOnClickListener(v -> onTimeClicked());
-        scrollView.setOnTouchListener((v, e) -> {
-            txtDesc.performClick();
-            txtDesc.requestFocus();
-            showKeyboard();
-            return false;
-        });
-    }
-
-    private void showKeyboard() {
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.showSoftInput(txtDesc, InputMethodManager.SHOW_IMPLICIT);
     }
 
     private void update(FragmentState state) {
@@ -200,18 +185,14 @@ public class CreateEventActivity extends BaseActivity {
             txtTime.setError("what time?");
             hasErrors = true;
         }
-        if (CreateEventViewModel.hobbiesSelected.size() == 0) {
+        if (createEventViewModel.getHobbyAdapter().getSelectedHobbies().size() == 0) {
             Toast.makeText(this, "Please pick a category", Toast.LENGTH_LONG).show();
             hasErrors = true;
         }
         if (hasErrors) {
             return;
         }
-        String[] dateParts = date.split("-");
-        String[] timeParts = time.split(":");
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Integer.parseInt(dateParts[2]), Integer.parseInt(dateParts[1]) - 1, Integer.parseInt(dateParts[0]), Integer.parseInt(timeParts[0]), Integer.parseInt(timeParts[1]));
-        Event event = new Event(name, desc, CreateEventViewModel.hobbiesSelected, calendar.getTimeInMillis());
+        Event event = new Event(name, desc, date, time);
         createEventViewModel.createEvent(event);
     }
 }

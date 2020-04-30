@@ -1,8 +1,9 @@
 package org.duder.service;
 
-import org.duder.model.chat.ChatMessage;
-import org.duder.model.event.Event;
-import org.duder.model.user.Account;
+import org.duder.dto.chat.ChatMessage;
+import org.duder.dto.event.CreateEvent;
+import org.duder.dto.event.EventPreview;
+import org.duder.dto.user.RegisterAccount;
 import org.duder.util.Const;
 
 import java.util.List;
@@ -23,16 +24,16 @@ public interface ApiService {
     Single<List<ChatMessage>> getChatState(@Header("Authorization") String sessionToken);
 
     @POST(Const.REGISTER_USER)
-    Single<Response<ResponseBody>> registerUser(@Body Account account);
+    Single<Response<ResponseBody>> registerUser(@Body RegisterAccount registerAccount);
 
     @GET(Const.LOGIN_USER)
     Single<Response<ResponseBody>> loginUser(@Query("login") String login, @Query("password") String password);
 
     @GET(Const.EVENTS)
-    Maybe<List<Event>> findEventsPage(@Query("page") int page, @Query("size") int size, @Header("Authorization") String sessionToken);
+    Maybe<List<EventPreview>> findEventsPage(@Query("page") int page, @Query("size") int size, @Header("Authorization") String sessionToken);
 
     @POST(Const.EVENTS)
-    Single<Response<ResponseBody>> createEvent(@Body Event event, @Header("Authorization") String sessionToken);
+    Single<Response<ResponseBody>> createEvent(@Body CreateEvent event, @Header("Authorization") String sessionToken);
 
     @GET
     Single<Response<ResponseBody>> getEvent(@Url String url, @Header("Authorization") String sessionToken);

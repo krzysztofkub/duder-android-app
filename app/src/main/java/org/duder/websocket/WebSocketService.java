@@ -5,7 +5,7 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import org.duder.model.chat.ChatMessage;
+import org.duder.dto.chat.ChatMessage;
 import org.duder.util.Const;
 import org.duder.websocket.dto.StompHeader;
 import org.duder.websocket.dto.StompMessage;
@@ -62,12 +62,10 @@ public class WebSocketService {
         return stompClient;
     }
 
-    public CompletableFuture<ConnectionResponse> connect(String login, String password) {
-        final StompHeader loginHeader = new StompHeader("login", login);
-        final StompHeader passwordHeader = new StompHeader("password", password);
+    public CompletableFuture<ConnectionResponse> connect(String sessionToken) {
+        final StompHeader loginHeader = new StompHeader("Authorization", sessionToken);
         List<StompHeader> headers = new ArrayList<>();
         headers.add(loginHeader);
-        headers.add(passwordHeader);
 
         return stompClient.connect(headers);
     }

@@ -1,12 +1,12 @@
 package org.duder.util;
 
-import org.duder.model.user.Account;
+import org.duder.dto.user.LoggedAccount;
 
 public class UserSession {
-    private Account account;
+    private LoggedAccount account;
     private static UserSession userSession;
 
-    private UserSession(Account account) {
+    private UserSession(LoggedAccount account) {
         this.account = account;
     }
 
@@ -14,7 +14,7 @@ public class UserSession {
         return userSession;
     }
 
-    public static void createUserSession(Account account) {
+    public static void createUserSession(LoggedAccount account) {
         if (userSession == null) {
             userSession = new UserSession(account);
         }
@@ -24,7 +24,7 @@ public class UserSession {
         return userSession == null;
     }
 
-    public Account getAccount() {
+    public LoggedAccount getLoggedAccount() {
         return account;
     }
 }

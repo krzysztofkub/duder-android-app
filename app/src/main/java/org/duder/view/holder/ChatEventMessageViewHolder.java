@@ -6,9 +6,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 
 import org.duder.R;
-import org.duder.model.chat.ChatMessage;
-
-import static org.duder.model.chat.ChatMessage.MessageType;
+import org.duder.dto.chat.ChatMessage;
+import org.duder.dto.chat.MessageType;
 
 public class ChatEventMessageViewHolder extends AbstractChatMessageViewHolder {
 

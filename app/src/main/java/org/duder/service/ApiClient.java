@@ -1,8 +1,9 @@
 package org.duder.service;
 
-import org.duder.model.chat.ChatMessage;
-import org.duder.model.event.Event;
-import org.duder.model.user.Account;
+import org.duder.dto.chat.ChatMessage;
+import org.duder.dto.event.CreateEvent;
+import org.duder.dto.event.EventPreview;
+import org.duder.dto.user.RegisterAccount;
 import org.duder.util.Const;
 
 import java.util.List;
@@ -40,19 +41,19 @@ public class ApiClient {
         return apiService.getChatState(sessionToken);
     }
 
-    public Single<Response<ResponseBody>> registerUser(Account account) {
-        return apiService.registerUser(account);
+    public Single<Response<ResponseBody>> registerUser(RegisterAccount registerAccount) {
+        return apiService.registerUser(registerAccount);
     }
 
     public Single<Response<ResponseBody>> loginUser(String login, String password) {
         return apiService.loginUser(login, password);
     }
 
-    public Maybe<List<Event>> getEvents(int page, int size, String sessionToken) {
+    public Maybe<List<EventPreview>> getEvents(int page, int size, String sessionToken) {
         return apiService.findEventsPage(page, size, sessionToken);
     }
 
-    public Single<Response<ResponseBody>> createEvent(Event event, String sessionToken) {
+    public Single<Response<ResponseBody>> createEvent(CreateEvent event, String sessionToken) {
         return apiService.createEvent(event, sessionToken);
     }
 

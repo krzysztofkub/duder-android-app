@@ -15,7 +15,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import org.duder.R;
-import org.duder.model.chat.ChatMessage;
+import org.duder.dto.chat.ChatMessage;
+import org.duder.dto.chat.MessageType;
 import org.duder.service.ApiClient;
 import org.duder.util.Const;
 import org.duder.util.UserSession;
@@ -71,7 +72,7 @@ public class ChatActivity extends BaseActivity {
 
     private void initialize() {
         UserSession userSession = UserSession.getUserSession();
-        login = userSession.getAccount().getLogin();
+        login = userSession.getLoggedAccount().getLogin();
         tvChatTitle = findViewById(R.id.tvChatTitle);
         rvChatMessages = findViewById(R.id.rvChatMessages);
         etChatMessage = findViewById(R.id.etChatMessage);
@@ -89,7 +90,7 @@ public class ChatActivity extends BaseActivity {
 
     private void printChatMessagesHistory() {
         UserSession userSession = UserSession.getUserSession();
-        addSub(apiClient.getChatState(userSession.getAccount().getSessionToken())
+        addSub(apiClient.getChatState(userSession.getLoggedAccount().getSessionToken())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(messages -> {
@@ -105,7 +106,7 @@ public class ChatActivity extends BaseActivity {
             return;
         }
         ChatMessage chatMessage = new ChatMessage();
-        chatMessage.setType(ChatMessage.MessageType.CHAT);
+        chatMessage.setType(MessageType.CHAT);
         chatMessage.setSender(login);
         chatMessage.setContent(message);
 

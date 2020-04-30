@@ -10,13 +10,15 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.duder.R;
+import org.duder.dto.event.HobbyName;
 
+import java.util.HashSet;
 import java.util.List;
-
-import static org.duder.viewModel.CreateEventViewModel.hobbiesSelected;
+import java.util.Set;
 
 public class HobbyCategoriesAdapter extends RecyclerView.Adapter<HobbyCategoriesAdapter.ViewHolder> {
     private List<String> hobbies;
+    private Set<HobbyName> selectedHobbies = new HashSet<>();
 
     public HobbyCategoriesAdapter(List<String> hobbies) {
         this.hobbies = hobbies;
@@ -37,13 +39,17 @@ public class HobbyCategoriesAdapter extends RecyclerView.Adapter<HobbyCategories
             if (isChecked) {
                 toggleButton.setTextColor(Color.parseColor("#FFFFFF"));
                 toggleButton.setBackgroundResource(R.drawable.hobby_toggle_button_on);
-                hobbiesSelected.add(text);
+                selectedHobbies.add(HobbyName.valueOf(text));
             } else {
                 toggleButton.setTextColor(Color.parseColor("#757575"));
                 toggleButton.setBackgroundResource(R.drawable.hobby_toggle_button_off);
-                hobbiesSelected.remove(text);
+                selectedHobbies.remove(HobbyName.valueOf(text));
             }
         });
+    }
+
+    public Set<HobbyName> getSelectedHobbies() {
+        return selectedHobbies;
     }
 
     @Override
