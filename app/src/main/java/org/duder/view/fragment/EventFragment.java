@@ -31,7 +31,6 @@ import org.duder.viewModel.EventViewModel;
 import org.duder.viewModel.state.FragmentState;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
 
 import static org.duder.util.Const.CREATED_EVENT_URI;
 
@@ -39,6 +38,9 @@ public class EventFragment extends BaseFragment {
 
     private static final String TAG = EventFragment.class.getSimpleName();
     private static final int CREATE_EVENT_REQUEST = 1;
+    public static final String EVENT_NAME = "EVENT_NAME";
+    public static final String EVENT_DESCRIPTION = "EVENT_DESCRIPTION";
+    public static final String EVENT_IMAGE = "EVENT_IMAGE";
 
     private EventViewModel viewModel;
     private ProgressBar progressBar;
@@ -106,9 +108,9 @@ public class EventFragment extends BaseFragment {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe((e) -> {
                             Intent intent = new Intent(getActivity(), EventDetailActivity.class);
-                            intent.putExtra("EVENT_NAME", e.getEventPreview().getName());
-                            intent.putExtra("EVENT_DESCRIPTION", e.getEventPreview().getDescription());
-                            intent.putExtra("EVENT_IMAGE", "https://miro.medium.com/max/1200/1*mk1-6aYaf_Bes1E3Imhc0A.jpeg");
+                            intent.putExtra(EVENT_NAME, e.getEventPreview().getName());
+                            intent.putExtra(EVENT_DESCRIPTION, e.getEventPreview().getDescription());
+                            intent.putExtra(EVENT_IMAGE, "https://miro.medium.com/max/1200/1*mk1-6aYaf_Bes1E3Imhc0A.jpeg");
                             ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(getActivity(),
                                     e.getImageView(), ViewCompat.getTransitionName(e.getImageView()));
                             startActivity(intent, options.toBundle());

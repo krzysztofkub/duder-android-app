@@ -14,6 +14,10 @@ import android.widget.TextView;
 
 import org.duder.R;
 
+import static org.duder.view.fragment.EventFragment.EVENT_DESCRIPTION;
+import static org.duder.view.fragment.EventFragment.EVENT_IMAGE;
+import static org.duder.view.fragment.EventFragment.EVENT_NAME;
+
 
 public class EventDetailActivity extends BaseActivity {
 
@@ -30,9 +34,9 @@ public class EventDetailActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_detail);
         Bundle extras = this.getIntent().getExtras();
-        imageUrl = extras.getString("EVENT_IMAGE", "");
-        title = extras.getString("EVENT_NAME", "");
-        description = extras.getString("EVENT_DESCRIPTION", "");
+        imageUrl = extras.getString(EVENT_IMAGE, "");
+        title = extras.getString(EVENT_NAME, "");
+        description = extras.getString(EVENT_DESCRIPTION, "");
         init();
         postponeEnterTransition();
     }
