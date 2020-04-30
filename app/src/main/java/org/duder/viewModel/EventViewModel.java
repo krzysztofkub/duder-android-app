@@ -9,7 +9,7 @@ import com.google.gson.Gson;
 import org.duder.dto.event.EventPreview;
 import org.duder.service.ApiClient;
 import org.duder.util.UserSession;
-import org.duder.view.adapter.EventPostAdapter;
+import org.duder.view.adapter.EventListAdapter;
 import org.duder.viewModel.state.FragmentState;
 
 import java.util.ArrayList;
@@ -23,7 +23,7 @@ public class EventViewModel extends AbstractViewModel {
     private static final int GET_EVENT_NUMBER = 10;
 
     private MutableLiveData<FragmentState> state = new MutableLiveData<>();
-    private EventPostAdapter eventPostAdapter = new EventPostAdapter(new ArrayList<>());
+    private EventListAdapter eventListAdapter = new EventListAdapter(new ArrayList<>());
     private int currentPage = 0;
 
     public void loadEventsBatch(boolean clearEventsBefore) {
@@ -35,9 +35,9 @@ public class EventViewModel extends AbstractViewModel {
                         .subscribe(response -> {
                                     Log.i(TAG, "Fetched " + response.size() + " events");
                                     if (clearEventsBefore) {
-                                        eventPostAdapter.clearEvents();
+                                        eventListAdapter.clearEvents();
                                     }
-                                    eventPostAdapter.addEvents(response);
+                                    eventListAdapter.addEvents(response);
                                     state.postValue(FragmentState.success());
                                 },
                                 error -> {
@@ -58,7 +58,7 @@ public class EventViewModel extends AbstractViewModel {
                                     Log.i(TAG, "Fetched event " + response.body());
                                     if (response.code() == 200) {
                                         EventPreview event = new Gson().fromJson(response.body().string(), EventPreview.class);
-                                        eventPostAdapter.addEvent(event);
+                                        eventListAdapter.addEvent(event);
                                         state.postValue(FragmentState.success());
                                     } else {
                                         Log.e(TAG, "Cant fetch newly created event with location url = " + locationUri);
@@ -81,7 +81,7 @@ public class EventViewModel extends AbstractViewModel {
         return state;
     }
 
-    public EventPostAdapter getEventPostAdapter() {
-        return eventPostAdapter;
+    public EventListAdapter getEventListAdapter() {
+        return eventListAdapter;
     }
 }

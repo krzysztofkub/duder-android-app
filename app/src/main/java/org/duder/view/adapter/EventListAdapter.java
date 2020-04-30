@@ -13,6 +13,7 @@ import com.squareup.picasso.Picasso;
 
 import org.duder.R;
 import org.duder.dto.event.EventPreview;
+import org.duder.model.EventItem;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -21,14 +22,22 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Consumer;
 
-public class EventPostAdapter extends RecyclerView.Adapter<EventPostAdapter.ViewHolder> {
+import io.reactivex.Observable;
+import io.reactivex.subjects.PublishSubject;
+
+public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.ViewHolder> {
 
     private final List<EventPreview> events;
+
+    private PublishSubject<EventItem> onClickSubject = PublishSubject.create();
+    Observable<EventItem> clickStream = onClickSubject.hide();
+
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yy");
     private final int SHORTEN_DESCRIPTION_LENGTH = 39;
 
-    public EventPostAdapter(List<EventPreview> events) {
+    public EventListAdapter(List<EventPreview> events) {
         this.events = events;
     }
 
@@ -41,7 +50,7 @@ public class EventPostAdapter extends RecyclerView.Adapter<EventPostAdapter.View
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-        viewHolder.bind(events.get(i));
+        viewHolder.bind(events.get(i), (e) -> onClickSubject.onNext(e));
     }
 
     @Override
@@ -67,8 +76,8 @@ public class EventPostAdapter extends RecyclerView.Adapter<EventPostAdapter.View
         notifyDataSetChanged();
     }
 
-    public List<EventPreview> getEvents() {
-        return events;
+    public Observable<EventItem> getClickStream() {
+        return clickStream;
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
@@ -89,7 +98,7 @@ public class EventPostAdapter extends RecyclerView.Adapter<EventPostAdapter.View
             timestamp_text = itemView.findViewById(R.id.timestamp_text);
         }
 
-        private void bind(EventPreview event) {
+        private void bind(EventPreview event, Consumer<EventItem> consumer) {
             Picasso
                     .with(itemView.getContext())
                     .cancelRequest(image_view);
@@ -108,6 +117,8 @@ public class EventPostAdapter extends RecyclerView.Adapter<EventPostAdapter.View
             event.getHobbies().forEach(h -> hobbies.set(h + " " + hobbies));
             hobbies_text.setText(hobbies.get());
             timestamp_text.setText(simpleDateFormat.format(new Date(event.getTimestamp())));
+
+            itemView.setOnClickListener((v) -> consumer.accept(new EventItem(image_view, event)));
         }
 
         private String getShortenText(String description) {
