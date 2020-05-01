@@ -48,7 +48,6 @@ public class MainActivity extends BaseActivity {
     }
 
     private void initializeLayout() {
-        profileImage = findViewById(R.id.view_profile);
         BottomNavigationView navView = findViewById(R.id.bottom_nav_view);
         navView.setOnNavigationItemSelectedListener(this::onNavigationItemSelectedListener);
 
@@ -66,6 +65,8 @@ public class MainActivity extends BaseActivity {
         LayoutInflater layoutInflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View action_bar_view = layoutInflater.inflate(R.layout.custom_bar, null);
         actionBar.setCustomView(action_bar_view);
+        profileImage = findViewById(R.id.view_profile);
+
 
         setProfileImage();
     }

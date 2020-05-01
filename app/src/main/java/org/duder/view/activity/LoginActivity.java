@@ -71,6 +71,11 @@ public class LoginActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        sharedPreferences = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
+        if (UserSession.isLoggedIn(sharedPreferences)) {
+            doLoginToWebsocket();
+        }
+
         this.initializeFromR();
 
         String login = this.getIntent().getStringExtra("login");
@@ -85,11 +90,6 @@ public class LoginActivity extends BaseActivity {
         btnSignUp.setOnClickListener(this::onSignUpClicked);
 
         registerFacebookCallback();
-
-        sharedPreferences = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
-        if (UserSession.isLoggedIn(sharedPreferences)) {
-            doLoginToWebsocket();
-        }
     }
 
     private void initializeFromR() {
