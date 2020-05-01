@@ -2,6 +2,7 @@ package org.duder.view.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -13,13 +14,18 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import com.facebook.login.LoginManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.pkmmte.view.CircularImageView;
+import com.squareup.picasso.Picasso;
 
 import org.duder.R;
+import org.duder.util.UserSession;
 import org.duder.view.fragment.DuderFragment;
 import org.duder.view.fragment.EventFragment;
 import org.duder.view.fragment.HomeFragment;
+
+import static org.duder.util.UserSession.PREF_NAME;
 
 public class MainActivity extends BaseActivity {
 
@@ -36,14 +42,21 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        initializeActionBar();
 
+        initializeLayout();
+        initializeListeners();
+    }
+
+    private void initializeLayout() {
+        profileImage = findViewById(R.id.view_profile);
         BottomNavigationView navView = findViewById(R.id.bottom_nav_view);
         navView.setOnNavigationItemSelectedListener(this::onNavigationItemSelectedListener);
 
         fm.beginTransaction().add(R.id.nav_host_fragment, duderFragment, "duder_fragment").hide(duderFragment).commit();
         fm.beginTransaction().add(R.id.nav_host_fragment, eventFragment, "event_fragment").hide(eventFragment).commit();
         fm.beginTransaction().add(R.id.nav_host_fragment, homeFragment, "home_fragment").commit();
+
+        initializeActionBar();
     }
 
     private void initializeActionBar() {
@@ -53,6 +66,26 @@ public class MainActivity extends BaseActivity {
         LayoutInflater layoutInflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View action_bar_view = layoutInflater.inflate(R.layout.custom_bar, null);
         actionBar.setCustomView(action_bar_view);
+
+        setProfileImage();
+    }
+
+    private void setProfileImage() {
+        String imageUrl = getSharedPreferences(PREF_NAME, MODE_PRIVATE).getString(UserSession.IMAGE_URL, "");
+        if (!imageUrl.isEmpty()) {
+            Picasso.get().load(imageUrl).into(profileImage);
+        }
+    }
+
+    private void initializeListeners() {
+        profileImage.setOnClickListener((v) -> logout());
+    }
+
+    private void logout() {
+        UserSession.logOut(getSharedPreferences(PREF_NAME, MODE_PRIVATE), LoginManager.getInstance());
+        final Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     private boolean onNavigationItemSelectedListener(MenuItem item) {

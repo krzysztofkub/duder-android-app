@@ -2,6 +2,7 @@ package org.duder.view.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -17,7 +18,6 @@ import android.widget.Toast;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
-import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.gson.Gson;
@@ -40,6 +40,8 @@ import io.reactivex.schedulers.Schedulers;
 import okhttp3.ResponseBody;
 import retrofit2.Response;
 
+import static org.duder.util.UserSession.*;
+
 public class LoginActivity extends BaseActivity {
 
     private final static String TAG = "LoginActivity";
@@ -59,19 +61,10 @@ public class LoginActivity extends BaseActivity {
     private CallbackManager callbackManager;
 
     private ApiClient apiClient = ApiClient.getApiClient();
+    private SharedPreferences sharedPreferences;
 
     private static final int LOGIN_SUCCEEDED = 1;
     private static final int BAD_CREDENTIALS = 0;
-
-    private void initializeFromR() {
-        txtLogin = findViewById(R.id.login_text_login);
-        txtPassword = findViewById(R.id.login_text_password);
-        btnLogin = findViewById(R.id.login_button_login);
-        btnSignUp = findViewById(R.id.login_button_sign_up);
-        btnForgotPassword = findViewById(R.id.login_button_forgot_password);
-        fbLoginButton = findViewById(R.id.login_button_facebook);
-        viewRoot = txtLogin.getRootView();
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +85,21 @@ public class LoginActivity extends BaseActivity {
         btnSignUp.setOnClickListener(this::onSignUpClicked);
 
         registerFacebookCallback();
+
+        sharedPreferences = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
+        if (UserSession.isLoggedIn(sharedPreferences)) {
+            doLoginToWebsocket();
+        }
+    }
+
+    private void initializeFromR() {
+        txtLogin = findViewById(R.id.login_text_login);
+        txtPassword = findViewById(R.id.login_text_password);
+        btnLogin = findViewById(R.id.login_button_login);
+        btnSignUp = findViewById(R.id.login_button_sign_up);
+        btnForgotPassword = findViewById(R.id.login_button_forgot_password);
+        fbLoginButton = findViewById(R.id.login_button_facebook);
+        viewRoot = txtLogin.getRootView();
     }
 
     private void registerFacebookCallback() {
@@ -102,6 +110,7 @@ public class LoginActivity extends BaseActivity {
                     @Override
                     public void onSuccess(LoginResult loginResult) {
                         Single<Response<ResponseBody>> loginUserWithFb = apiClient.loginUserWithFb(loginResult.getAccessToken().getToken());
+                        UserSession.saveProfileImageUrl(loginResult.getAccessToken().getUserId(), sharedPreferences);
                         account = new LoggedAccount();
                         doLoginToRest(loginUserWithFb);
                     }
@@ -168,7 +177,7 @@ public class LoginActivity extends BaseActivity {
                             LoginResponse accountFromResponse = new Gson().fromJson(response.body().string(), LoginResponse.class);
                             account.setNickname(accountFromResponse.getNickname());
                             account.setSessionToken(accountFromResponse.getSessionToken());
-                            UserSession.createUserSession(account);
+                            storeUserSession(account, getSharedPreferences(PREF_NAME, MODE_PRIVATE));
                             doLoginToWebsocket();
                             break;
                         case 422:
@@ -187,7 +196,8 @@ public class LoginActivity extends BaseActivity {
 
     private void doLoginToWebsocket() {
         WebSocketService webSocketService = WebSocketService.getWebSocketService();
-        CompletableFuture<ConnectionResponse> futureConnect = webSocketService.connect(account.getSessionToken());
+        String token = getSharedPreferences(PREF_NAME, MODE_PRIVATE).getString(TOKEN, "");
+        CompletableFuture<ConnectionResponse> futureConnect = webSocketService.connect(token);
         futureConnect.thenAccept(response -> {
             final Message message = new Message();
             message.what = response.isBadCredentials() ? BAD_CREDENTIALS : LOGIN_SUCCEEDED;
@@ -216,11 +226,7 @@ public class LoginActivity extends BaseActivity {
     }
 
     private void gotoMainActivity() {
-        final String login = txtLogin.getText().toString();
-        final Bundle bundle = new Bundle();
-        bundle.putString("login", login);
         final Intent intent = new Intent(this, MainActivity.class);
-        intent.putExtras(bundle);
         startActivity(intent);
         finish();
     }

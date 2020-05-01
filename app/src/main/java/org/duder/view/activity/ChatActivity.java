@@ -28,6 +28,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
+import static org.duder.util.UserSession.*;
+
 
 public class ChatActivity extends BaseActivity {
     private String login;
@@ -71,8 +73,8 @@ public class ChatActivity extends BaseActivity {
     }
 
     private void initialize() {
-        UserSession userSession = UserSession.getUserSession();
-        login = userSession.getLoggedAccount().getLogin();
+//        UserSession userSession = UserSession.getUserSession();
+//        login = userSession.getLoggedAccount().getLogin();
         tvChatTitle = findViewById(R.id.tvChatTitle);
         rvChatMessages = findViewById(R.id.rvChatMessages);
         etChatMessage = findViewById(R.id.etChatMessage);
@@ -89,8 +91,8 @@ public class ChatActivity extends BaseActivity {
     }
 
     private void printChatMessagesHistory() {
-        UserSession userSession = UserSession.getUserSession();
-        addSub(apiClient.getChatState(userSession.getLoggedAccount().getSessionToken())
+        String token = getSharedPreferences(PREF_NAME, MODE_PRIVATE).getString(TOKEN, "");
+        addSub(apiClient.getChatState(token)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(messages -> {
