@@ -29,6 +29,9 @@ public interface ApiService {
     @GET(Const.LOGIN_USER)
     Single<Response<ResponseBody>> loginUser(@Query("login") String login, @Query("password") String password);
 
+    @GET(Const.LOGIN_USER_WITH_FB)
+    Single<Response<ResponseBody>> loginUserWithFb(@Query("accessToken") String accessToken);
+
     @GET(Const.EVENTS)
     Maybe<List<EventPreview>> findEventsPage(@Query("page") int page, @Query("size") int size, @Header("Authorization") String sessionToken);
 

@@ -50,7 +50,7 @@ public class EventDetailActivity extends BaseActivity {
     }
 
     private void loadImage() {
-        Picasso.with(this)
+        Picasso.get()
                 .load(imageUrl)
                 .placeholder(R.drawable.ic_image_24dp)
                 .into(image_view, new Callback() {
@@ -60,8 +60,8 @@ public class EventDetailActivity extends BaseActivity {
                     }
 
                     @Override
-                    public void onError() {
-                        Log.i("HI", "HI");
+                    public void onError(Exception error) {
+                        Log.e("HI", "HI", error);
                     }
                 });
     }

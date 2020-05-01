@@ -1,14 +1,20 @@
 package org.duder.view.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.pkmmte.view.CircularImageView;
 
 import org.duder.R;
 import org.duder.view.fragment.DuderFragment;
@@ -23,11 +29,14 @@ public class MainActivity extends BaseActivity {
     private final FragmentManager fm = getSupportFragmentManager();
     Fragment active = homeFragment;
 
+    private CircularImageView profileImage;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        setTitle("Home");
+
+        initializeActionBar();
 
         BottomNavigationView navView = findViewById(R.id.bottom_nav_view);
         navView.setOnNavigationItemSelectedListener(this::onNavigationItemSelectedListener);
@@ -37,22 +46,28 @@ public class MainActivity extends BaseActivity {
         fm.beginTransaction().add(R.id.nav_host_fragment, homeFragment, "home_fragment").commit();
     }
 
+    private void initializeActionBar() {
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayShowCustomEnabled(true);
+        actionBar.setDisplayShowTitleEnabled(false);
+        LayoutInflater layoutInflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View action_bar_view = layoutInflater.inflate(R.layout.custom_bar, null);
+        actionBar.setCustomView(action_bar_view);
+    }
+
     private boolean onNavigationItemSelectedListener(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.navigation_home:
                 fm.beginTransaction().hide(active).show(homeFragment).commit();
                 active = homeFragment;
-                setTitle("Home");
                 return true;
             case R.id.navigation_events:
                 fm.beginTransaction().hide(active).show(eventFragment).commit();
                 active = eventFragment;
-                setTitle("Events");
                 return true;
             case R.id.navigation_duders:
                 fm.beginTransaction().hide(active).show(duderFragment).commit();
                 active = duderFragment;
-                setTitle("Duders");
                 return true;
             default:
                 return false;

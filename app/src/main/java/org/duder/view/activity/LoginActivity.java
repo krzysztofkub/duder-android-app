@@ -14,6 +14,12 @@ import android.widget.EditText;
 import android.widget.PopupWindow;
 import android.widget.Toast;
 
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 import com.google.gson.Gson;
 
 import org.duder.R;
@@ -28,8 +34,11 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import okhttp3.ResponseBody;
+import retrofit2.Response;
 
 public class LoginActivity extends BaseActivity {
 
@@ -46,6 +55,10 @@ public class LoginActivity extends BaseActivity {
 
     private LoggedAccount account;
     private ExecutorService executor;
+    private LoginButton fbLoginButton;
+    private CallbackManager callbackManager;
+
+    private ApiClient apiClient = ApiClient.getApiClient();
 
     private static final int LOGIN_SUCCEEDED = 1;
     private static final int BAD_CREDENTIALS = 0;
@@ -56,6 +69,7 @@ public class LoginActivity extends BaseActivity {
         btnLogin = findViewById(R.id.login_button_login);
         btnSignUp = findViewById(R.id.login_button_sign_up);
         btnForgotPassword = findViewById(R.id.login_button_forgot_password);
+        fbLoginButton = findViewById(R.id.login_button_facebook);
         viewRoot = txtLogin.getRootView();
     }
 
@@ -76,6 +90,34 @@ public class LoginActivity extends BaseActivity {
 
         btnLogin.setOnClickListener(this::onLoginClicked);
         btnSignUp.setOnClickListener(this::onSignUpClicked);
+
+        registerFacebookCallback();
+    }
+
+    private void registerFacebookCallback() {
+        fbLoginButton.setPermissions("email");
+        callbackManager = CallbackManager.Factory.create();
+        fbLoginButton.registerCallback(callbackManager,
+                new FacebookCallback<LoginResult>() {
+                    @Override
+                    public void onSuccess(LoginResult loginResult) {
+                        Single<Response<ResponseBody>> loginUserWithFb = apiClient.loginUserWithFb(loginResult.getAccessToken().getToken());
+                        account = new LoggedAccount();
+                        doLoginToRest(loginUserWithFb);
+                    }
+
+                    @Override
+                    public void onCancel() {
+                        // App code
+                        System.out.println("cancel");
+                    }
+
+                    @Override
+                    public void onError(FacebookException exception) {
+                        // App code
+                        System.out.println("error");
+                    }
+                });
     }
 
     private void onSignUpClicked(View view) {
@@ -112,12 +154,12 @@ public class LoginActivity extends BaseActivity {
                 .login(txtLogin.getText().toString())
                 .password(txtPassword.getText().toString())
                 .build();
-        executor.submit(this::doLoginToRest);
+        Single<Response<ResponseBody>> loginRequest = apiClient.loginUser(account.getLogin(), account.getPassword());
+        executor.submit(() -> doLoginToRest(loginRequest));
     }
 
-    private void doLoginToRest() {
-        ApiClient apiClient = ApiClient.getApiClient();
-        addSub(apiClient.loginUser(account.getLogin(), account.getPassword())
+    private void doLoginToRest(Single<Response<ResponseBody>> loginRequest) {
+        addSub(loginRequest
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(response -> {
@@ -207,5 +249,11 @@ public class LoginActivity extends BaseActivity {
                     break;
             }
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        callbackManager.onActivityResult(requestCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }

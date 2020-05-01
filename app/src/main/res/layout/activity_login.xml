@@ -81,6 +81,7 @@
             android:background="@color/success"
             android:paddingHorizontal="50dp"
             android:text="@string/loginText"
+            android:textColor="@color/cardview_light_background"
             app:layout_constraintBottom_toTopOf="@id/login.button.forgot_password"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -96,13 +97,25 @@
             android:paddingHorizontal="50dp"
             android:text="@string/forgot_password"
             android:textColor="@color/secondary_text"
-            app:layout_constraintBottom_toBottomOf="@+id/login.layout.login_form"
-            app:layout_constraintBottom_toTopOf="@id/login.button.forgot_password"
+            app:layout_constraintBottom_toTopOf="@+id/login.button.facebook"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/login.text.password" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        <com.facebook.login.widget.LoginButton
+            android:id="@+id/login.button.facebook"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/loginFormMargin"
+            android:background="@color/primary_dark"
+            android:paddingHorizontal="50dp"
+            android:text="@string/loginText"
+            app:layout_constraintBottom_toBottomOf="@+id/login.layout.login_form"
+            app:layout_constraintBottom_toTopOf="@id/login.button.forgot_password"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/login.button.forgot_password" />
 
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

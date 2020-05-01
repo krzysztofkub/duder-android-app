@@ -27,6 +27,7 @@ android {
 
 dependencies {
     implementation 'org.duder:duder-dto:9'
+    implementation 'com.facebook.android:facebook-android-sdk:[5,6)'
     api "io.reactivex.rxjava2:rxjava:2.2.5"
     api 'com.squareup.okhttp3:okhttp:3.12.1'
     api 'org.java-websocket:Java-WebSocket:1.3.6'
@@ -59,7 +60,8 @@ dependencies {
     implementation "android.arch.navigation:navigation-fragment-ktx:1.0.0"
 
     kapt "android.arch.lifecycle:compiler:1.0.0"
-    implementation 'com.squareup.picasso:picasso:2.5.2'
+    implementation 'com.squareup.picasso:picasso:2.71828'
+    compile 'com.pkmmte.view:circularimageview:1.1'
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.0.0'
     implementation 'com.google.android:flexbox:2.0.1'
     //To Delete

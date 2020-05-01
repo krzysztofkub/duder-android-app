@@ -28,4 +28,8 @@
     <string name="eventDescription">Event Description</string>
     <string name="dateHint">Event start date</string>
     <string name="timeHint">Event start time</string>
+
+    <!--    Facebook-->
+    <string name="facebook_app_id">682883292526178</string>
+    <string name="fb_login_protocol_scheme">fb682883292526178</string>
 </resources>
