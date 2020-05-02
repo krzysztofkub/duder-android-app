@@ -4,7 +4,6 @@ package org.duder.websocket.dto;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-
 import org.duder.websocket.exception.BadCredentialsException;
 
 import java.io.StringReader;

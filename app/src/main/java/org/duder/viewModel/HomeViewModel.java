@@ -23,7 +23,7 @@ public class HomeViewModel extends ViewModel {
 
     public void init() {
         AccessToken token = AccessToken.getCurrentAccessToken();
-        if (token!=null) {
+        if (token != null) {
             System.out.println(token);
         }
     }

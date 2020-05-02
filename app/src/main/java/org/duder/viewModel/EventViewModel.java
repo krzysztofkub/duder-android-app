@@ -7,12 +7,10 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
-import com.facebook.share.Share;
 import com.google.gson.Gson;
 
 import org.duder.dto.event.EventPreview;
 import org.duder.service.ApiClient;
-import org.duder.util.UserSession;
 import org.duder.view.adapter.EventListAdapter;
 import org.duder.viewModel.state.FragmentState;
 

@@ -19,7 +19,6 @@ import org.duder.dto.chat.ChatMessage;
 import org.duder.dto.chat.MessageType;
 import org.duder.service.ApiClient;
 import org.duder.util.Const;
-import org.duder.util.UserSession;
 import org.duder.view.adapter.ChatMessageRecyclerViewAdapter;
 import org.duder.websocket.WebSocketService;
 import org.duder.websocket.dto.StompMessage;
@@ -28,7 +27,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
-import static org.duder.util.UserSession.*;
+import static org.duder.util.UserSession.PREF_NAME;
+import static org.duder.util.UserSession.TOKEN;
 
 
 public class ChatActivity extends BaseActivity {

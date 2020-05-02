@@ -5,12 +5,11 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
-
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import org.duder.R;
 
