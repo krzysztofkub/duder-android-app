@@ -13,9 +13,9 @@ import com.squareup.picasso.Picasso;
 
 import org.duder.R;
 
-import static org.duder.view.fragment.EventFragment.EVENT_DESCRIPTION;
-import static org.duder.view.fragment.EventFragment.EVENT_IMAGE;
-import static org.duder.view.fragment.EventFragment.EVENT_NAME;
+import static org.duder.view.fragment.event.EventPublicFragment.EVENT_DESCRIPTION;
+import static org.duder.view.fragment.event.EventPublicFragment.EVENT_IMAGE;
+import static org.duder.view.fragment.event.EventPublicFragment.EVENT_NAME;
 
 
 public class EventDetailActivity extends BaseActivity {

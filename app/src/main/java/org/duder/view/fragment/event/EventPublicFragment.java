@@ -1,4 +1,4 @@
-package org.duder.view.fragment;
+package org.duder.view.fragment.event;
 
 import android.app.Activity;
 import android.app.ActivityOptions;
@@ -27,6 +27,7 @@ import org.duder.R;
 import org.duder.view.activity.CreateEventActivity;
 import org.duder.view.activity.EventDetailActivity;
 import org.duder.view.adapter.listener.LazyLoadRecyclerViewListener;
+import org.duder.view.fragment.BaseFragment;
 import org.duder.viewModel.EventViewModel;
 import org.duder.viewModel.state.FragmentState;
 
@@ -34,9 +35,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 
 import static org.duder.util.Const.CREATED_EVENT_URI;
 
-public class EventFragment extends BaseFragment {
+public class EventPublicFragment extends BaseFragment {
 
-    private static final String TAG = EventFragment.class.getSimpleName();
+    private static final String TAG = EventPublicFragment.class.getSimpleName();
     private static final int CREATE_EVENT_REQUEST = 1;
     public static final String EVENT_NAME = "EVENT_NAME";
     public static final String EVENT_DESCRIPTION = "EVENT_DESCRIPTION";
@@ -51,7 +52,7 @@ public class EventFragment extends BaseFragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_events, container, false);
+        View root = inflater.inflate(R.layout.fragment_events_public, container, false);
         progressBar = root.findViewById(R.id.progress_spinner);
         eventsList = root.findViewById(R.id.events_list);
         addEventButton = root.findViewById(R.id.btn_add_event);

@@ -20,15 +20,15 @@ import com.squareup.picasso.Picasso;
 import org.duder.R;
 import org.duder.util.UserSession;
 import org.duder.view.fragment.DuderFragment;
-import org.duder.view.fragment.EventFragment;
 import org.duder.view.fragment.HomeFragment;
+import org.duder.view.fragment.event.EventMainFragment;
 
 import static org.duder.util.UserSession.PREF_NAME;
 
 public class MainActivity extends BaseActivity {
 
     private final Fragment homeFragment = new HomeFragment();
-    private final Fragment eventFragment = new EventFragment();
+    private final Fragment eventFragment = new EventMainFragment();
     private final Fragment duderFragment = new DuderFragment();
     private final FragmentManager fm = getSupportFragmentManager();
     Fragment active = homeFragment;
