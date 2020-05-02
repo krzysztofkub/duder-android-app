@@ -37,7 +37,7 @@ public class UserSession {
 
     public static void saveProfileImageUrl(String userId, SharedPreferences prefs) {
         SharedPreferences.Editor editor = prefs.edit();
-        editor.putString(IMAGE_URL, "https://graph.facebook.com/" + userId + "/picture?type=square");
+        editor.putString(IMAGE_URL, "https://graph.facebook.com/" + userId + "/picture?type=large&width=900&height=900");
         editor.commit();
     }
 }

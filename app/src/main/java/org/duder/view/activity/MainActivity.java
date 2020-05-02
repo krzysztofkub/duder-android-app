@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
@@ -16,7 +17,6 @@ import androidx.fragment.app.FragmentManager;
 
 import com.facebook.login.LoginManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.pkmmte.view.CircularImageView;
 import com.squareup.picasso.Picasso;
 
 import org.duder.R;
@@ -24,6 +24,8 @@ import org.duder.util.UserSession;
 import org.duder.view.fragment.DuderFragment;
 import org.duder.view.fragment.EventFragment;
 import org.duder.view.fragment.HomeFragment;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 import static org.duder.util.UserSession.PREF_NAME;
 
@@ -35,7 +37,7 @@ public class MainActivity extends BaseActivity {
     private final FragmentManager fm = getSupportFragmentManager();
     Fragment active = homeFragment;
 
-    private CircularImageView profileImage;
+    private ImageView profileImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +76,7 @@ public class MainActivity extends BaseActivity {
     private void setProfileImage() {
         String imageUrl = getSharedPreferences(PREF_NAME, MODE_PRIVATE).getString(UserSession.IMAGE_URL, "");
         if (!imageUrl.isEmpty()) {
-            Picasso.get().load(imageUrl).into(profileImage);
+            Picasso.get().load(imageUrl).noFade().into(profileImage);
         }
     }
 

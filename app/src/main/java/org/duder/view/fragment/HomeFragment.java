@@ -10,12 +10,13 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModelProviders;
 
-import com.pkmmte.view.CircularImageView;
 import com.squareup.picasso.Picasso;
 
 import org.duder.R;
 import org.duder.util.UserSession;
 import org.duder.viewModel.HomeViewModel;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 import static android.content.Context.MODE_PRIVATE;
 import static org.duder.util.UserSession.PREF_NAME;
@@ -23,7 +24,7 @@ import static org.duder.util.UserSession.PREF_NAME;
 public class HomeFragment extends BaseFragment {
 
     private HomeViewModel homeViewModel;
-    private CircularImageView profileImage;
+    private CircleImageView profileImage;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -39,7 +40,7 @@ public class HomeFragment extends BaseFragment {
     private void setProfileImage() {
         String imageUrl = getActivity().getSharedPreferences(PREF_NAME, MODE_PRIVATE).getString(UserSession.IMAGE_URL, "");
         if (!imageUrl.isEmpty()) {
-            Picasso.get().load(imageUrl).into(profileImage);
+            Picasso.get().load(imageUrl).noFade().into(profileImage);
         }
     }
 }
