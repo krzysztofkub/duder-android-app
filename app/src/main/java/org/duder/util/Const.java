@@ -20,4 +20,5 @@ public class Const {
     public static final String HOBBIES = "/api/hobby";
 
     public static final String CREATED_EVENT_URI = "EVENT_LOCATION";
+    public static final String VALIDATE_USER = "/user/validate";
 }

@@ -24,7 +24,6 @@ import static org.duder.util.UserSession.PREF_NAME;
 public class HomeFragment extends BaseFragment {
 
     private HomeViewModel homeViewModel;
-    private CircleImageView profileImage;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -32,15 +31,7 @@ public class HomeFragment extends BaseFragment {
         View root = inflater.inflate(R.layout.fragment_home, container, false);
         final TextView textView = root.findViewById(R.id.text_home);
         homeViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
-        profileImage = root.findViewById(R.id.profile_image);
-        setProfileImage();
         return root;
     }
 
-    private void setProfileImage() {
-        String imageUrl = getActivity().getSharedPreferences(PREF_NAME, MODE_PRIVATE).getString(UserSession.IMAGE_URL, "");
-        if (!imageUrl.isEmpty()) {
-            Picasso.get().load(imageUrl).noFade().into(profileImage);
-        }
-    }
 }

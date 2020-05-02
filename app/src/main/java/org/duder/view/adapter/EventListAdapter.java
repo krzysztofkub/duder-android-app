@@ -32,7 +32,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
     private final List<EventPreview> events;
 
     private PublishSubject<EventItem> onClickSubject = PublishSubject.create();
-    Observable<EventItem> clickStream = onClickSubject.hide();
+    private Observable<EventItem> clickStream = onClickSubject.hide();
 
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yy");
     private final int SHORTEN_DESCRIPTION_LENGTH = 39;
