@@ -19,7 +19,6 @@ import org.duder.dto.chat.ChatMessage;
 import org.duder.dto.chat.MessageType;
 import org.duder.service.ApiClient;
 import org.duder.util.Const;
-import org.duder.util.UserSession;
 import org.duder.view.adapter.ChatMessageRecyclerViewAdapter;
 import org.duder.websocket.WebSocketService;
 import org.duder.websocket.dto.StompMessage;
@@ -27,6 +26,9 @@ import org.duder.websocket.dto.StompMessage;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
+
+import static org.duder.util.UserSession.PREF_NAME;
+import static org.duder.util.UserSession.TOKEN;
 
 
 public class ChatActivity extends BaseActivity {
@@ -71,8 +73,8 @@ public class ChatActivity extends BaseActivity {
     }
 
     private void initialize() {
-        UserSession userSession = UserSession.getUserSession();
-        login = userSession.getLoggedAccount().getLogin();
+//        UserSession userSession = UserSession.getUserSession();
+//        login = userSession.getLoggedAccount().getLogin();
         tvChatTitle = findViewById(R.id.tvChatTitle);
         rvChatMessages = findViewById(R.id.rvChatMessages);
         etChatMessage = findViewById(R.id.etChatMessage);
@@ -89,8 +91,8 @@ public class ChatActivity extends BaseActivity {
     }
 
     private void printChatMessagesHistory() {
-        UserSession userSession = UserSession.getUserSession();
-        addSub(apiClient.getChatState(userSession.getLoggedAccount().getSessionToken())
+        String token = getSharedPreferences(PREF_NAME, MODE_PRIVATE).getString(TOKEN, "");
+        addSub(apiClient.getChatState(token)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(messages -> {

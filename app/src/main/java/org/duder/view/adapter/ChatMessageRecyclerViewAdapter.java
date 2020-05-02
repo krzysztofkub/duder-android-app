@@ -9,15 +9,14 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.duder.R;
+import org.duder.dto.chat.ChatMessage;
+import org.duder.dto.chat.MessageType;
 import org.duder.view.holder.AbstractChatMessageViewHolder;
 import org.duder.view.holder.ChatEventMessageViewHolder;
 import org.duder.view.holder.ChatMessageViewHolder;
 
 import java.util.LinkedList;
 import java.util.List;
-
-import org.duder.dto.chat.ChatMessage;
-import org.duder.dto.chat.MessageType;
 
 
 public class ChatMessageRecyclerViewAdapter extends RecyclerView.Adapter<AbstractChatMessageViewHolder> {

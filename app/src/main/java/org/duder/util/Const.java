@@ -14,8 +14,11 @@ public class Const {
     public static final String GET_MESSAGE_HISTORY_ENDPOINT = "/api/chat/getChatState";
     public static final String REGISTER_USER = "/user/register";
     public static final String LOGIN_USER = "/user/login";
+    public static final String LOGIN_USER_WITH_FB = "/user/fb-login";
+
     public static final String EVENTS = "/api/event";
     public static final String HOBBIES = "/api/hobby";
 
     public static final String CREATED_EVENT_URI = "EVENT_LOCATION";
+    public static final String VALIDATE_USER = "/user/validate";
 }

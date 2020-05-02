@@ -14,6 +14,11 @@ import android.widget.EditText;
 import android.widget.PopupWindow;
 import android.widget.Toast;
 
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
 import com.google.gson.Gson;
 
 import org.duder.R;
@@ -22,14 +27,22 @@ import org.duder.dto.user.LoginResponse;
 import org.duder.service.ApiClient;
 import org.duder.util.UserSession;
 import org.duder.websocket.WebSocketService;
-import org.duder.websocket.stomp.dto.ConnectionResponse;
+import org.duder.websocket.dto.ConnectionResponse;
 
+import java.util.Collections;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import okhttp3.ResponseBody;
+import retrofit2.Response;
+
+import static org.duder.util.UserSession.PREF_NAME;
+import static org.duder.util.UserSession.TOKEN;
+import static org.duder.util.UserSession.storeUserSession;
 
 public class LoginActivity extends BaseActivity {
 
@@ -40,31 +53,25 @@ public class LoginActivity extends BaseActivity {
     private Button btnLogin;
     private Button btnSignUp;
     private Button btnForgotPassword;
-    private View viewRoot;
     private PopupWindow busyIndicator;
-    private Handler handler;
+    private View loginView;
 
     private LoggedAccount account;
     private ExecutorService executor;
+    private Button fbLoginButton;
+    private CallbackManager callbackManager;
+    private Handler handler;
+
+    private ApiClient apiClient = ApiClient.getApiClient();
 
     private static final int LOGIN_SUCCEEDED = 1;
     private static final int BAD_CREDENTIALS = 0;
-
-    private void initializeFromR() {
-        txtLogin = findViewById(R.id.login_text_login);
-        txtPassword = findViewById(R.id.login_text_password);
-        btnLogin = findViewById(R.id.login_button_login);
-        btnSignUp = findViewById(R.id.login_button_sign_up);
-        btnForgotPassword = findViewById(R.id.login_button_forgot_password);
-        viewRoot = txtLogin.getRootView();
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
-        this.initializeFromR();
+        this.initializeLayout();
 
         String login = this.getIntent().getStringExtra("login");
         if (login != null) {
@@ -75,19 +82,53 @@ public class LoginActivity extends BaseActivity {
         }
 
         btnLogin.setOnClickListener(this::onLoginClicked);
+        fbLoginButton.setOnClickListener(this::onFbLoginClicked);
         btnSignUp.setOnClickListener(this::onSignUpClicked);
+        registerFacebookCallback();
+    }
+
+    private void initializeLayout() {
+        txtLogin = findViewById(R.id.login_text_login);
+        txtPassword = findViewById(R.id.login_text_password);
+        btnLogin = findViewById(R.id.login_button_login);
+        btnSignUp = findViewById(R.id.login_button_sign_up);
+        btnForgotPassword = findViewById(R.id.login_button_forgot_password);
+        fbLoginButton = findViewById(R.id.login_button_facebook);
+        loginView = findViewById(R.id.login_layout_main);
+    }
+
+    private void registerFacebookCallback() {
+        callbackManager = CallbackManager.Factory.create();
+        LoginManager.getInstance().registerCallback(callbackManager,
+                new FacebookCallback<LoginResult>() {
+                    @Override
+                    public void onSuccess(LoginResult loginResult) {
+                        Single<Response<ResponseBody>> loginUserWithFb = apiClient.loginUserWithFb(loginResult.getAccessToken().getToken());
+                        UserSession.saveProfileImageUrl(loginResult.getAccessToken().getUserId(), getSharedPreferences(PREF_NAME, MODE_PRIVATE));
+                        account = new LoggedAccount();
+                        doLoginToRest(loginUserWithFb);
+                    }
+
+                    @Override
+                    public void onCancel() {
+                        // App code
+                        loginView.setVisibility(View.VISIBLE);
+                        hideBusyIndicator();
+                    }
+
+                    @Override
+                    public void onError(FacebookException exception) {
+                        // App code
+                        loginView.setVisibility(View.VISIBLE);
+                        hideBusyIndicator();
+                        System.out.println("error");
+                    }
+                });
     }
 
     private void onSignUpClicked(View view) {
         final Intent registrationIntent = new Intent(this, RegistrationActivity.class);
         startActivity(registrationIntent);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        handler = new LoginHandler();
-        executor = Executors.newFixedThreadPool(2);
     }
 
     private void onLoginClicked(View view) {
@@ -112,12 +153,18 @@ public class LoginActivity extends BaseActivity {
                 .login(txtLogin.getText().toString())
                 .password(txtPassword.getText().toString())
                 .build();
-        executor.submit(this::doLoginToRest);
+        Single<Response<ResponseBody>> loginRequest = apiClient.loginUser(account.getLogin(), account.getPassword());
+        executor.submit(() -> doLoginToRest(loginRequest));
     }
 
-    private void doLoginToRest() {
-        ApiClient apiClient = ApiClient.getApiClient();
-        addSub(apiClient.loginUser(account.getLogin(), account.getPassword())
+    private void onFbLoginClicked(View view) {
+        showBusyIndicator();
+        loginView.setVisibility(View.GONE);
+        LoginManager.getInstance().logInWithReadPermissions(this, Collections.singletonList("email"));
+    }
+
+    private void doLoginToRest(Single<Response<ResponseBody>> loginRequest) {
+        addSub(loginRequest
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(response -> {
@@ -126,7 +173,7 @@ public class LoginActivity extends BaseActivity {
                             LoginResponse accountFromResponse = new Gson().fromJson(response.body().string(), LoginResponse.class);
                             account.setNickname(accountFromResponse.getNickname());
                             account.setSessionToken(accountFromResponse.getSessionToken());
-                            UserSession.createUserSession(account);
+                            storeUserSession(account, getSharedPreferences(PREF_NAME, MODE_PRIVATE));
                             doLoginToWebsocket();
                             break;
                         case 422:
@@ -145,7 +192,8 @@ public class LoginActivity extends BaseActivity {
 
     private void doLoginToWebsocket() {
         WebSocketService webSocketService = WebSocketService.getWebSocketService();
-        CompletableFuture<ConnectionResponse> futureConnect = webSocketService.connect(account.getSessionToken());
+        String token = getSharedPreferences(PREF_NAME, MODE_PRIVATE).getString(TOKEN, "");
+        CompletableFuture<ConnectionResponse> futureConnect = webSocketService.connect(token);
         futureConnect.thenAccept(response -> {
             final Message message = new Message();
             message.what = response.isBadCredentials() ? BAD_CREDENTIALS : LOGIN_SUCCEEDED;
@@ -174,11 +222,7 @@ public class LoginActivity extends BaseActivity {
     }
 
     private void gotoMainActivity() {
-        final String login = txtLogin.getText().toString();
-        final Bundle bundle = new Bundle();
-        bundle.putString("login", login);
         final Intent intent = new Intent(this, MainActivity.class);
-        intent.putExtras(bundle);
         startActivity(intent);
         finish();
     }
@@ -187,6 +231,19 @@ public class LoginActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         hideBusyIndicator();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        handler = new LoginHandler();
+        executor = Executors.newFixedThreadPool(2);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        callbackManager.onActivityResult(requestCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     private class LoginHandler extends Handler {

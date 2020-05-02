@@ -6,16 +6,16 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import org.duder.websocket.dto.ConnectionResponse;
 import org.duder.websocket.dto.LifecycleEvent;
 import org.duder.websocket.dto.StompCommand;
 import org.duder.websocket.dto.StompHeader;
 import org.duder.websocket.dto.StompMessage;
+import org.duder.websocket.exception.BadCredentialsException;
 import org.duder.websocket.pathmatcher.PathMatcher;
 import org.duder.websocket.pathmatcher.RabbitPathMatcher;
 import org.duder.websocket.pathmatcher.SimplePathMatcher;
 import org.duder.websocket.provider.ConnectionProvider;
-import org.duder.websocket.stomp.dto.ConnectionResponse;
-import org.duder.websocket.exception.BadCredentialsException;
 
 import java.util.ArrayList;
 import java.util.Collections;

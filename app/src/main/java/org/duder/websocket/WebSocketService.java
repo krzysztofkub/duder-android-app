@@ -7,9 +7,9 @@ import com.google.gson.GsonBuilder;
 
 import org.duder.dto.chat.ChatMessage;
 import org.duder.util.Const;
+import org.duder.websocket.dto.ConnectionResponse;
 import org.duder.websocket.dto.StompHeader;
 import org.duder.websocket.dto.StompMessage;
-import org.duder.websocket.stomp.dto.ConnectionResponse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,9 +63,9 @@ public class WebSocketService {
     }
 
     public CompletableFuture<ConnectionResponse> connect(String sessionToken) {
-        final StompHeader loginHeader = new StompHeader("Authorization", sessionToken);
+        final StompHeader authorizationHeader = new StompHeader("Authorization", sessionToken);
         List<StompHeader> headers = new ArrayList<>();
-        headers.add(loginHeader);
+        headers.add(authorizationHeader);
 
         return stompClient.connect(headers);
     }

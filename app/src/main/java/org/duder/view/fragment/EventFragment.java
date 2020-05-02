@@ -56,6 +56,7 @@ public class EventFragment extends BaseFragment {
         eventsList = root.findViewById(R.id.events_list);
         addEventButton = root.findViewById(R.id.btn_add_event);
         swipeLayout = root.findViewById(R.id.swipe_layout);
+
         init();
         viewModel.loadEventsBatch(false);
         return root;

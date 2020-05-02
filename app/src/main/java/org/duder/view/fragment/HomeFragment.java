@@ -24,4 +24,5 @@ public class HomeFragment extends BaseFragment {
         homeViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
         return root;
     }
+
 }

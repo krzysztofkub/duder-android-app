@@ -1,30 +1,43 @@
 package org.duder.util;
 
+import android.content.SharedPreferences;
+
+import com.facebook.login.LoginManager;
+
 import org.duder.dto.user.LoggedAccount;
 
 public class UserSession {
-    private LoggedAccount account;
-    private static UserSession userSession;
+    public static final String IMAGE_URL = "IMAGE_URL";
+    public static final String NICKNAME = "NICKNAME";
+    public static final String TOKEN = "TOKEN";
 
-    private UserSession(LoggedAccount account) {
-        this.account = account;
+    public static final String PREF_NAME = "org.duder.util.UserSession";
+
+    public static void storeUserSession(LoggedAccount loggedAccount, SharedPreferences prefs) {
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString(NICKNAME, loggedAccount.getNickname());
+        editor.putString(TOKEN, loggedAccount.getSessionToken());
+        editor.commit();
     }
 
-    public static UserSession getUserSession() {
-        return userSession;
+    public static boolean isLoggedIn(SharedPreferences prefs) {
+        String string = prefs.getString(TOKEN, "");
+        return !string.isEmpty();
     }
 
-    public static void createUserSession(LoggedAccount account) {
-        if (userSession == null) {
-            userSession = new UserSession(account);
+    public static void logOut(SharedPreferences prefs, LoginManager loginManager) {
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.clear();
+        editor.commit();
+
+        if (loginManager != null) {
+            loginManager.logOut();
         }
     }
 
-    public static boolean isSessionEmpty() {
-        return userSession == null;
-    }
-
-    public LoggedAccount getLoggedAccount() {
-        return account;
+    public static void saveProfileImageUrl(String userId, SharedPreferences prefs) {
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString(IMAGE_URL, "https://graph.facebook.com/" + userId + "/picture?type=large&width=900&height=900");
+        editor.commit();
     }
 }

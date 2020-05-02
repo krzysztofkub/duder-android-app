@@ -1,14 +1,16 @@
 package org.duder.viewModel;
 
+import android.app.Application;
+import android.content.SharedPreferences;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
 import com.google.gson.Gson;
 
 import org.duder.dto.event.EventPreview;
 import org.duder.service.ApiClient;
-import org.duder.util.UserSession;
 import org.duder.view.adapter.EventListAdapter;
 import org.duder.viewModel.state.FragmentState;
 
@@ -17,19 +19,29 @@ import java.util.ArrayList;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
+import static android.content.Context.MODE_PRIVATE;
+import static org.duder.util.UserSession.PREF_NAME;
+import static org.duder.util.UserSession.TOKEN;
+
 public class EventViewModel extends AbstractViewModel {
 
     private static final String TAG = EventViewModel.class.getSimpleName();
     private static final int GET_EVENT_NUMBER = 10;
 
+    private SharedPreferences sharedPreferences = getApplication().getSharedPreferences(PREF_NAME, MODE_PRIVATE);
     private MutableLiveData<FragmentState> state = new MutableLiveData<>();
     private EventListAdapter eventListAdapter = new EventListAdapter(new ArrayList<>());
     private int currentPage = 0;
 
+    public EventViewModel(@NonNull Application application) {
+        super(application);
+    }
+
     public void loadEventsBatch(boolean clearEventsBefore) {
         state.postValue(FragmentState.loading());
+        String token = sharedPreferences.getString(TOKEN, "");
         addSub(
-                ApiClient.getApiClient().getEvents(currentPage, GET_EVENT_NUMBER, UserSession.getUserSession().getLoggedAccount().getSessionToken())
+                ApiClient.getApiClient().getEvents(currentPage, GET_EVENT_NUMBER, token)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(response -> {
@@ -50,8 +62,9 @@ public class EventViewModel extends AbstractViewModel {
 
     public void fetchAndAddNewEvent(String locationUri) {
         state.postValue(FragmentState.loading());
+        String token = sharedPreferences.getString(TOKEN, "");
         addSub(
-                ApiClient.getApiClient().getEvent(locationUri, UserSession.getUserSession().getLoggedAccount().getSessionToken())
+                ApiClient.getApiClient().getEvent(locationUri, token)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(response -> {

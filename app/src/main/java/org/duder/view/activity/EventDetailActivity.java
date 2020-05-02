@@ -5,12 +5,11 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
-
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import org.duder.R;
 
@@ -50,7 +49,7 @@ public class EventDetailActivity extends BaseActivity {
     }
 
     private void loadImage() {
-        Picasso.with(this)
+        Picasso.get()
                 .load(imageUrl)
                 .placeholder(R.drawable.ic_image_24dp)
                 .into(image_view, new Callback() {
@@ -60,8 +59,8 @@ public class EventDetailActivity extends BaseActivity {
                     }
 
                     @Override
-                    public void onError() {
-                        Log.i("HI", "HI");
+                    public void onError(Exception error) {
+                        Log.e("HI", "HI", error);
                     }
                 });
     }

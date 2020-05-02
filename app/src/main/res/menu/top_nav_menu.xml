@@ -5,7 +5,7 @@
     tools:context="org.duder.view.activity.MainActivity">
     <item
         android:id="@+id/action_chat"
-        android:icon="@drawable/chat_icon"
+        android:icon="@drawable/chat_icon2"
         android:title="@string/title_chat"
         app:showAsAction="always"/>
 </menu>

@@ -49,6 +49,14 @@ public class ApiClient {
         return apiService.loginUser(login, password);
     }
 
+    public Single<Response<ResponseBody>> loginUserWithFb(String accessToken) {
+        return apiService.loginUserWithFb(accessToken);
+    }
+
+    public Single<Boolean> validate(String sessionToken) {
+        return apiService.validateUser(sessionToken);
+    }
+
     public Maybe<List<EventPreview>> getEvents(int page, int size, String sessionToken) {
         return apiService.findEventsPage(page, size, sessionToken);
     }

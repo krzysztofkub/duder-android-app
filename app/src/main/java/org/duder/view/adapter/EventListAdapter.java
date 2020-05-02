@@ -32,7 +32,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
     private final List<EventPreview> events;
 
     private PublishSubject<EventItem> onClickSubject = PublishSubject.create();
-    Observable<EventItem> clickStream = onClickSubject.hide();
+    private Observable<EventItem> clickStream = onClickSubject.hide();
 
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yy");
     private final int SHORTEN_DESCRIPTION_LENGTH = 39;
@@ -100,11 +100,11 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
 
         private void bind(EventPreview event, Consumer<EventItem> consumer) {
             Picasso
-                    .with(itemView.getContext())
+                    .get()
                     .cancelRequest(image_view);
             image_view.setImageResource(R.drawable.ic_image_24dp);
             Picasso
-                    .with(itemView.getContext())
+                    .get()
                     .load("https://miro.medium.com/max/1200/1*mk1-6aYaf_Bes1E3Imhc0A.jpeg")
                     .placeholder(R.drawable.ic_image_24dp)
                     .fit()

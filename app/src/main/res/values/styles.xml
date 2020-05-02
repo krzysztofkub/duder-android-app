@@ -10,6 +10,7 @@
         <item name="colorPrimaryDark">@color/primary_dark</item>
         <item name="colorAccent">@color/success</item>
         <item name="android:windowBackground">@color/background</item>
+        <item name="actionBarSize">45dp</item>
     </style>
 
     <!-- Login/Registration/Chat -->

@@ -1,4 +1,4 @@
-package org.duder.websocket.stomp.dto;
+package org.duder.websocket.dto;
 
 public class ConnectionResponse {
     private boolean isBadCredentials;

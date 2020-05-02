@@ -1,13 +1,15 @@
 package org.duder.viewModel;
 
+import android.app.Application;
+import android.content.SharedPreferences;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
 import org.duder.dto.event.CreateEvent;
 import org.duder.model.Event;
 import org.duder.service.ApiClient;
-import org.duder.util.UserSession;
 import org.duder.view.adapter.HobbyCategoriesAdapter;
 import org.duder.viewModel.state.FragmentState;
 
@@ -19,14 +21,24 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.Headers;
 
+import static android.content.Context.MODE_PRIVATE;
+import static org.duder.util.UserSession.PREF_NAME;
+import static org.duder.util.UserSession.TOKEN;
+
 public class CreateEventViewModel extends AbstractViewModel {
     private static final String TAG = CreateEventViewModel.class.getSimpleName();
     private MutableLiveData<FragmentState> state = new MutableLiveData<>();
     private HobbyCategoriesAdapter hobbyAdapter = new HobbyCategoriesAdapter(new ArrayList<>());
+    private SharedPreferences sharedPreferences = getApplication().getSharedPreferences(PREF_NAME, MODE_PRIVATE);
+
+    public CreateEventViewModel(@NonNull Application application) {
+        super(application);
+    }
 
     public void loadHobbies() {
         state.postValue(FragmentState.loading());
-        addSub(ApiClient.getApiClient().getHobbies(UserSession.getUserSession().getLoggedAccount().getSessionToken())
+        String token = sharedPreferences.getString(TOKEN, "");
+        addSub(ApiClient.getApiClient().getHobbies(token)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(response -> {
@@ -43,7 +55,8 @@ public class CreateEventViewModel extends AbstractViewModel {
 
     public void createEvent(Event event) {
         CreateEvent createEvent = mapEventToCreateEventDto(event);
-        addSub(ApiClient.getApiClient().createEvent(createEvent, UserSession.getUserSession().getLoggedAccount().getSessionToken())
+        String token = sharedPreferences.getString(TOKEN, "");
+        addSub(ApiClient.getApiClient().createEvent(createEvent, token)
                 .toObservable()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
