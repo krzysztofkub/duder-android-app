@@ -4,6 +4,7 @@
     <string name="login_prompt">Please input you name:</string>
     <string name="login">Connect</string>
     <string name="loginText">Login</string>
+    <string name="fbLoginText">Login with Facebook</string>
     <string name="registerText">Register</string>
     <string name="passwordHint">Password</string>
     <string name="passwordConfirmHint">Confirm Password</string>
