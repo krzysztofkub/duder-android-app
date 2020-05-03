@@ -8,6 +8,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -38,6 +40,8 @@ public class CreateEventActivity extends BaseActivity {
     private TextView txtName;
     private TextView txtDesc;
     private RecyclerView hobbies;
+    private CheckBox isPrivateChbox;
+    private Button createEventBtn;
     private ProgressBar progressBar;
     private RelativeLayout createEventForm;
 
@@ -69,6 +73,8 @@ public class CreateEventActivity extends BaseActivity {
         txtDesc = findViewById(R.id.event_description);
         progressBar = findViewById(R.id.progress_spinner);
         hobbies = findViewById(R.id.hobby_list);
+        isPrivateChbox = findViewById(R.id.private_checkbox);
+        createEventBtn = findViewById(R.id.create_event_button);
         createEventForm = findViewById(R.id.layout_create_event_form);
         createEventForm.setVisibility(View.GONE);
         setTitle("Create Event");
@@ -87,6 +93,7 @@ public class CreateEventActivity extends BaseActivity {
     private void initListeners() {
         txtDate.setOnClickListener(v -> onDateClicked());
         txtTime.setOnClickListener(v -> onTimeClicked());
+        createEventBtn.setOnClickListener(v -> onCreateEventClicked());
     }
 
     private void update(FragmentState state) {
@@ -120,16 +127,7 @@ public class CreateEventActivity extends BaseActivity {
             case android.R.id.home:
                 finish();
                 break;
-            case R.id.action_save:
-                onCreateEventClicked();
-                break;
         }
-        return true;
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.top_nav_menu_with_save, menu);
         return true;
     }
 
@@ -192,7 +190,7 @@ public class CreateEventActivity extends BaseActivity {
         if (hasErrors) {
             return;
         }
-        Event event = new Event(name, desc, date, time);
+        Event event = new Event(name, desc, date, time, isPrivateChbox.isChecked());
         createEventViewModel.createEvent(event);
     }
 }

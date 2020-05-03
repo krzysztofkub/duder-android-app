@@ -88,6 +88,7 @@ public class CreateEventViewModel extends AbstractViewModel {
                 .description(event.getDescription())
                 .timestamp(calendar.getTimeInMillis())
                 .hobbies(hobbyAdapter.getSelectedHobbies())
+                .isPrivate(event.getPrivate())
                 .build();
     }
 
