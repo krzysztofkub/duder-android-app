@@ -14,8 +14,10 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_gravity="end|bottom"
+        app:borderWidth="0dp"
         android:src="@drawable/ic_add_button"
         android:layout_margin="@dimen/element_spacing_medium_large"
+        android:backgroundTint="@color/secondary"
         />
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout

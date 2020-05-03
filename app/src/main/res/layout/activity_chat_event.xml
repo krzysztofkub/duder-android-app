@@ -17,5 +17,5 @@
         android:text="sample message"
         android:textAlignment="center"
         android:textColor="#505050"
-        android:background="@drawable/chat_even_background" />
+        android:background="@drawable/chat_event_background" />
 </LinearLayout>
