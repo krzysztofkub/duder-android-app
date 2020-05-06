@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
-    tools:context=".view.fragment.event.EventPublicFragment">
+    tools:context=".view.fragment.event.EventViewFragment">
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/btn_add_event"
@@ -15,6 +15,7 @@
         android:layout_alignParentBottom="true"
         android:layout_gravity="end|bottom"
         app:borderWidth="0dp"
+        android:visibility="gone"
         android:src="@drawable/ic_add_button"
         android:layout_margin="@dimen/element_spacing_medium_large"
         android:backgroundTint="@color/secondary"

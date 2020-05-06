@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 public abstract class LazyLoadRecyclerViewListener extends RecyclerView.OnScrollListener {
     private LinearLayoutManager layoutManager;
     private boolean isLoading = false;
+    private boolean isOnBottom = false;
     private static final int VISIBLE_THRESHOLD = 3; //Number of items left in list before we start loading more
 
     public LazyLoadRecyclerViewListener(LinearLayoutManager layoutManager) {
@@ -20,24 +21,31 @@ public abstract class LazyLoadRecyclerViewListener extends RecyclerView.OnScroll
     public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
         super.onScrolled(recyclerView, dx, dy);
 
-        int visibleItemCount = recyclerView.getChildCount();
-        int totalItemCount = layoutManager.getItemCount();
-        int firstVisibleItem = layoutManager.findFirstVisibleItemPosition();
-        boolean shouldFetchMoreItems = totalItemCount - visibleItemCount <= firstVisibleItem + VISIBLE_THRESHOLD;
-
-        if (!isLoading && shouldFetchMoreItems) {
-            //End of list has been reached
+        if (!isLoading && shouldFetchMoreItems(layoutManager, recyclerView)) {
             onLoadMore();
             isLoading = true;
+            if (hasReachedBottom(recyclerView)) {
+                isOnBottom = true;
+            }
+        }
+        if (!hasReachedBottom(recyclerView)) {
+            isOnBottom = false;
         }
     }
 
-    private boolean hasMore(int totalItemCount) {
-        return true;
+    private boolean shouldFetchMoreItems(LinearLayoutManager layoutManager, RecyclerView recyclerView) {
+        int visibleItemCount = recyclerView.getChildCount();
+        int totalItemCount = layoutManager.getItemCount();
+        int firstVisibleItem = layoutManager.findFirstVisibleItemPosition();
+
+        return !isLoading
+                && (totalItemCount - visibleItemCount == firstVisibleItem + VISIBLE_THRESHOLD
+                || hasReachedBottom(recyclerView));
     }
 
-    private void reset() {
-        isLoading = true;
+    private boolean hasReachedBottom(RecyclerView recyclerView) {
+        return !recyclerView.canScrollVertically(1);
+
     }
 
     public void setLoading(boolean loading) {

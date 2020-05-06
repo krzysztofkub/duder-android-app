@@ -2,6 +2,7 @@ package org.duder.service;
 
 import org.duder.dto.chat.ChatMessage;
 import org.duder.dto.event.CreateEvent;
+import org.duder.dto.event.EventLoadingMode;
 import org.duder.dto.event.EventPreview;
 import org.duder.dto.user.RegisterAccount;
 import org.duder.util.Const;
@@ -57,8 +58,8 @@ public class ApiClient {
         return apiService.validateUser(sessionToken);
     }
 
-    public Maybe<List<EventPreview>> getEvents(int page, int size, String sessionToken) {
-        return apiService.findEventsPage(page, size, sessionToken);
+    public Maybe<List<EventPreview>> getEvents(int page, int size, EventLoadingMode loadingMode, String sessionToken) {
+        return apiService.findEventsPage(page, size, loadingMode, sessionToken);
     }
 
     public Single<Response<ResponseBody>> createEvent(CreateEvent event, String sessionToken) {

@@ -13,7 +13,7 @@
 
     <fragment
         android:id="@+id/navigation_events"
-        android:name="org.duder.view.fragment.event.EventPublicFragment"
+        android:name="org.duder.view.fragment.event.EventViewFragment"
         android:label="@string/title_dashboard"
         tools:layout="@layout/fragment_events_public" />
 

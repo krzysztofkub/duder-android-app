@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -24,20 +25,24 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.duder.R;
+import org.duder.dto.event.EventLoadingMode;
 import org.duder.view.activity.CreateEventActivity;
 import org.duder.view.activity.EventDetailActivity;
 import org.duder.view.adapter.listener.LazyLoadRecyclerViewListener;
 import org.duder.view.fragment.BaseFragment;
 import org.duder.viewModel.EventViewModel;
+import org.duder.viewModel.OwnEventViewModel;
+import org.duder.viewModel.PrivateEventViewModel;
+import org.duder.viewModel.PublicEventViewModel;
 import org.duder.viewModel.state.FragmentState;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 
 import static org.duder.util.Const.CREATED_EVENT_URI;
 
-public class EventPublicFragment extends BaseFragment {
+public class EventViewFragment extends BaseFragment {
 
-    private static final String TAG = EventPublicFragment.class.getSimpleName();
+    private static final String TAG = EventViewFragment.class.getSimpleName();
     private static final int CREATE_EVENT_REQUEST = 1;
     public static final String EVENT_NAME = "EVENT_NAME";
     public static final String EVENT_DESCRIPTION = "EVENT_DESCRIPTION";
@@ -49,6 +54,11 @@ public class EventPublicFragment extends BaseFragment {
     private FloatingActionButton addEventButton;
     private LazyLoadRecyclerViewListener lazyListener;
     private SwipeRefreshLayout swipeLayout;
+    private final EventLoadingMode loadingMode;
+
+    public EventViewFragment(EventLoadingMode loadingMode) {
+        this.loadingMode = loadingMode;
+    }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -59,7 +69,7 @@ public class EventPublicFragment extends BaseFragment {
         swipeLayout = root.findViewById(R.id.swipe_layout);
 
         init();
-        viewModel.loadEventsBatch(false);
+        viewModel.loadEventsOnInit();
         return root;
     }
 
@@ -71,12 +81,25 @@ public class EventPublicFragment extends BaseFragment {
     }
 
     private void initViewModel() {
-        viewModel = ViewModelProviders.of(getActivity()).get(EventViewModel.class);
+        switch (loadingMode) {
+            case OWN:
+                viewModel = ViewModelProviders.of(getActivity()).get(OwnEventViewModel.class);
+                break;
+            case PRIVATE:
+                viewModel = ViewModelProviders.of(getActivity()).get(PrivateEventViewModel.class);
+                break;
+            case PUBLIC:
+                viewModel = ViewModelProviders.of(getActivity()).get(PublicEventViewModel.class);
+                break;
+        }
     }
 
     private void initLayout() {
         setProgressBarColor();
         swipeLayout.setColorSchemeResources(R.color.primary);
+        if (loadingMode == EventLoadingMode.OWN) {
+            addEventButton.show();
+        }
     }
 
     private void initListeners() {
@@ -87,7 +110,7 @@ public class EventPublicFragment extends BaseFragment {
         lazyListener = new LazyLoadRecyclerViewListener(layoutManager) {
             @Override
             public void onLoadMore() {
-                viewModel.loadEventsBatch(false);
+                viewModel.loadEventsBatch();
             }
         };
         eventsList.addOnScrollListener(lazyListener);
@@ -164,7 +187,7 @@ public class EventPublicFragment extends BaseFragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == CREATE_EVENT_REQUEST && resultCode == Activity.RESULT_OK) {
             String locationUri = data.getStringExtra(CREATED_EVENT_URI);
-            viewModel.fetchAndAddNewEvent(locationUri);
+            viewModel.loadEvent(locationUri);
         }
     }
 }

@@ -2,6 +2,7 @@ package org.duder.service;
 
 import org.duder.dto.chat.ChatMessage;
 import org.duder.dto.event.CreateEvent;
+import org.duder.dto.event.EventLoadingMode;
 import org.duder.dto.event.EventPreview;
 import org.duder.dto.user.RegisterAccount;
 import org.duder.util.Const;
@@ -36,7 +37,7 @@ public interface ApiService {
     Single<Boolean> validateUser(@Query("sessionToken") String sessionToken);
 
     @GET(Const.EVENTS)
-    Maybe<List<EventPreview>> findEventsPage(@Query("page") int page, @Query("size") int size, @Header("Authorization") String sessionToken);
+    Maybe<List<EventPreview>> findEventsPage(@Query("page") int page, @Query("size") int size, @Query("mode") EventLoadingMode loadingMode, @Header("Authorization") String sessionToken);
 
     @POST(Const.EVENTS)
     Single<Response<ResponseBody>> createEvent(@Body CreateEvent event, @Header("Authorization") String sessionToken);

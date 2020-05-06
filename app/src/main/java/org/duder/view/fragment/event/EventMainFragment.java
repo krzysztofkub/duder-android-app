@@ -12,6 +12,7 @@ import androidx.viewpager.widget.ViewPager;
 import com.google.android.material.tabs.TabLayout;
 
 import org.duder.R;
+import org.duder.dto.event.EventLoadingMode;
 import org.duder.view.adapter.EventMainAdapter;
 import org.duder.view.fragment.BaseFragment;
 
@@ -29,11 +30,12 @@ public class EventMainFragment extends BaseFragment {
         tabLayout = root.findViewById(R.id.tab_layout);
 
         adapter = new EventMainAdapter(getFragmentManager());
-        adapter.addFragment(new DummyFragment(), "My Events");
-        adapter.addFragment(new EventPublicFragment(), "Public");
-        adapter.addFragment(new DummyFragment(), "Private");
+        adapter.addFragment(new EventViewFragment(EventLoadingMode.OWN), "My Events");
+        adapter.addFragment(new EventViewFragment(EventLoadingMode.PRIVATE), "Private");
+        adapter.addFragment(new EventViewFragment(EventLoadingMode.PUBLIC), "Public");
 
         viewPager.setAdapter(adapter);
+        viewPager.setOffscreenPageLimit(3);
         tabLayout.setupWithViewPager(viewPager);
         return root;
     }
