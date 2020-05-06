@@ -171,7 +171,7 @@ public class EventViewFragment extends BaseFragment {
                 break;
             case SUCCESS:
                 if (eventsList.getAdapter().getItemCount() == 0) {
-                    Toast.makeText(mContext, R.string.no_events, Toast.LENGTH_LONG).show();
+                    Toast.makeText(mContext, R.string.no_events, Toast.LENGTH_SHORT).show();
                 }
                 lazyListener.setLoading(false);
                 progressBar.setVisibility(View.GONE);
