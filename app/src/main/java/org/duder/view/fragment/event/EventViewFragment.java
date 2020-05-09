@@ -10,7 +10,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -173,13 +172,19 @@ public class EventViewFragment extends BaseFragment {
                 if (eventsList.getAdapter().getItemCount() == 0) {
                     Toast.makeText(mContext, R.string.no_events, Toast.LENGTH_LONG).show();
                 }
-                lazyListener.setLoading(false);
-                progressBar.setVisibility(View.GONE);
-                swipeLayout.setRefreshing(false);
+                finishLoading();
                 break;
             case ERROR:
                 Log.e(TAG, "Something went wrong", state.getError());
+                finishLoading();
+                break;
         }
+    }
+
+    private void finishLoading() {
+        lazyListener.setLoading(false);
+        progressBar.setVisibility(View.GONE);
+        swipeLayout.setRefreshing(false);
     }
 
     @Override
