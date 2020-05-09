@@ -4,13 +4,13 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class DudersViewModel extends ViewModel {
+public class DudesViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;
 
-    public DudersViewModel() {
+    public DudesViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("This is duders fragment");
+        mText.setValue("This is dudes fragment");
     }
 
     public LiveData<String> getText() {

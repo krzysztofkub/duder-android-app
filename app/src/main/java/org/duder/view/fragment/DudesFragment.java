@@ -10,18 +10,18 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModelProviders;
 
 import org.duder.R;
-import org.duder.viewModel.DudersViewModel;
+import org.duder.viewModel.DudesViewModel;
 
-public class DuderFragment extends BaseFragment {
+public class DudesFragment extends BaseFragment {
 
-    private DudersViewModel dudersViewModel;
+    private DudesViewModel dudesViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        dudersViewModel = ViewModelProviders.of(this).get(DudersViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_duders, container, false);
-        final TextView textView = root.findViewById(R.id.text_duders);
-        dudersViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+        dudesViewModel = ViewModelProviders.of(this).get(DudesViewModel.class);
+        View root = inflater.inflate(R.layout.fragment_dudes, container, false);
+        final TextView textView = root.findViewById(R.id.text_dudes);
+        dudesViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
         return root;
     }
 }

@@ -19,7 +19,7 @@ import com.squareup.picasso.Picasso;
 
 import org.duder.R;
 import org.duder.util.UserSession;
-import org.duder.view.fragment.DuderFragment;
+import org.duder.view.fragment.DudesFragment;
 import org.duder.view.fragment.HomeFragment;
 import org.duder.view.fragment.event.EventMainFragment;
 
@@ -29,7 +29,7 @@ public class MainActivity extends BaseActivity {
 
     private final Fragment homeFragment = new HomeFragment();
     private final Fragment eventFragment = new EventMainFragment();
-    private final Fragment duderFragment = new DuderFragment();
+    private final Fragment duderFragment = new DudesFragment();
     private final FragmentManager fm = getSupportFragmentManager();
     Fragment active = homeFragment;
 
@@ -97,7 +97,7 @@ public class MainActivity extends BaseActivity {
                 fm.beginTransaction().hide(active).show(eventFragment).commit();
                 active = eventFragment;
                 return true;
-            case R.id.navigation_duders:
+            case R.id.navigation_dudes:
                 fm.beginTransaction().hide(active).show(duderFragment).commit();
                 active = duderFragment;
                 return true;
