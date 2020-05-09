@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/create.event.layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:gravity="center_horizontal"
-    android:padding="@dimen/eventCreateFormPadding"
+    android:orientation="vertical"
     tools:context="org.duder.view.activity.CreateEventActivity">
 
     <ScrollView
@@ -24,77 +23,91 @@
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
                 android:layout_alignParentTop="true">
+
                 <Button
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:text="Add image"/>
+                    android:text="Add image" />
             </LinearLayout>
 
 
-            <EditText
-                android:id="@+id/event_name"
-                style="@android:style/Widget.EditText"
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/add_image_layout"
-                android:layout_margin="@dimen/eventCreateFormMargin"
-                android:ems="10"
-                android:hint="@string/eventNameHint"
-                android:textSize="@dimen/body_text_size_large" />
-
-            <EditText
-                android:id="@+id/event_description"
-                style="@android:style/Widget.EditText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/event_name"
-                android:layout_margin="@dimen/eventCreateFormMargin"
-                android:hint="@string/eventDescription" />
-
-            <LinearLayout
-                android:id="@+id/pick_date_time"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/eventCreateFormMargin"
-                android:layout_below="@+id/event_description"
-                >
+                android:padding="@dimen/eventCreateFormPadding">
 
                 <EditText
-                    android:id="@+id/in_date"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/event_name"
+                    style="@android:style/Widget.EditText"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:focusable="false"
-                    android:hint="@string/dateHint"
-                    android:inputType="none"
-                    android:textAlignment="center"
-                    app:layout_constraintBottom_toTopOf="@+id/hobby_list"
-                    app:layout_constraintLeft_toLeftOf="parent" />
+                    android:layout_margin="@dimen/eventCreateFormMargin"
+                    android:ems="10"
+                    android:hint="@string/eventNameHint"
+                    android:textSize="@dimen/body_text_size_large" />
 
                 <EditText
-                    android:id="@+id/in_time"
+                    android:id="@+id/event_description"
+                    style="@android:style/Widget.EditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/event_name"
+                    android:layout_margin="@dimen/eventCreateFormMargin"
+                    android:hint="@string/eventDescription" />
+
+                <LinearLayout
+                    android:id="@+id/pick_date_time"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/event_description"
+                    android:layout_margin="@dimen/eventCreateFormMargin">
+
+                    <EditText
+                        android:id="@+id/in_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:focusable="false"
+                        android:hint="@string/dateHint"
+                        android:inputType="none"
+                        android:textAlignment="center"
+                        app:layout_constraintBottom_toTopOf="@+id/hobby_list"
+                        app:layout_constraintLeft_toLeftOf="parent" />
+
+                    <EditText
+                        android:id="@+id/in_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:focusable="false"
+                        android:hint="@string/timeHint"
+                        android:inputType="none"
+                        android:textAlignment="center"
+                        app:layout_constraintLeft_toRightOf="@+id/in_date" />
+
+                </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/hobby_list"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:focusable="false"
-                    android:hint="@string/timeHint"
-                    android:inputType="none"
-                    android:textAlignment="center"
-                    app:layout_constraintLeft_toRightOf="@+id/in_date" />
+                    android:layout_below="@+id/pick_date_time"
+                    android:layout_centerHorizontal="true"
+                    android:layout_margin="@dimen/eventCreateFormMargin"
+                    android:layout_marginLeft="@dimen/element_spacing_normal"
+                    android:layout_marginRight="@dimen/element_spacing_normal"
+                    android:clipToPadding="false"
+                    android:nestedScrollingEnabled="false" />
 
-            </LinearLayout>
+                <CheckBox
+                    android:id="@+id/private_checkbox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/hobby_list"
+                    android:text="Visible only for my dudez" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/hobby_list"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/eventCreateFormMargin"
-                android:layout_centerHorizontal="true"
-                android:layout_marginLeft="@dimen/element_spacing_normal"
-                android:layout_marginRight="@dimen/element_spacing_normal"
-                android:clipToPadding="false"
-                android:nestedScrollingEnabled="false"
-                android:layout_below="@+id/pick_date_time"/>
+            </RelativeLayout>
 
         </RelativeLayout>
 
@@ -104,11 +117,18 @@
         android:id="@+id/progress_spinner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/element_spacing_normal"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="@dimen/element_spacing_normal" />
 
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <Button
+        android:id="@+id/create_event_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/primary"
+        android:text="@string/eventCreateText"
+        android:textColor="@color/white" />
 
 
-</LinearLayout>
+</RelativeLayout>

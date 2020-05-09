@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="primary">#03A9F4</color>
-    <color name="primary_dark">#0288D1</color>
-    <color name="primary_light">#B3E5FC</color>
-    <color name="success">#5cb85c</color>
+    <color name="primary_light">#e9c46a</color>
+    <color name="secondary">#f77f00</color>
+    <color name="secondary_dark">#f77f00</color>
+    <color name="primary">#2a9d8f</color>
+    <color name="primary_dark">#264653</color>
+
+
+    <color name="success">#e76f51</color>
     <color name="primary_text">#212121</color>
     <color name="secondary_text">#757575</color>
     <color name="white">#FFFFFF</color>

@@ -10,8 +10,7 @@
     android:background="@color/color_accent">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/primary">
+        android:layout_height="match_parent">
 
         <ImageView
             android:id="@+id/image_view"
@@ -27,7 +26,7 @@
             android:id="@+id/title_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/white"
+
             android:paddingLeft="@dimen/element_spacing_normal"
             android:paddingTop="@dimen/element_spacing_normal"
             android:paddingRight="@dimen/element_spacing_normal"
@@ -45,7 +44,6 @@
             android:id="@+id/desc_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/white"
             android:paddingLeft="@dimen/element_spacing_normal"
             android:paddingTop="@dimen/element_spacing_normal"
             android:paddingRight="@dimen/element_spacing_normal"
@@ -61,7 +59,6 @@
             android:id="@+id/participants_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/white"
             android:padding="@dimen/element_spacing_small"
             android:textSize="@dimen/body_text_size_medium_small"
             app:layout_constraintStart_toStartOf="parent"
@@ -73,7 +70,6 @@
             android:id="@+id/timestamp_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/white"
             android:padding="@dimen/element_spacing_small"
             android:textSize="@dimen/body_text_size_medium_small"
             app:layout_constraintEnd_toEndOf="parent"
@@ -85,7 +81,6 @@
             android:id="@+id/hobbies_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/white"
             android:padding="@dimen/element_spacing_small"
             android:textSize="@dimen/body_text_size_medium_small"
             app:layout_constraintEnd_toEndOf="parent"

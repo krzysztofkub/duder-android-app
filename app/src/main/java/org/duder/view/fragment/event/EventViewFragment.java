@@ -1,4 +1,4 @@
-package org.duder.view.fragment;
+package org.duder.view.fragment.event;
 
 import android.app.Activity;
 import android.app.ActivityOptions;
@@ -24,19 +24,24 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.duder.R;
+import org.duder.dto.event.EventLoadingMode;
 import org.duder.view.activity.CreateEventActivity;
 import org.duder.view.activity.EventDetailActivity;
 import org.duder.view.adapter.listener.LazyLoadRecyclerViewListener;
+import org.duder.view.fragment.BaseFragment;
 import org.duder.viewModel.EventViewModel;
+import org.duder.viewModel.OwnEventViewModel;
+import org.duder.viewModel.PrivateEventViewModel;
+import org.duder.viewModel.PublicEventViewModel;
 import org.duder.viewModel.state.FragmentState;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 
 import static org.duder.util.Const.CREATED_EVENT_URI;
 
-public class EventFragment extends BaseFragment {
+public class EventViewFragment extends BaseFragment {
 
-    private static final String TAG = EventFragment.class.getSimpleName();
+    private static final String TAG = EventViewFragment.class.getSimpleName();
     private static final int CREATE_EVENT_REQUEST = 1;
     public static final String EVENT_NAME = "EVENT_NAME";
     public static final String EVENT_DESCRIPTION = "EVENT_DESCRIPTION";
@@ -48,17 +53,22 @@ public class EventFragment extends BaseFragment {
     private FloatingActionButton addEventButton;
     private LazyLoadRecyclerViewListener lazyListener;
     private SwipeRefreshLayout swipeLayout;
+    private final EventLoadingMode loadingMode;
+
+    public EventViewFragment(EventLoadingMode loadingMode) {
+        this.loadingMode = loadingMode;
+    }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_events, container, false);
+        View root = inflater.inflate(R.layout.fragment_events_public, container, false);
         progressBar = root.findViewById(R.id.progress_spinner);
         eventsList = root.findViewById(R.id.events_list);
         addEventButton = root.findViewById(R.id.btn_add_event);
         swipeLayout = root.findViewById(R.id.swipe_layout);
 
         init();
-        viewModel.loadEventsBatch(false);
+        viewModel.loadEventsOnInit();
         return root;
     }
 
@@ -70,12 +80,25 @@ public class EventFragment extends BaseFragment {
     }
 
     private void initViewModel() {
-        viewModel = ViewModelProviders.of(getActivity()).get(EventViewModel.class);
+        switch (loadingMode) {
+            case OWN:
+                viewModel = ViewModelProviders.of(getActivity()).get(OwnEventViewModel.class);
+                break;
+            case PRIVATE:
+                viewModel = ViewModelProviders.of(getActivity()).get(PrivateEventViewModel.class);
+                break;
+            case PUBLIC:
+                viewModel = ViewModelProviders.of(getActivity()).get(PublicEventViewModel.class);
+                break;
+        }
     }
 
     private void initLayout() {
         setProgressBarColor();
         swipeLayout.setColorSchemeResources(R.color.primary);
+        if (loadingMode == EventLoadingMode.OWN) {
+            addEventButton.show();
+        }
     }
 
     private void initListeners() {
@@ -86,7 +109,7 @@ public class EventFragment extends BaseFragment {
         lazyListener = new LazyLoadRecyclerViewListener(layoutManager) {
             @Override
             public void onLoadMore() {
-                viewModel.loadEventsBatch(false);
+                viewModel.loadEventsBatch();
             }
         };
         eventsList.addOnScrollListener(lazyListener);
@@ -147,15 +170,21 @@ public class EventFragment extends BaseFragment {
                 break;
             case SUCCESS:
                 if (eventsList.getAdapter().getItemCount() == 0) {
-                    Toast.makeText(mContext, R.string.no_events, Toast.LENGTH_LONG).show();
+                    Toast.makeText(mContext, R.string.no_events, Toast.LENGTH_SHORT).show();
                 }
-                lazyListener.setLoading(false);
-                progressBar.setVisibility(View.GONE);
-                swipeLayout.setRefreshing(false);
+                finishLoading();
                 break;
             case ERROR:
                 Log.e(TAG, "Something went wrong", state.getError());
+                finishLoading();
+                break;
         }
+    }
+
+    private void finishLoading() {
+        lazyListener.setLoading(false);
+        progressBar.setVisibility(View.GONE);
+        swipeLayout.setRefreshing(false);
     }
 
     @Override
@@ -163,7 +192,7 @@ public class EventFragment extends BaseFragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == CREATE_EVENT_REQUEST && resultCode == Activity.RESULT_OK) {
             String locationUri = data.getStringExtra(CREATED_EVENT_URI);
-            viewModel.fetchAndAddNewEvent(locationUri);
+            viewModel.loadEvent(locationUri);
         }
     }
 }
