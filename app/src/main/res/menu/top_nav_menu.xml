@@ -7,5 +7,5 @@
         android:id="@+id/action_chat"
         android:icon="@drawable/chat_icon2"
         android:title="@string/title_chat"
-        app:showAsAction="always"/>
+        app:showAsAction="always" />
 </menu>

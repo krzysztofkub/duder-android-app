@@ -47,7 +47,8 @@ import static org.duder.util.UserSession.storeUserSession;
 public class LoginActivity extends BaseActivity {
 
     private final static String TAG = "LoginActivity";
-
+    private static final int LOGIN_SUCCEEDED = 1;
+    private static final int BAD_CREDENTIALS = 0;
     private EditText txtLogin;
     private EditText txtPassword;
     private Button btnLogin;
@@ -55,17 +56,12 @@ public class LoginActivity extends BaseActivity {
     private Button btnForgotPassword;
     private PopupWindow busyIndicator;
     private View loginView;
-
     private LoggedAccount account;
     private ExecutorService executor;
     private Button fbLoginButton;
     private CallbackManager callbackManager;
     private Handler handler;
-
     private ApiClient apiClient = ApiClient.getApiClient();
-
-    private static final int LOGIN_SUCCEEDED = 1;
-    private static final int BAD_CREDENTIALS = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

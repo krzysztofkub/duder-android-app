@@ -6,9 +6,9 @@
 
     <item>
         <bitmap
-            android:tint="@android:color/white"
             android:gravity="center"
-            android:src="@drawable/duder_logo" />
+            android:src="@drawable/duder_logo"
+            android:tint="@android:color/white" />
     </item>
 
 </layer-list>

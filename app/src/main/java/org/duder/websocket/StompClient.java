@@ -35,11 +35,9 @@ import io.reactivex.subjects.PublishSubject;
 
 class StompClient {
 
-    private static final String TAG = StompClient.class.getSimpleName();
-
     public static final String SUPPORTED_VERSIONS = "1.1,1.2";
     public static final String DEFAULT_ACK = "auto";
-
+    private static final String TAG = StompClient.class.getSimpleName();
     private final ConnectionProvider connectionProvider;
     private ConcurrentHashMap<String, String> topics;
     private boolean legacyWhitespace;

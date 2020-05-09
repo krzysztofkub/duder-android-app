@@ -3,19 +3,19 @@
     android:id="@+id/linLayMsgMain"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
     android:gravity="center"
+    android:orientation="horizontal"
     android:padding="5dp">
 
     <TextView
         android:id="@+id/tvContent"
-        android:paddingHorizontal="30dp"
-        android:paddingVertical="3dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="10sp"
+        android:background="@drawable/chat_event_background"
+        android:paddingHorizontal="30dp"
+        android:paddingVertical="3dp"
         android:text="sample message"
         android:textAlignment="center"
         android:textColor="#505050"
-        android:background="@drawable/chat_event_background" />
+        android:textSize="10sp" />
 </LinearLayout>

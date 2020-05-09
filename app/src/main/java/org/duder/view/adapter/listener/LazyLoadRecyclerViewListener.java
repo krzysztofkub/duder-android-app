@@ -6,10 +6,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 public abstract class LazyLoadRecyclerViewListener extends RecyclerView.OnScrollListener {
+    private static final int VISIBLE_THRESHOLD = 3; //Number of items left in list before we start loading more
     private LinearLayoutManager layoutManager;
     private boolean isLoading = false;
     private boolean isOnBottom = false;
-    private static final int VISIBLE_THRESHOLD = 3; //Number of items left in list before we start loading more
 
     public LazyLoadRecyclerViewListener(LinearLayoutManager layoutManager) {
         this.layoutManager = layoutManager;

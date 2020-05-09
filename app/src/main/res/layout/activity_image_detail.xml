@@ -5,10 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:fitsSystemWindows="true">
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+
         <RelativeLayout
             android:id="@+id/parent_layout"
             android:layout_width="match_parent"
@@ -19,30 +21,29 @@
                 android:id="@+id/image_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:transitionName="@string/transition_name"
-                android:adjustViewBounds="true"
                 android:layout_alignParentTop="true"
-                />
+                android:adjustViewBounds="true"
+                android:transitionName="@string/transition_name" />
 
             <TextView
                 android:id="@+id/title_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/secondary_text"
-                android:padding="@dimen/element_spacing_normal"
-                android:textSize="@dimen/header_text_size_normal"
                 android:layout_below="@+id/image_view"
-                tools:text="Really great title Really great"/>
+                android:padding="@dimen/element_spacing_normal"
+                android:textColor="@color/secondary_text"
+                android:textSize="@dimen/header_text_size_normal"
+                tools:text="Really great title Really great" />
 
             <TextView
                 android:id="@+id/description_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/secondary_text"
-                android:padding="@dimen/element_spacing_normal"
-                android:textSize="@dimen/header_text_size_normal"
                 android:layout_below="@+id/title_text"
-                tools:text="Really great title Really great"/>
+                android:padding="@dimen/element_spacing_normal"
+                android:textColor="@color/secondary_text"
+                android:textSize="@dimen/header_text_size_normal"
+                tools:text="Really great title Really great" />
 
         </RelativeLayout>
     </ScrollView>

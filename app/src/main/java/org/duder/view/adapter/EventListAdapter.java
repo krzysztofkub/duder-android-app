@@ -30,12 +30,10 @@ import io.reactivex.subjects.PublishSubject;
 public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.ViewHolder> {
 
     private final List<EventPreview> events;
-
+    private final int SHORTEN_DESCRIPTION_LENGTH = 39;
     private PublishSubject<EventItem> onClickSubject = PublishSubject.create();
     private Observable<EventItem> clickStream = onClickSubject.hide();
-
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yy");
-    private final int SHORTEN_DESCRIPTION_LENGTH = 39;
 
     public EventListAdapter(List<EventPreview> events) {
         this.events = events;

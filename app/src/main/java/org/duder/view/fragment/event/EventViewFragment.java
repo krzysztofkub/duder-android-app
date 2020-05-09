@@ -41,19 +41,18 @@ import static org.duder.util.Const.CREATED_EVENT_URI;
 
 public class EventViewFragment extends BaseFragment {
 
-    private static final String TAG = EventViewFragment.class.getSimpleName();
-    private static final int CREATE_EVENT_REQUEST = 1;
     public static final String EVENT_NAME = "EVENT_NAME";
     public static final String EVENT_DESCRIPTION = "EVENT_DESCRIPTION";
     public static final String EVENT_IMAGE = "EVENT_IMAGE";
-
+    private static final String TAG = EventViewFragment.class.getSimpleName();
+    private static final int CREATE_EVENT_REQUEST = 1;
+    private final EventLoadingMode loadingMode;
     private EventViewModel viewModel;
     private ProgressBar progressBar;
     private RecyclerView eventsList;
     private FloatingActionButton addEventButton;
     private LazyLoadRecyclerViewListener lazyListener;
     private SwipeRefreshLayout swipeLayout;
-    private final EventLoadingMode loadingMode;
 
     public EventViewFragment(EventLoadingMode loadingMode) {
         this.loadingMode = loadingMode;

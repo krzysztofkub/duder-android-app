@@ -78,8 +78,10 @@ repositories {
         name = "GitHubPackages"
         url = uri("https://maven.pkg.github.com/krzysztofkubieniec/duder-dto")
         credentials {
-            username = System.getenv("GPR_USER") ?: githubProperties['gpr.usr'] //user id from this api https://api.github.com/users/krzysztofkubieniec
-            password = System.getenv("GPR_API_KEY") ?: githubProperties['gpr.key']  //generated token
+            username = System.getenv("GPR_USER") ?: githubProperties['gpr.usr']
+            //user id from this api https://api.github.com/users/krzysztofkubieniec
+            password = System.getenv("GPR_API_KEY") ?: githubProperties['gpr.key']
+            //generated token
         }
     }
 }

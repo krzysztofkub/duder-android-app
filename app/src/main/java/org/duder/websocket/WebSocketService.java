@@ -24,9 +24,9 @@ import static org.duder.util.Const.TAG;
 
 public class WebSocketService {
 
+    private static WebSocketService webSocketService;
     private StompClient stompClient;
     private Gson gson = new GsonBuilder().create();
-    private static WebSocketService webSocketService;
 
     private WebSocketService() {
         stompClient = initialize();
