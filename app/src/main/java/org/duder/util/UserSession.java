@@ -4,7 +4,7 @@ import android.content.SharedPreferences;
 
 import com.facebook.login.LoginManager;
 
-import org.duder.dto.user.LoggedAccount;
+import org.duder.model.LoggedAccount;
 
 public class UserSession {
     public static final String IMAGE_URL = "IMAGE_URL";
@@ -17,6 +17,7 @@ public class UserSession {
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString(NICKNAME, loggedAccount.getNickname());
         editor.putString(TOKEN, loggedAccount.getSessionToken());
+        editor.putString(IMAGE_URL, loggedAccount.getImageUrl());
         editor.commit();
     }
 
@@ -33,11 +34,5 @@ public class UserSession {
         if (loginManager != null) {
             loginManager.logOut();
         }
-    }
-
-    public static void saveProfileImageUrl(String userId, SharedPreferences prefs) {
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putString(IMAGE_URL, "https://graph.facebook.com/" + userId + "/picture?type=large&width=900&height=900");
-        editor.commit();
     }
 }

@@ -22,8 +22,8 @@ import com.facebook.login.LoginResult;
 import com.google.gson.Gson;
 
 import org.duder.R;
-import org.duder.dto.user.LoggedAccount;
 import org.duder.dto.user.LoginResponse;
+import org.duder.model.LoggedAccount;
 import org.duder.service.ApiClient;
 import org.duder.util.UserSession;
 import org.duder.websocket.WebSocketService;
@@ -100,7 +100,6 @@ public class LoginActivity extends BaseActivity {
                     @Override
                     public void onSuccess(LoginResult loginResult) {
                         Single<Response<ResponseBody>> loginUserWithFb = apiClient.loginUserWithFb(loginResult.getAccessToken().getToken());
-                        UserSession.saveProfileImageUrl(loginResult.getAccessToken().getUserId(), getSharedPreferences(PREF_NAME, MODE_PRIVATE));
                         account = new LoggedAccount();
                         doLoginToRest(loginUserWithFb);
                     }
@@ -145,11 +144,8 @@ public class LoginActivity extends BaseActivity {
             return;
         }
         showBusyIndicator();
-        account = LoggedAccount.builder()
-                .login(txtLogin.getText().toString())
-                .password(txtPassword.getText().toString())
-                .build();
-        Single<Response<ResponseBody>> loginRequest = apiClient.loginUser(account.getLogin(), account.getPassword());
+        account = new LoggedAccount(login, password);
+        Single<Response<ResponseBody>> loginRequest = apiClient.loginUser(login, password);
         executor.submit(() -> doLoginToRest(loginRequest));
     }
 
@@ -169,6 +165,7 @@ public class LoginActivity extends BaseActivity {
                             LoginResponse accountFromResponse = new Gson().fromJson(response.body().string(), LoginResponse.class);
                             account.setNickname(accountFromResponse.getNickname());
                             account.setSessionToken(accountFromResponse.getSessionToken());
+                            account.setImageUrl(accountFromResponse.getProfileImageUrl());
                             storeUserSession(account, getSharedPreferences(PREF_NAME, MODE_PRIVATE));
                             doLoginToWebsocket();
                             break;
@@ -217,12 +214,6 @@ public class LoginActivity extends BaseActivity {
         }
     }
 
-    private void gotoMainActivity() {
-        final Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
-        finish();
-    }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -242,7 +233,14 @@ public class LoginActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
+    private void gotoMainActivity() {
+        final Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
     private class LoginHandler extends Handler {
+
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
