@@ -4,6 +4,7 @@ import org.duder.dto.chat.ChatMessage;
 import org.duder.dto.event.CreateEvent;
 import org.duder.dto.event.EventLoadingMode;
 import org.duder.dto.event.EventPreview;
+import org.duder.dto.user.Dude;
 import org.duder.dto.user.RegisterAccount;
 import org.duder.util.Const;
 
@@ -56,6 +57,10 @@ public class ApiClient {
 
     public Single<Boolean> validate(String sessionToken) {
         return apiService.validateUser(sessionToken);
+    }
+
+    public Single<List<Dude>> getDudes(int page, int size, String sessionToken) {
+        return apiService.getDudes(page, size, sessionToken);
     }
 
     public Maybe<List<EventPreview>> getEvents(int page, int size, EventLoadingMode loadingMode, String sessionToken) {

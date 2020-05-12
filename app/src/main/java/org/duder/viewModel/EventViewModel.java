@@ -4,7 +4,7 @@ import android.app.Application;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.MutableLiveData;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
 
@@ -19,31 +19,17 @@ import java.util.ArrayList;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-import static android.content.Context.MODE_PRIVATE;
-import static org.duder.util.UserSession.PREF_NAME;
-import static org.duder.util.UserSession.TOKEN;
+public abstract class EventViewModel extends RecyclerViewModel {
 
-public abstract class EventViewModel extends AbstractViewModel {
-
-    static final int EVENT_BATCH_SIZE = 10;
-    private static final String TAG = EventViewModel.class.getSimpleName();
-    String token = getApplication().getSharedPreferences(PREF_NAME, MODE_PRIVATE).getString(TOKEN, "");
-    ApiClient apiClient = ApiClient.getApiClient();
-    int currentPage = 0;
-    private MutableLiveData<FragmentState> state = new MutableLiveData<>();
+    private static final int EVENT_BATCH_SIZE = 10;
     private EventListAdapter eventListAdapter = new EventListAdapter(new ArrayList<>());
+    private static final String TAG = EventViewModel.class.getSimpleName();
 
     EventViewModel(@NonNull Application application) {
         super(application);
     }
 
-    public abstract void loadEventsBatch();
-
-    public abstract void loadEventsOnInit();
-
-    public abstract void refreshEvents();
-
-    void loadEventsBatch(boolean clearEventsBefore, EventLoadingMode loadingMode) {
+    void loadItemsBatch(boolean clearEventsBefore, EventLoadingMode loadingMode) {
         state.postValue(FragmentState.loading());
         addSub(
                 apiClient.getEvents(currentPage, EVENT_BATCH_SIZE, loadingMode, token)
@@ -87,16 +73,13 @@ public abstract class EventViewModel extends AbstractViewModel {
         );
     }
 
-    protected void refreshEvents(EventLoadingMode loadingMode) {
+    protected void refreshItems(EventLoadingMode loadingMode) {
         currentPage = 0;
-        loadEventsBatch(true, loadingMode);
+        loadItemsBatch(true, loadingMode);
     }
 
-    public MutableLiveData<FragmentState> getState() {
-        return state;
-    }
-
-    public EventListAdapter getEventListAdapter() {
+    @Override
+    public RecyclerView.Adapter getListAdapter() {
         return eventListAdapter;
     }
 }

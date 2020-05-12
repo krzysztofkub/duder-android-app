@@ -1,19 +1,77 @@
 package org.duder.viewModel;
 
+import android.app.Application;
+import android.util.Log;
+
+import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+import androidx.recyclerview.widget.RecyclerView;
 
-public class DudesViewModel extends ViewModel {
+import org.duder.dto.event.EventLoadingMode;
+import org.duder.service.ApiClient;
+import org.duder.view.adapter.DudeListAdapter;
+import org.duder.view.adapter.EventListAdapter;
+import org.duder.viewModel.state.FragmentState;
 
-    private MutableLiveData<String> mText;
+import java.util.ArrayList;
 
-    public DudesViewModel() {
-        mText = new MutableLiveData<>();
-        mText.setValue("This is dudes fragment");
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
+
+public class DudesViewModel extends RecyclerViewModel {
+
+    private static final int DUDES_BATCH_SIZE = 25;
+    private static final String TAG = DudesViewModel.class.getSimpleName();
+    private DudeListAdapter dudeListAdapter = new DudeListAdapter(getApplication().getApplicationContext(), new ArrayList<>());
+
+    public DudesViewModel(@NonNull Application application) {
+        super(application);
     }
 
-    public LiveData<String> getText() {
-        return mText;
+    void loadItemsBatch(boolean clearEventsBefore) {
+        state.postValue(FragmentState.loading());
+        addSub(
+                ApiClient.getApiClient().getDudes(currentPage,DUDES_BATCH_SIZE, token)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(response -> {
+                            Log.i(TAG, "Fetched " + response.size() + " dudes");
+                            if (clearEventsBefore) {
+                                dudeListAdapter.clearItems();
+                            }
+                            dudeListAdapter.addDudes(response);
+                            state.postValue(FragmentState.success());
+                        }, error -> {
+                            Log.e(TAG, error.getMessage(), error);
+                            state.postValue(FragmentState.error(error));
+                        }));
+        currentPage++;
+    }
+
+    @Override
+    public void loadItemsBatch() {
+        state.postValue(FragmentState.loading());
+        loadItemsBatch(false);
+    }
+
+    @Override
+    public void loadItemsOnInit() {
+        if (getListAdapter().getItemCount() == 0) {
+            loadItemsBatch(false);
+        }
+    }
+
+    @Override
+    public void refreshItems() {
+        currentPage = 0;
+        dudeListAdapter.clearItems();
+        loadItemsBatch(true);
+    }
+
+    @Override
+    public RecyclerView.Adapter getListAdapter() {
+        return dudeListAdapter;
     }
 }
