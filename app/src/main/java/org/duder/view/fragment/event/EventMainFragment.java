@@ -30,9 +30,9 @@ public class EventMainFragment extends BaseFragment {
         tabLayout = root.findViewById(R.id.tab_layout);
 
         adapter = new EventMainAdapter(getFragmentManager());
-        adapter.addFragment(new EventViewFragment(EventLoadingMode.OWN), "My Events");
-        adapter.addFragment(new EventViewFragment(EventLoadingMode.PRIVATE), "Private");
-        adapter.addFragment(new EventViewFragment(EventLoadingMode.PUBLIC), "Public");
+        adapter.addFragment(new EventFragment(EventLoadingMode.OWN), "My Events");
+        adapter.addFragment(new EventFragment(EventLoadingMode.PRIVATE), "Private");
+        adapter.addFragment(new EventFragment(EventLoadingMode.PUBLIC), "Public");
 
         viewPager.setAdapter(adapter);
         viewPager.setOffscreenPageLimit(3);

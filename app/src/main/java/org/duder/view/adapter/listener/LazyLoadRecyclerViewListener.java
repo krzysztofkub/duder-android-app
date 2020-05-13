@@ -21,7 +21,7 @@ public abstract class LazyLoadRecyclerViewListener extends RecyclerView.OnScroll
     public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
         super.onScrolled(recyclerView, dx, dy);
 
-        if (!isLoading && shouldFetchMoreItems(layoutManager, recyclerView)) {
+        if (shouldFetchMoreItems(layoutManager, recyclerView)) {
             onLoadMore();
             isLoading = true;
             if (hasReachedBottom(recyclerView)) {

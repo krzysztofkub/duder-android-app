@@ -14,6 +14,11 @@
     <item
         android:id="@+id/navigation_dudes"
         android:icon="@drawable/dudes"
+        android:title="@string/title_dudes" />
+
+    <item
+        android:id="@+id/navigation_notifications"
+        android:icon="@drawable/ic_notifications_black_24dp"
         android:title="@string/title_notifications" />
 
 </menu>

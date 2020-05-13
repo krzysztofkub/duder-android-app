@@ -19,7 +19,7 @@ import com.squareup.picasso.Picasso;
 
 import org.duder.R;
 import org.duder.util.UserSession;
-import org.duder.view.fragment.DudesFragment;
+import org.duder.view.fragment.dudes.DudesFragment;
 import org.duder.view.fragment.HomeFragment;
 import org.duder.view.fragment.event.EventMainFragment;
 
