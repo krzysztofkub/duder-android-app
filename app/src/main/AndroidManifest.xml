@@ -52,7 +52,7 @@
             android:name=".view.activity.MainActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:label="@string/title_activity_main"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppThemeWithoutActionBar" />
         <activity
             android:name=".view.activity.CreateEventActivity"
             android:theme="@style/AppTheme">
