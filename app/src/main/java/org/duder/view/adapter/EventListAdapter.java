@@ -101,9 +101,13 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
                     .get()
                     .cancelRequest(image_view);
             image_view.setImageResource(R.drawable.ic_image_24dp);
+            String imageUrl = "https://miro.medium.com/max/1200/1*mk1-6aYaf_Bes1E3Imhc0A.jpeg";
+            if (event.getImageUrl() != null) {
+                imageUrl = event.getImageUrl();
+            }
             Picasso
                     .get()
-                    .load("https://miro.medium.com/max/1200/1*mk1-6aYaf_Bes1E3Imhc0A.jpeg")
+                    .load(imageUrl)
                     .placeholder(R.drawable.ic_image_24dp)
                     .fit()
                     .centerCrop()
