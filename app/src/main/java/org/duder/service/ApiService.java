@@ -12,12 +12,16 @@ import java.util.List;
 
 import io.reactivex.Maybe;
 import io.reactivex.Single;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Response;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
 import retrofit2.http.Query;
 import retrofit2.http.Url;
 
@@ -38,13 +42,21 @@ public interface ApiService {
     Single<Boolean> validateUser(@Query("sessionToken") String sessionToken);
 
     @GET(Const.DUDES)
-    Single<List<Dude>> getDudes(@Query("page") int page, @Query("size") int size, @Header("Authorization") String sessionToken);
+    Single<List<Dude>> getDudes(@Query("page") int page,
+                                @Query("size") int size,
+                                @Header("Authorization") String sessionToken);
 
     @GET(Const.EVENTS)
-    Maybe<List<EventPreview>> findEventsPage(@Query("page") int page, @Query("size") int size, @Query("mode") EventLoadingMode loadingMode, @Header("Authorization") String sessionToken);
+    Maybe<List<EventPreview>> findEventsPage(@Query("page") int page,
+                                             @Query("size") int size,
+                                             @Query("mode") EventLoadingMode loadingMode,
+                                             @Header("Authorization") String sessionToken);
 
+    @Multipart
     @POST(Const.EVENTS)
-    Single<Response<ResponseBody>> createEvent(@Body CreateEvent event, @Header("Authorization") String sessionToken);
+    Single<Response<ResponseBody>> createEvent(@Part("createEvent") RequestBody event,
+                                               @Part MultipartBody.Part image,
+                                               @Header("Authorization") String sessionToken);
 
     @GET
     Single<Response<ResponseBody>> getEvent(@Url String url, @Header("Authorization") String sessionToken);

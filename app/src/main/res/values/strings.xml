@@ -20,6 +20,9 @@
     <string name="title_chat">Chat</string>
     <string name="title_save">Save</string>
 
+    <!-- Drawer menu-->
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
     <!-- Events -->
     <string name="no_events">No Events Found</string>
     <string name="no_more_events">No More Events Found</string>

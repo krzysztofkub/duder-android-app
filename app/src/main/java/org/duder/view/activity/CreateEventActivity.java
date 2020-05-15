@@ -1,19 +1,25 @@
 package org.duder.view.activity;
 
+import android.Manifest;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -23,9 +29,11 @@ import com.google.android.flexbox.JustifyContent;
 
 import org.duder.R;
 import org.duder.model.Event;
+import org.duder.util.FileUtils;
 import org.duder.viewModel.CreateEventViewModel;
 import org.duder.viewModel.state.FragmentState;
 
+import java.io.File;
 import java.util.Calendar;
 
 import static org.duder.util.Const.CREATED_EVENT_URI;
@@ -41,10 +49,15 @@ public class CreateEventActivity extends BaseActivity {
     private RecyclerView hobbies;
     private CheckBox isPrivateChbox;
     private Button createEventBtn;
+    private ImageView addImageView;
     private ProgressBar progressBar;
     private RelativeLayout createEventForm;
+    private Uri imageUri;
 
     private CreateEventViewModel createEventViewModel;
+
+    private static final int IMAGE_PICK_CODE = 1000;
+    private static final int PERMISSION_CODE = 1001;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +87,7 @@ public class CreateEventActivity extends BaseActivity {
         hobbies = findViewById(R.id.hobby_list);
         isPrivateChbox = findViewById(R.id.private_checkbox);
         createEventBtn = findViewById(R.id.create_event_button);
+        addImageView = findViewById(R.id.add_image_view);
         createEventForm = findViewById(R.id.layout_create_event_form);
         createEventForm.setVisibility(View.GONE);
         setTitle("Create Event");
@@ -93,6 +107,7 @@ public class CreateEventActivity extends BaseActivity {
         txtDate.setOnClickListener(v -> onDateClicked());
         txtTime.setOnClickListener(v -> onTimeClicked());
         createEventBtn.setOnClickListener(v -> onCreateEventClicked());
+        addImageView.setOnClickListener(v -> onAddImageClicked());
     }
 
     private void update(FragmentState state) {
@@ -182,14 +197,56 @@ public class CreateEventActivity extends BaseActivity {
             txtTime.setError("what time?");
             hasErrors = true;
         }
-        if (createEventViewModel.getHobbyAdapter().getSelectedHobbies().size() == 0) {
+        if (createEventViewModel.getHobbyAdapter().getSelectedHobbies().isEmpty()) {
             Toast.makeText(this, "Please pick a category", Toast.LENGTH_LONG).show();
             hasErrors = true;
         }
         if (hasErrors) {
             return;
         }
-        Event event = new Event(name, desc, date, time, isPrivateChbox.isChecked());
+        Event event = new Event(
+                name, desc, date, time,
+                isPrivateChbox.isChecked(),
+                FileUtils.getRealPath(this, imageUri)
+        );
         createEventViewModel.createEvent(event);
+    }
+
+    private void onAddImageClicked() {
+        if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
+            String[] permissions = {Manifest.permission.READ_EXTERNAL_STORAGE};
+            requestPermissions(permissions, PERMISSION_CODE);
+        } else {
+            pickImageFromGallery();
+        }
+    }
+
+    private void pickImageFromGallery() {
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        intent.setType("image/*");
+        startActivityForResult(intent, IMAGE_PICK_CODE);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case PERMISSION_CODE:
+                if (grantResults.length > 0 
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    pickImageFromGallery();
+                } else {
+                    Toast.makeText(this, "Permission denied!", Toast.LENGTH_SHORT).show();
+                }
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (resultCode == RESULT_OK
+        && requestCode == IMAGE_PICK_CODE
+        && data != null) {
+            imageUri = data.getData();
+            addImageView.setImageURI(imageUri);
+        }
     }
 }

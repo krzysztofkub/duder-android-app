@@ -1,26 +1,28 @@
 package org.duder.view.activity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.facebook.login.LoginManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationView;
 import com.squareup.picasso.Picasso;
 
 import org.duder.R;
 import org.duder.util.UserSession;
-import org.duder.view.fragment.dudes.DudesFragment;
 import org.duder.view.fragment.HomeFragment;
+import org.duder.view.fragment.dudes.DudesFragment;
 import org.duder.view.fragment.event.EventMainFragment;
 
 import static org.duder.util.UserSession.PREF_NAME;
@@ -33,19 +35,24 @@ public class MainActivity extends BaseActivity {
     private final FragmentManager fm = getSupportFragmentManager();
     Fragment active = homeFragment;
 
-    private ImageView profileImage;
+    private DrawerLayout drawerLayout;
+    private NavigationView navigationView;
+    private Toolbar toolbar;
+    private ImageView actionBarProfileImage;
+    private ImageView drawerHeaderProfileImage;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
         initializeLayout();
         initializeListeners();
     }
 
     private void initializeLayout() {
+        drawerLayout = findViewById(R.id.drawer_layout);
+
         BottomNavigationView navView = findViewById(R.id.bottom_nav_view);
         navView.setOnNavigationItemSelectedListener(this::onNavigationItemSelectedListener);
 
@@ -54,30 +61,50 @@ public class MainActivity extends BaseActivity {
         fm.beginTransaction().add(R.id.nav_host_fragment, homeFragment, "home_fragment").commit();
 
         initializeActionBar();
+        initializeDrawerMenu();
+        setProfileImage();
     }
 
     private void initializeActionBar() {
+        toolbar = findViewById(R.id.custom_bar);
+        setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayShowCustomEnabled(true);
         actionBar.setDisplayShowTitleEnabled(false);
-        LayoutInflater layoutInflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View action_bar_view = layoutInflater.inflate(R.layout.custom_bar, null);
-        actionBar.setCustomView(action_bar_view);
-        profileImage = findViewById(R.id.view_profile);
 
+        actionBarProfileImage = findViewById(R.id.view_profile);
+    }
 
-        setProfileImage();
+    private void initializeDrawerMenu() {
+        navigationView = findViewById(R.id.nav_view);
+        drawerHeaderProfileImage = navigationView.getHeaderView(0).findViewById(R.id.drawer_header_image);
     }
 
     private void setProfileImage() {
         String imageUrl = getSharedPreferences(PREF_NAME, MODE_PRIVATE).getString(UserSession.IMAGE_URL, "");
         if (!imageUrl.isEmpty()) {
-            Picasso.get().load(imageUrl).noFade().into(profileImage);
+            Picasso.get().load(imageUrl).noFade().into(actionBarProfileImage);
+            Picasso.get().load(imageUrl).noFade().into(drawerHeaderProfileImage);
         }
     }
 
     private void initializeListeners() {
-        profileImage.setOnClickListener((v) -> logout());
+        actionBarProfileImage.setOnClickListener((v) -> {
+            if (!drawerLayout.isDrawerOpen(GravityCompat.START)) {
+                drawerLayout.openDrawer(GravityCompat.START);
+            }
+        });
+
+        navigationView.setNavigationItemSelectedListener(this::drawerMenuNavigation);
+    }
+
+    private boolean drawerMenuNavigation(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.nav_logout:
+                logout();
+                break;
+        }
+        return true;
     }
 
     private void logout() {
@@ -120,5 +147,14 @@ public class MainActivity extends BaseActivity {
                 startActivity(chatIntent);
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
     }
 }

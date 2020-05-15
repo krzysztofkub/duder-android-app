@@ -6,13 +6,15 @@ public class Event {
     private String date;
     private String time;
     private Boolean isPrivate;
+    private String imagePath;
 
-    public Event(String name, String description, String date, String time, Boolean isPrivate) {
+    public Event(String name, String description, String date, String time, Boolean isPrivate, String imagePath) {
         this.name = name;
         this.description = description;
         this.date = date;
         this.time = time;
         this.isPrivate = isPrivate;
+        this.imagePath = imagePath;
     }
 
     public String getName() {
@@ -33,5 +35,9 @@ public class Event {
 
     public Boolean getPrivate() {
         return isPrivate;
+    }
+
+    public String getImagePath() {
+        return imagePath;
     }
 }

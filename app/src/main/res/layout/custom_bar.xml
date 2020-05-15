@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.appcompat.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/custom_bar"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/primary">
+    android:layout_height="45dp"
+    android:background="@color/primary"
+    app:contentInsetStart="10dp">
 
     <FrameLayout
         android:layout_width="36dp"
@@ -31,5 +33,4 @@
             app:civ_border_width="1dp"
             app:civ_circle_background_color="@color/white" />
     </FrameLayout>
-
-</LinearLayout>
+</androidx.appcompat.widget.Toolbar>

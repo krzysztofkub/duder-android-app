@@ -12,6 +12,8 @@ import java.util.List;
 
 import io.reactivex.Maybe;
 import io.reactivex.Single;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Response;
 import retrofit2.Retrofit;
@@ -67,8 +69,8 @@ public class ApiClient {
         return apiService.findEventsPage(page, size, loadingMode, sessionToken);
     }
 
-    public Single<Response<ResponseBody>> createEvent(CreateEvent event, String sessionToken) {
-        return apiService.createEvent(event, sessionToken);
+    public Single<Response<ResponseBody>> createEvent(RequestBody event, MultipartBody.Part image,String sessionToken) {
+        return apiService.createEvent(event, image, sessionToken);
     }
 
     public Single<Response<ResponseBody>> getEvent(String url, String sessionToken) {
