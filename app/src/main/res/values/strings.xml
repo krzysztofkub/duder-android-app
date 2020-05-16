@@ -30,6 +30,7 @@
     <string name="participant">Participants: %1$d</string>
     <string name="eventCreateText">Create event</string>
     <string name="eventNameHint">Event Name</string>
+    <string name="eventCreateDescription">Event Description</string>
     <string name="eventDescription">AFflkasjdflaksjdf sldkfj asldkfj asldkfja lskdfjaslkd fjasldkf jasdfka sdlfkjasdlkjasfs;lkd f</string>
     <string name="dateHint">Event start date</string>
     <string name="timeHint">Event start time</string>

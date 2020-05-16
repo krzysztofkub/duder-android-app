@@ -52,7 +52,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/event_name"
                     android:layout_margin="@dimen/eventCreateFormMargin"
-                    android:hint="@string/eventDescription" />
+                    android:hint="@string/eventCreateDescription" />
 
                 <LinearLayout
                     android:id="@+id/pick_date_time"
