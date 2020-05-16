@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -13,16 +14,17 @@ import com.squareup.picasso.Picasso;
 
 import org.duder.R;
 import org.duder.dto.event.EventPreview;
+import org.duder.dto.event.HobbyName;
 import org.duder.model.EventItem;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.Set;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 import io.reactivex.Observable;
 import io.reactivex.subjects.PublishSubject;
@@ -79,53 +81,73 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        private ImageView image_view;
+        private ImageView profile_image;
+        private ImageView event_image;
+        private TextView nickname_text;
+        private TextView created_text;
         private TextView title_text;
         private TextView desc_text;
-        private TextView participants_text;
+        private TextView participants_num_text;
+        private TextView observers_num_text;
         private TextView hobbies_text;
-        private TextView timestamp_text;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            image_view = itemView.findViewById(R.id.image_view);
+            profile_image = itemView.findViewById(R.id.view_profile);
+            event_image = itemView.findViewById(R.id.event_img);
+            nickname_text = itemView.findViewById(R.id.nickname_text);
+            created_text = itemView.findViewById(R.id.created_text);
             title_text = itemView.findViewById(R.id.title_text);
-            desc_text = itemView.findViewById(R.id.desc_text);
-            participants_text = itemView.findViewById(R.id.participants_text);
+            desc_text = itemView.findViewById(R.id.description_text);
+            participants_num_text = itemView.findViewById(R.id.participants_number_text);
+            observers_num_text = itemView.findViewById(R.id.observers_number_text);
             hobbies_text = itemView.findViewById(R.id.hobbies_text);
-            timestamp_text = itemView.findViewById(R.id.timestamp_text);
         }
 
         private void bind(EventPreview event, Consumer<EventItem> consumer) {
+            event_image.setVisibility(View.GONE);
+            if (event.getImageUrl() != null) {
+                event_image.setVisibility(View.VISIBLE);
+                setupImage(event.getImageUrl(), event_image, R.drawable.ic_image_24dp);
+            }
+            setupImage(event.getHost().getImageUrl(), profile_image, R.drawable.profile);
+            nickname_text.setText(event.getHost().getNickname());
+            created_text.setText(setEventCreatedText(event.getCreated()));
+            title_text.setText(event.getName());
+            desc_text.setText(getShortenText(event.getDescription()));
+            participants_num_text.setText(String.valueOf(event.getNumberOfParticipants()));
+            observers_num_text.setText("0");
+            hobbies_text.setText(setHobbies(event.getHobbies()));
+
+            itemView.setOnClickListener((v) -> consumer.accept(new EventItem(profile_image, event)));
+        }
+
+        private String setHobbies(Set<HobbyName> hobbies) {
+            return hobbies.stream().map(HobbyName::name).collect(Collectors.joining(" "));
+        }
+
+        private String setEventCreatedText(Long created) {
+            return "1d";
+        }
+
+        private void setupImage(String imageUrl, ImageView imageView, @DrawableRes int drawable) {
             Picasso
                     .get()
-                    .cancelRequest(image_view);
-            image_view.setImageResource(R.drawable.ic_image_24dp);
-            String imageUrl = "https://miro.medium.com/max/1200/1*mk1-6aYaf_Bes1E3Imhc0A.jpeg";
-            if (event.getImageUrl() != null) {
-                imageUrl = event.getImageUrl();
-            }
+                    .cancelRequest(imageView);
+            imageView.setImageResource(drawable);
+
             Picasso
                     .get()
                     .load(imageUrl)
-                    .placeholder(R.drawable.ic_image_24dp)
+                    .placeholder(drawable)
                     .fit()
                     .centerCrop()
-                    .into(image_view);
-            title_text.setText(event.getName());
-            desc_text.setText(getShortenText(event.getDescription()));
-            participants_text.setText(itemView.getContext().getString(R.string.participant, event.getNumberOfParticipants()));
-            AtomicReference<String> hobbies = new AtomicReference<>("");
-            event.getHobbies().forEach(h -> hobbies.set(h + " " + hobbies));
-            hobbies_text.setText(hobbies.get());
-            timestamp_text.setText(simpleDateFormat.format(new Date(event.getTimestamp())));
-
-            itemView.setOnClickListener((v) -> consumer.accept(new EventItem(image_view, event)));
+                    .into(imageView);
         }
 
         private String getShortenText(String description) {
             if (description.length() > SHORTEN_DESCRIPTION_LENGTH) {
-                return description.substring(0, SHORTEN_DESCRIPTION_LENGTH) + "...";
+                return description.substring(0, SHORTEN_DESCRIPTION_LENGTH) + "... Read more";
             }
             return description;
         }

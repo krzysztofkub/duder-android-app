@@ -6,13 +6,14 @@
     <color name="primary">#2a9d8f</color>
     <color name="primary_dark">#264653</color>
 
-
     <color name="success">#e76f51</color>
     <color name="primary_text">#212121</color>
     <color name="secondary_text">#757575</color>
     <color name="white">#FFFFFF</color>
+    <color name="lighter_gray">#ddd</color>
     <color name="grey">#757575</color>
     <color name="divider">#BDBDBD</color>
     <color name="background">#fff</color>
     <color name="color_accent">#607D8B</color>
+    <color name="Transparent">#00000000</color>
 </resources>

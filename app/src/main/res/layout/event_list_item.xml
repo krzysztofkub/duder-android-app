@@ -1,94 +1,233 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/card_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/element_spacing_normal"
-    android:background="@color/color_accent"
-    app:cardCornerRadius="8dp">
+    android:layout_marginBottom="10dp">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <LinearLayout
+            android:id="@+id/event_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp">
+
+            <RelativeLayout
+                android:id="@+id/user_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/view_profile"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginRight="15dp"
+                    android:src="@drawable/profile" />
+
+                <TextView
+                    android:id="@+id/nickname_text"
+                    style="@style/TextAppearance.AppCompat.Body1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/view_profile"
+                    android:lines="1"
+                    android:textSize="@dimen/body_text_size_medium_small"
+                    android:textStyle="bold"
+                    tools:text="Jan Kowalski" />
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:layout_below="@+id/nickname_text"
+                    android:layout_toRightOf="@+id/view_profile">
+
+                    <TextView
+                        android:id="@+id/created_text"
+                        style="@style/TextAppearance.AppCompat.Small"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerVertical="true"
+                        android:lines="1"
+                        android:textSize="@dimen/body_text_size_small"
+                        tools:text="3d" />
+
+                    <ImageView
+                        android:id="@+id/dot_img"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="4dp"
+                        android:layout_toRightOf="@+id/created_text"
+                        android:paddingVertical="4dp"
+                        android:src="@drawable/circle" />
+
+                    <ImageView
+                        android:id="@+id/access_img"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginVertical="4dp"
+                        android:layout_toRightOf="@+id/dot_img"
+                        android:src="@drawable/ic_public" />
+                </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/title_text"
+                    style="@style/TextAppearance.AppCompat.Headline"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/view_profile"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginTop="@dimen/loginFormMargin"
+                    android:textSize="18dp"
+                    android:textStyle="bold"
+
+                    tools:text="Bieganie w lesie" />
+
+                <TextView
+                    android:id="@+id/description_text"
+                    style="@style/TextAppearance.AppCompat.Body1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/title_text"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginTop="@dimen/loginFormMargin"
+                    android:textSize="@dimen/body_text_size_medium_small"
+                    tools:text="@string/eventDescription" />
+
+            </RelativeLayout>
+        </LinearLayout>
+
         <ImageView
-            android:id="@+id/image_view"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/image_height"
+            android:id="@+id/event_img"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_below="@+id/event_view"
+            android:background="@color/grey"
+            android:layout_marginTop="@dimen/loginFormMargin"
             android:scaleType="centerCrop"
-            android:src="@drawable/ic_image_24dp"
-            android:transitionName="@string/transition_name"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
 
-        <TextView
-            android:id="@+id/title_text"
-            android:layout_width="wrap_content"
+            android:src="@drawable/ic_image_24dp" />
+
+        <RelativeLayout
+            android:id="@+id/event_metadata_view"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/event_img"
+            android:padding="10dp">
 
-            android:ellipsize="end"
-            android:lines="1"
-            android:paddingLeft="@dimen/element_spacing_normal"
-            android:paddingTop="@dimen/element_spacing_normal"
-            android:paddingRight="@dimen/element_spacing_normal"
-            android:textSize="@dimen/body_text_size_title"
-            app:layout_constraintBottom_toTopOf="@+id/desc_text"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/image_view"
-            tools:text="Really great title Really great" />
+            <ImageView
+                android:id="@+id/participants_img"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:src="@drawable/ic_participants" />
 
-        <TextView
-            android:id="@+id/desc_text"
-            android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/participants_number_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/participants_img"
+                android:text="15"
+                android:textSize="10dp" />
+
+            <ImageView
+                android:id="@+id/observers_img"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_marginLeft="20dp"
+                android:layout_toRightOf="@+id/participants_number_text"
+                android:src="@drawable/ic_observers" />
+
+            <TextView
+                android:id="@+id/observers_number_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/observers_img"
+                android:text="9"
+                android:textSize="10dp" />
+
+            <TextView
+                android:id="@+id/hobbies_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/participants_img"
+                android:text="HOBBIES"
+                android:textSize="10dp" />
+
+        </RelativeLayout>
+
+        <View
+            android:id="@+id/space"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginBottom="10dp"
+            android:background="@color/lighter_gray"
+            android:layout_below="@id/event_metadata_view" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:lines="1"
-            android:paddingLeft="@dimen/element_spacing_normal"
-            android:paddingTop="@dimen/element_spacing_normal"
-            android:paddingRight="@dimen/element_spacing_normal"
-            android:textSize="@dimen/body_text_size_title"
-            app:layout_constraintBottom_toTopOf="@+id/participants_text"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/title_text"
-            tools:text="This is description blabla pppoopdsoppp..." />
+            android:paddingHorizontal="@dimen/loginFormMargin"
+            android:layout_marginBottom="10dp"
+            android:layout_below="@+id/space">
 
-        <TextView
-            android:id="@+id/participants_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/element_spacing_small"
-            android:textSize="@dimen/body_text_size_medium_small"
-            app:layout_constraintBottom_toTopOf="@id/hobbies_text"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/desc_text"
-            tools:text="Participants number: 1" />
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true">
 
-        <TextView
-            android:id="@+id/timestamp_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/element_spacing_small"
-            android:textSize="@dimen/body_text_size_medium_small"
-            app:layout_constraintBottom_toTopOf="@id/hobbies_text"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/desc_text"
-            tools:text="timestamp" />
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:textColor="@color/grey"
+                    android:textAllCaps="false"
+                    android:minHeight="0dp"
+                    android:background="@color/Transparent"
+                    android:drawableLeft="@drawable/ic_participant_border"
+                    android:text="Participate" />
+            </RelativeLayout>
 
-        <TextView
-            android:id="@+id/hobbies_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/element_spacing_small"
-            android:textSize="@dimen/body_text_size_medium_small"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/timestamp_text"
-            tools:text="SPORT" />
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:textColor="@color/grey"
+                    android:textAllCaps="false"
+                    android:minHeight="0dp"
+                    android:background="@color/Transparent"
+                    android:drawableLeft="@drawable/ic_observer_border"
+                    android:text="Observe" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true">
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:textColor="@color/grey"
+                    android:textAllCaps="false"
+                    android:minHeight="0dp"
+                    android:background="@color/Transparent"
+                    android:drawableLeft="@drawable/ic_share"
+                    android:text="Share" />
+            </RelativeLayout>
+        </RelativeLayout>
+
+    </RelativeLayout>
 </androidx.cardview.widget.CardView>
 

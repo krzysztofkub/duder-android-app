@@ -18,6 +18,7 @@
 
     <!-- Text Values -->
     <dimen name="header_text_size_normal">20sp</dimen>
+    <dimen name="body_text_size_small">12sp</dimen>
     <dimen name="body_text_size_medium_small">14sp</dimen>
     <dimen name="body_text_size_normal">16sp</dimen>
     <dimen name="body_text_size_medium_large">20sp</dimen>
