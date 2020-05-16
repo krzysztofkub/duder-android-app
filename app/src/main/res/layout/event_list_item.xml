@@ -3,19 +3,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/card_view"
-    app:cardUseCompatPadding="true"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="@dimen/loginFormMargin">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:id="@+id/event_view"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:padding="5dp">
 
             <RelativeLayout
                 android:id="@+id/user_view"
@@ -130,6 +129,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/event_img"
+            android:paddingHorizontal="5dp"
             android:layout_marginVertical="10dp">
 
             <ImageView
@@ -187,6 +187,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
+            android:paddingHorizontal="5dp"
             android:layout_below="@+id/space">
 
             <RelativeLayout
@@ -240,11 +241,11 @@
                     android:text="Share" />
             </RelativeLayout>
         </RelativeLayout>
-<!--        <View-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="7dp"-->
-<!--            android:background="@color/lighter_gray"-->
-<!--            android:layout_below="@id/buttons_view" />-->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            android:background="@drawable/down_shadow"
+            android:layout_below="@id/buttons_view" />
     </RelativeLayout>
 </androidx.cardview.widget.CardView>
 

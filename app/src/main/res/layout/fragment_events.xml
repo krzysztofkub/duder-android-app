@@ -29,7 +29,6 @@
             android:id="@+id/events_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/lighter_gray"
             android:layout_marginLeft="@dimen/element_spacing_normal"
             android:layout_marginRight="@dimen/element_spacing_normal"
             app:layout_constraintBottom_toBottomOf="parent"
