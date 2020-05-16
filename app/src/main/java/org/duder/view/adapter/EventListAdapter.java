@@ -21,6 +21,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -90,6 +91,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
         private TextView participants_num_text;
         private TextView observers_num_text;
         private TextView hobbies_text;
+        private TextView starting_date_text;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -102,13 +104,14 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
             participants_num_text = itemView.findViewById(R.id.participants_number_text);
             observers_num_text = itemView.findViewById(R.id.observers_number_text);
             hobbies_text = itemView.findViewById(R.id.hobbies_text);
+            starting_date_text = itemView.findViewById(R.id.starting_date_text);
         }
 
         private void bind(EventPreview event, Consumer<EventItem> consumer) {
             event_image.setVisibility(View.GONE);
+            setupImage(event.getImageUrl(), event_image, R.drawable.ic_image_24dp);
             if (event.getImageUrl() != null) {
                 event_image.setVisibility(View.VISIBLE);
-                setupImage(event.getImageUrl(), event_image, R.drawable.ic_image_24dp);
             }
             setupImage(event.getHost().getImageUrl(), profile_image, R.drawable.profile);
             nickname_text.setText(event.getHost().getNickname());
@@ -118,8 +121,9 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
             participants_num_text.setText(String.valueOf(event.getNumberOfParticipants()));
             observers_num_text.setText("0");
             hobbies_text.setText(setHobbies(event.getHobbies()));
+            starting_date_text.setText(simpleDateFormat.format(new Date(event.getTimestamp())));
 
-            itemView.setOnClickListener((v) -> consumer.accept(new EventItem(profile_image, event)));
+            itemView.setOnClickListener(v -> consumer.accept(new EventItem(profile_image, event)));
         }
 
         private String setHobbies(Set<HobbyName> hobbies) {
@@ -136,13 +140,15 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
                     .cancelRequest(imageView);
             imageView.setImageResource(drawable);
 
-            Picasso
-                    .get()
-                    .load(imageUrl)
-                    .placeholder(drawable)
-                    .fit()
-                    .centerCrop()
-                    .into(imageView);
+            if (imageUrl != null) {
+                Picasso
+                        .get()
+                        .load(imageUrl)
+                        .placeholder(drawable)
+                        .fit()
+                        .centerCrop()
+                        .into(imageView);
+            }
         }
 
         private String getShortenText(String description) {
