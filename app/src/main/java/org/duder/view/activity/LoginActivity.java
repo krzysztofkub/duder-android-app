@@ -1,13 +1,10 @@
 package org.duder.view.activity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -25,7 +22,6 @@ import org.duder.R;
 import org.duder.dto.user.LoginResponse;
 import org.duder.model.LoggedAccount;
 import org.duder.service.ApiClient;
-import org.duder.util.UserSession;
 import org.duder.websocket.WebSocketService;
 import org.duder.websocket.dto.ConnectionResponse;
 
@@ -40,6 +36,8 @@ import io.reactivex.schedulers.Schedulers;
 import okhttp3.ResponseBody;
 import retrofit2.Response;
 
+import static org.duder.util.BusyIndicator.hideBusyIndicator;
+import static org.duder.util.BusyIndicator.showBusyIndicator;
 import static org.duder.util.UserSession.PREF_NAME;
 import static org.duder.util.UserSession.TOKEN;
 import static org.duder.util.UserSession.storeUserSession;
@@ -108,15 +106,15 @@ public class LoginActivity extends BaseActivity {
                     public void onCancel() {
                         // App code
                         loginView.setVisibility(View.VISIBLE);
-                        hideBusyIndicator();
+                        hideBusyIndicator(busyIndicator);
                     }
 
                     @Override
                     public void onError(FacebookException exception) {
                         // App code
                         loginView.setVisibility(View.VISIBLE);
-                        hideBusyIndicator();
-                        System.out.println("error");
+                        hideBusyIndicator(busyIndicator);
+                        Log.e(TAG, "Error during fb login");
                     }
                 });
     }
@@ -143,14 +141,14 @@ public class LoginActivity extends BaseActivity {
         if (hasErrors) {
             return;
         }
-        showBusyIndicator();
+        busyIndicator = showBusyIndicator(this, busyIndicator);
         account = new LoggedAccount(login, password);
         Single<Response<ResponseBody>> loginRequest = apiClient.loginUser(login, password);
         executor.submit(() -> doLoginToRest(loginRequest));
     }
 
     private void onFbLoginClicked(View view) {
-        showBusyIndicator();
+        busyIndicator = showBusyIndicator(this, busyIndicator);
         loginView.setVisibility(View.GONE);
         LoginManager.getInstance().logInWithReadPermissions(this, Collections.singletonList("email"));
     }
@@ -170,12 +168,12 @@ public class LoginActivity extends BaseActivity {
                             doLoginToWebsocket();
                             break;
                         case 422:
-                            hideBusyIndicator();
+                            hideBusyIndicator(busyIndicator);
                             Toast.makeText(this, "Bad credentials", Toast.LENGTH_SHORT).show();
                             txtLogin.setError("Baaad login or password, try again DUuuuude");
                             break;
                         default:
-                            hideBusyIndicator();
+                            hideBusyIndicator(busyIndicator);
                             Toast.makeText(this, "Unknown response", Toast.LENGTH_SHORT).show();
                             break;
                     }
@@ -194,30 +192,11 @@ public class LoginActivity extends BaseActivity {
         });
     }
 
-    private void showBusyIndicator() {
-        final View activityView = getWindow().getDecorView();
-        if (busyIndicator == null) {
-            final int width = activityView.getWidth() - 20;
-            final int height = activityView.getHeight() - 20;
-            final Context context = getApplicationContext();
-            final LayoutInflater inflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
-            final View popupView = inflater.inflate(R.layout.popup_busy, null);
-            busyIndicator = new PopupWindow(popupView, width, height);
-            busyIndicator.setElevation(10.0f);
-        }
-        busyIndicator.showAtLocation(activityView, Gravity.CENTER, 0, 0);
-    }
-
-    private void hideBusyIndicator() {
-        if (busyIndicator != null && busyIndicator.isShowing()) {
-            busyIndicator.dismiss();
-        }
-    }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        hideBusyIndicator();
+        hideBusyIndicator(busyIndicator);
     }
 
     @Override
@@ -245,7 +224,7 @@ public class LoginActivity extends BaseActivity {
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             Log.i(TAG, "Handler received msg: " + msg.what);
-            hideBusyIndicator();
+            hideBusyIndicator(busyIndicator);
             switch (msg.what) {
                 case BAD_CREDENTIALS:
                     Toast.makeText(LoginActivity.this, "Bad credentials", Toast.LENGTH_SHORT).show();

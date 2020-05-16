@@ -21,7 +21,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class DudeListAdapter extends RecyclerView.Adapter<DudeListAdapter.ViewHolder>{
+public class DudeListAdapter extends RecyclerView.Adapter<DudeListAdapter.ViewHolder> {
     private final List<Dude> dudes;
     private final Context mContext;
 

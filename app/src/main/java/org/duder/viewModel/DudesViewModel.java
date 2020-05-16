@@ -4,15 +4,10 @@ import android.app.Application;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 import androidx.recyclerview.widget.RecyclerView;
 
-import org.duder.dto.event.EventLoadingMode;
 import org.duder.service.ApiClient;
 import org.duder.view.adapter.DudeListAdapter;
-import org.duder.view.adapter.EventListAdapter;
 import org.duder.viewModel.state.FragmentState;
 
 import java.util.ArrayList;
@@ -33,7 +28,7 @@ public class DudesViewModel extends RecyclerViewModel {
     void loadItemsBatch(boolean clearEventsBefore) {
         state.postValue(FragmentState.loading());
         addSub(
-                ApiClient.getApiClient().getDudes(currentPage,DUDES_BATCH_SIZE, token)
+                ApiClient.getApiClient().getDudes(currentPage, DUDES_BATCH_SIZE, token)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(response -> {

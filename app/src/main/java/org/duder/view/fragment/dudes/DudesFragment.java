@@ -21,7 +21,7 @@ public class DudesFragment extends RecyclerFragment {
 
     @Override
     public View onCreateRecyclerView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
+                                     ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_dudes, container, false);
         progressBar = root.findViewById(R.id.progress_spinner);
         list = root.findViewById(R.id.dudes_list);

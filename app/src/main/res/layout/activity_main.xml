@@ -13,7 +13,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <include android:id="@+id/custom_bar" layout="@layout/custom_bar"/>
+        <include
+            android:id="@+id/custom_bar"
+            layout="@layout/custom_bar" />
 
         <FrameLayout
             android:id="@+id/nav_host_fragment"

@@ -1,7 +1,6 @@
 package org.duder.service;
 
 import org.duder.dto.chat.ChatMessage;
-import org.duder.dto.event.CreateEvent;
 import org.duder.dto.event.EventLoadingMode;
 import org.duder.dto.event.EventPreview;
 import org.duder.dto.user.Dude;

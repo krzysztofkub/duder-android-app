@@ -9,11 +9,10 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,15 +32,17 @@ import org.duder.util.FileUtils;
 import org.duder.viewModel.CreateEventViewModel;
 import org.duder.viewModel.state.FragmentState;
 
-import java.io.File;
 import java.util.Calendar;
 
+import static org.duder.util.BusyIndicator.hideBusyIndicator;
+import static org.duder.util.BusyIndicator.showBusyIndicator;
 import static org.duder.util.Const.CREATED_EVENT_URI;
 
 public class CreateEventActivity extends BaseActivity {
 
     private static final String TAG = CreateEventActivity.class.getSimpleName();
-
+    private static final int IMAGE_PICK_CODE = 1000;
+    private static final int PERMISSION_CODE = 1001;
     private TextView txtDate;
     private TextView txtTime;
     private TextView txtName;
@@ -50,14 +51,10 @@ public class CreateEventActivity extends BaseActivity {
     private CheckBox isPrivateChbox;
     private Button createEventBtn;
     private ImageView addImageView;
-    private ProgressBar progressBar;
     private RelativeLayout createEventForm;
+    private PopupWindow busyIndicator;
     private Uri imageUri;
-
     private CreateEventViewModel createEventViewModel;
-
-    private static final int IMAGE_PICK_CODE = 1000;
-    private static final int PERMISSION_CODE = 1001;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,13 +80,11 @@ public class CreateEventActivity extends BaseActivity {
         txtTime = findViewById(R.id.in_time);
         txtName = findViewById(R.id.event_name);
         txtDesc = findViewById(R.id.event_description);
-        progressBar = findViewById(R.id.progress_spinner);
         hobbies = findViewById(R.id.hobby_list);
         isPrivateChbox = findViewById(R.id.private_checkbox);
         createEventBtn = findViewById(R.id.create_event_button);
         addImageView = findViewById(R.id.add_image_view);
         createEventForm = findViewById(R.id.layout_create_event_form);
-        createEventForm.setVisibility(View.GONE);
         setTitle("Create Event");
     }
 
@@ -113,15 +108,13 @@ public class CreateEventActivity extends BaseActivity {
     private void update(FragmentState state) {
         switch (state.getStatus()) {
             case LOADING:
-                progressBar.setVisibility(View.VISIBLE);
+                busyIndicator = showBusyIndicator(this, busyIndicator);
                 break;
             case COMPLETE: //fetched hobbies list
-                progressBar.setVisibility(View.GONE);
-                createEventForm.setVisibility(View.VISIBLE);
+                hideBusyIndicator(busyIndicator);
                 break;
             case SUCCESS: //created event
-                progressBar.setVisibility(View.GONE);
-                createEventForm.setVisibility(View.VISIBLE);
+                hideBusyIndicator(busyIndicator);
                 Toast.makeText(this, "Created event", Toast.LENGTH_LONG).show();
                 Intent data = new Intent();
                 data.putExtra(CREATED_EVENT_URI, (String) state.getData());
@@ -129,8 +122,8 @@ public class CreateEventActivity extends BaseActivity {
                 finish();
                 break;
             case ERROR:
+                hideBusyIndicator(busyIndicator);
                 Log.e(TAG, state.getError().getMessage());
-                progressBar.setVisibility(View.GONE);
                 Toast.makeText(this, "Something went wrong", Toast.LENGTH_LONG).show();
         }
     }
@@ -231,7 +224,7 @@ public class CreateEventActivity extends BaseActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
             case PERMISSION_CODE:
-                if (grantResults.length > 0 
+                if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     pickImageFromGallery();
                 } else {
@@ -243,8 +236,8 @@ public class CreateEventActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (resultCode == RESULT_OK
-        && requestCode == IMAGE_PICK_CODE
-        && data != null) {
+                && requestCode == IMAGE_PICK_CODE
+                && data != null) {
             imageUri = data.getData();
             addImageView.setImageURI(imageUri);
         }

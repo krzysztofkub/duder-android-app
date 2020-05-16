@@ -2,7 +2,6 @@ package org.duder.viewModel;
 
 import android.app.Application;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -61,6 +60,7 @@ public class CreateEventViewModel extends AbstractViewModel {
     }
 
     public void createEvent(Event event) {
+        state.postValue(FragmentState.loading());
         MultipartBody.Part bodyImage = createMultipartBodyWithImage(event.getImagePath());
 
         CreateEvent createEvent = mapEventToCreateEventDto(event);

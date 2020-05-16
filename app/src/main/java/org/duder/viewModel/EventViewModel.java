@@ -22,8 +22,8 @@ import io.reactivex.schedulers.Schedulers;
 public abstract class EventViewModel extends RecyclerViewModel {
 
     private static final int EVENT_BATCH_SIZE = 10;
-    private EventListAdapter eventListAdapter = new EventListAdapter(new ArrayList<>());
     private static final String TAG = EventViewModel.class.getSimpleName();
+    private EventListAdapter eventListAdapter = new EventListAdapter(new ArrayList<>());
 
     EventViewModel(@NonNull Application application) {
         super(application);

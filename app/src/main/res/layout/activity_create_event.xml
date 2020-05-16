@@ -103,6 +103,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/hobby_list"
+                    android:layout_marginBottom="50dp"
                     android:text="Visible only for my dudez" />
 
             </RelativeLayout>
@@ -110,14 +111,6 @@
         </RelativeLayout>
 
     </ScrollView>
-
-    <ProgressBar
-        android:id="@+id/progress_spinner"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="@dimen/element_spacing_normal" />
 
     <Button
         android:id="@+id/create_event_button"
@@ -127,6 +120,5 @@
         android:background="@color/primary"
         android:text="@string/eventCreateText"
         android:textColor="@color/white" />
-
 
 </RelativeLayout>

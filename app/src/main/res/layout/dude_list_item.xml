@@ -5,8 +5,8 @@
     android:id="@+id/card_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:cardElevation="0dp"
-    android:layout_margin="@dimen/element_spacing_normal">
+    android:layout_margin="@dimen/element_spacing_normal"
+    app:cardElevation="0dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -18,29 +18,29 @@
             android:layout_height="60dp"
             android:layout_alignParentStart="true"
             android:cropToPadding="true"
-            android:src="@drawable/profile"/>
+            android:src="@drawable/profile" />
 
         <TextView
             android:id="@+id/nickname_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/view_profile"
             android:ellipsize="end"
             android:lines="1"
             android:paddingLeft="@dimen/element_spacing_normal"
             android:paddingTop="@dimen/element_spacing_normal"
             android:paddingRight="@dimen/element_spacing_normal"
             android:textSize="@dimen/body_text_size_title"
-            android:layout_toRightOf="@+id/view_profile"
             tools:text="Jan Kowalski" />
 
         <Button
             android:id="@+id/invite_friend_btn"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:background="@drawable/add_dude"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:stateListAnimator="@null"/>
+            android:background="@drawable/add_dude"
+            android:stateListAnimator="@null" />
     </RelativeLayout>
 </androidx.cardview.widget.CardView>
 
