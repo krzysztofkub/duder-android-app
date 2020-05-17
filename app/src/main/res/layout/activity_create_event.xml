@@ -37,11 +37,9 @@
 
                 <EditText
                     android:id="@+id/event_name"
-                    style="@android:style/Widget.EditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/eventCreateFormMargin"
-                    android:ems="10"
                     android:hint="@string/eventNameHint"
                     android:textSize="@dimen/body_text_size_large" />
 

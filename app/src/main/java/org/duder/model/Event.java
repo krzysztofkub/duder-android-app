@@ -1,20 +1,22 @@
 package org.duder.model;
 
+import java.io.File;
+
 public class Event {
     private String name;
     private String description;
     private String date;
     private String time;
     private Boolean isPrivate;
-    private String imagePath;
+    private File image;
 
-    public Event(String name, String description, String date, String time, Boolean isPrivate, String imagePath) {
+    public Event(String name, String description, String date, String time, Boolean isPrivate, File image) {
         this.name = name;
         this.description = description;
         this.date = date;
         this.time = time;
         this.isPrivate = isPrivate;
-        this.imagePath = imagePath;
+        this.image = image;
     }
 
     public String getName() {
@@ -37,7 +39,7 @@ public class Event {
         return isPrivate;
     }
 
-    public String getImagePath() {
-        return imagePath;
+    public File getImage() {
+        return image;
     }
 }

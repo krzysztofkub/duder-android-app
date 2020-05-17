@@ -105,14 +105,17 @@ public class EventFragment extends RecyclerFragment {
                             Intent intent = new Intent(getActivity(), EventDetailActivity.class);
                             intent.putExtra(EVENT_NAME, e.getEventPreview().getName());
                             intent.putExtra(EVENT_DESCRIPTION, e.getEventPreview().getDescription());
-                            String imageUrl = "https://miro.medium.com/max/1200/1*mk1-6aYaf_Bes1E3Imhc0A.jpeg";
-                            if (e.getEventPreview().getImageUrl() != null) {
-                                imageUrl = e.getEventPreview().getImageUrl();
+                            String imageUrl = e.getEventPreview().getImageUrl();
+                            if (imageUrl != null) {
+                                intent.putExtra(EVENT_IMAGE, imageUrl);
+                                ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(getActivity(),
+                                        e.getImageView(), ViewCompat.getTransitionName(e.getImageView()));
+                                startActivity(intent, options.toBundle());
+                            } else {
+                                startActivity(intent);
                             }
-                            intent.putExtra(EVENT_IMAGE, imageUrl);
-                            ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(getActivity(),
-                                    e.getImageView(), ViewCompat.getTransitionName(e.getImageView()));
-                            startActivity(intent, options.toBundle());
+
+
                         },
                         e -> Log.e(TAG, "Error", e))
         );

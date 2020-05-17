@@ -51,7 +51,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-        viewHolder.bind(events.get(i), (e) -> onClickSubject.onNext(e));
+        viewHolder.bind(events.get(i), e -> onClickSubject.onNext(e));
     }
 
     @Override
@@ -92,6 +92,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
         private TextView observers_num_text;
         private TextView hobbies_text;
         private TextView starting_date_text;
+        private View event_view;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -105,6 +106,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
             observers_num_text = itemView.findViewById(R.id.observers_number_text);
             hobbies_text = itemView.findViewById(R.id.hobbies_text);
             starting_date_text = itemView.findViewById(R.id.starting_date_text);
+            event_view = itemView.findViewById(R.id.event_view);
         }
 
         private void bind(EventPreview event, Consumer<EventItem> consumer) {
@@ -123,7 +125,8 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
             hobbies_text.setText(setHobbies(event.getHobbies()));
             starting_date_text.setText(simpleDateFormat.format(new Date(event.getTimestamp())));
 
-            itemView.setOnClickListener(v -> consumer.accept(new EventItem(profile_image, event)));
+            event_view.setOnClickListener(v -> consumer.accept(new EventItem(event_image, event)));
+            event_image.setOnClickListener(v -> consumer.accept(new EventItem(event_image, event)));
         }
 
         private String setHobbies(Set<HobbyName> hobbies) {

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/card_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -11,15 +10,15 @@
         android:layout_height="match_parent">
 
         <LinearLayout
-            android:id="@+id/event_view"
+            android:id="@+id/above_image_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="5dp">
 
             <RelativeLayout
-                android:id="@+id/user_view"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:padding="@dimen/loginFormMargin">
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/view_profile"
@@ -41,6 +40,7 @@
                     tools:text="Jan Kowalski" />
 
                 <RelativeLayout
+                    android:id="@+id/event_metdadata_above_image_view"
                     android:layout_width="wrap_content"
                     android:layout_height="20dp"
                     android:layout_below="@+id/nickname_text"
@@ -76,61 +76,68 @@
                         android:src="@drawable/ic_public" />
                 </RelativeLayout>
 
-                <TextView
-                    android:id="@+id/title_text"
-                    style="@style/TextAppearance.AppCompat.Headline"
-                    android:layout_width="wrap_content"
+                <RelativeLayout
+                    android:id="@+id/event_view"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/view_profile"
-                    android:layout_alignParentStart="true"
-                    android:layout_marginTop="@dimen/loginFormMargin"
-                    android:textSize="18dp"
-                    android:textStyle="bold"
+                    android:layout_below="@id/event_metdadata_above_image_view">
 
-                    tools:text="Bieganie w lesie" />
+                    <TextView
+                        android:id="@+id/title_text"
+                        style="@style/TextAppearance.AppCompat.Headline"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginTop="@dimen/loginFormMargin"
+                        android:textSize="18dp"
+                        android:textStyle="bold"
 
-                <TextView
-                    android:id="@+id/starting_date_text"
-                    style="@style/TextAppearance.AppCompat.Headline"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/view_profile"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginTop="@dimen/loginFormMargin"
-                    android:textSize="@dimen/body_text_size_medium_small"
-                    tools:text="14/04/20" />
+                        tools:text="Bieganie w lesie" />
 
-                <TextView
-                    android:id="@+id/description_text"
-                    style="@style/TextAppearance.AppCompat.Body1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/starting_date_text"
-                    android:layout_alignParentStart="true"
-                    android:layout_marginTop="@dimen/loginFormMargin"
-                    android:textSize="@dimen/body_text_size_medium_small"
-                    tools:text="@string/eventDescription" />
+                    <TextView
+                        android:id="@+id/starting_date_text"
+                        style="@style/TextAppearance.AppCompat.Headline"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginTop="@dimen/loginFormMargin"
+                        android:textSize="@dimen/body_text_size_medium_small"
+                        tools:text="14/04/20" />
+
+                    <TextView
+                        android:id="@+id/description_text"
+                        style="@style/TextAppearance.AppCompat.Body1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/starting_date_text"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginTop="@dimen/loginFormMargin"
+                        android:textSize="@dimen/body_text_size_medium_small"
+                        tools:text="@string/eventDescription" />
+
+                </RelativeLayout>
 
             </RelativeLayout>
+
         </LinearLayout>
 
         <ImageView
             android:id="@+id/event_img"
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:layout_below="@+id/event_view"
+            android:layout_below="@+id/above_image_view"
             android:background="@color/grey"
-            android:layout_marginTop="@dimen/loginFormMargin"
             android:scaleType="centerCrop"
-            android:src="@drawable/ic_image_24dp" />
+            android:src="@drawable/ic_image_24dp"
+            android:transitionName="@string/transition_name" />
 
         <RelativeLayout
             android:id="@+id/event_metadata_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/event_img"
-            android:paddingHorizontal="5dp"
-            android:layout_marginVertical="10dp">
+            android:layout_marginVertical="10dp"
+            android:paddingHorizontal="@dimen/loginFormMargin">
 
             <ImageView
                 android:id="@+id/participants_img"
@@ -177,18 +184,17 @@
             android:id="@+id/space"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginBottom="10dp"
+
+            android:layout_below="@id/event_metadata_view"
             android:layout_marginHorizontal="@dimen/loginFormMargin"
-            android:background="@color/lighter_gray"
-            android:layout_below="@id/event_metadata_view" />
+            android:background="@color/lighter_gray" />
 
         <RelativeLayout
             android:id="@+id/buttons_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:paddingHorizontal="5dp"
-            android:layout_below="@+id/space">
+            android:layout_below="@+id/space"
+            android:padding="@dimen/loginFormMargin">
 
             <RelativeLayout
                 android:layout_width="wrap_content"
@@ -199,12 +205,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:textColor="@color/grey"
-                    android:textAllCaps="false"
-                    android:minHeight="0dp"
                     android:background="@color/Transparent"
                     android:drawableLeft="@drawable/ic_participant_border"
-                    android:text="Participate" />
+                    android:minHeight="0dp"
+                    android:text="Participate"
+                    android:textAllCaps="false"
+                    android:textColor="@color/grey" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -216,12 +222,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:textColor="@color/grey"
-                    android:textAllCaps="false"
-                    android:minHeight="0dp"
                     android:background="@color/Transparent"
                     android:drawableLeft="@drawable/ic_observer_border"
-                    android:text="Observe" />
+                    android:minHeight="0dp"
+                    android:text="Observe"
+                    android:textAllCaps="false"
+                    android:textColor="@color/grey" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -233,19 +239,20 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:textColor="@color/grey"
-                    android:textAllCaps="false"
-                    android:minHeight="0dp"
                     android:background="@color/Transparent"
                     android:drawableLeft="@drawable/ic_share"
-                    android:text="Share" />
+                    android:minHeight="0dp"
+                    android:text="Share"
+                    android:textAllCaps="false"
+                    android:textColor="@color/grey" />
             </RelativeLayout>
         </RelativeLayout>
+
         <View
             android:layout_width="match_parent"
             android:layout_height="10dp"
-            android:background="@drawable/down_shadow"
-            android:layout_below="@id/buttons_view" />
+            android:layout_below="@id/buttons_view"
+            android:background="@drawable/down_shadow" />
     </RelativeLayout>
 </androidx.cardview.widget.CardView>
 

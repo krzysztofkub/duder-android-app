@@ -114,7 +114,7 @@ public class LoginActivity extends BaseActivity {
                         // App code
                         loginView.setVisibility(View.VISIBLE);
                         hideBusyIndicator(busyIndicator);
-                        Log.e(TAG, "Error during fb login");
+                        Log.e(TAG, "Error during fb login", exception);
                     }
                 });
     }
@@ -128,13 +128,11 @@ public class LoginActivity extends BaseActivity {
         boolean hasErrors = false;
         final String login = txtLogin.getText().toString();
         if (login.trim().isEmpty()) {
-            Log.e(TAG, "onLoginClicked - login empty");
             txtLogin.setError("Dude, gimme SOMETHING...");
             hasErrors = true;
         }
         final String password = txtPassword.getText().toString();
         if (password.trim().isEmpty()) {
-            Log.e(TAG, "onLoginClicked - password empty");
             txtPassword.setError("No password? Seriously, Dude?");
             hasErrors = true;
         }

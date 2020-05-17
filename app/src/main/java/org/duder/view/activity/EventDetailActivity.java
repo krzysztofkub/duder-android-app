@@ -44,8 +44,10 @@ public class EventDetailActivity extends BaseActivity {
         image_view = findViewById(R.id.image_view);
         title_text = findViewById(R.id.title_text);
         description_text = findViewById(R.id.description_text);
-        loadImage();
         passLayoutValues();
+        if (!imageUrl.isEmpty()) {
+            loadImage();
+        }
     }
 
     private void loadImage() {

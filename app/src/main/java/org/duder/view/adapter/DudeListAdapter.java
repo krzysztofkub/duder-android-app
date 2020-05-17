@@ -15,15 +15,23 @@ import com.squareup.picasso.Picasso;
 
 import org.duder.R;
 import org.duder.dto.user.Dude;
+import org.duder.model.EventItem;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.function.Consumer;
+
+import io.reactivex.Observable;
+import io.reactivex.subjects.PublishSubject;
 
 public class DudeListAdapter extends RecyclerView.Adapter<DudeListAdapter.ViewHolder> {
     private final List<Dude> dudes;
     private final Context mContext;
+
+    private PublishSubject<Dude> onClickSubject = PublishSubject.create();
+    private Observable<Dude> clickStream = onClickSubject.hide();
 
     public DudeListAdapter(Context mContext, List<Dude> dudes) {
         this.mContext = mContext;
@@ -39,7 +47,7 @@ public class DudeListAdapter extends RecyclerView.Adapter<DudeListAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull DudeListAdapter.ViewHolder viewHolder, int i) {
-        viewHolder.bind(dudes.get(i));
+        viewHolder.bind(dudes.get(i), d -> onClickSubject.onNext(d));
     }
 
     @Override
@@ -71,7 +79,7 @@ public class DudeListAdapter extends RecyclerView.Adapter<DudeListAdapter.ViewHo
             invite_friend_button = itemView.findViewById(R.id.invite_friend_btn);
         }
 
-        private void bind(Dude dude) {
+        private void bind(Dude dude, Consumer<Dude> consumer) {
             Picasso
                     .get()
                     .cancelRequest(view_profile);
@@ -93,6 +101,8 @@ public class DudeListAdapter extends RecyclerView.Adapter<DudeListAdapter.ViewHo
                 invite_friend_button.setBackground(mContext.getResources().getDrawable(R.drawable.add_dude_in_process));
                 invite_friend_button.setClickable(false);
             }
+
+            invite_friend_button.setOnClickListener(v -> consumer.accept(dude));
         }
     }
 }

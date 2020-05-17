@@ -61,7 +61,7 @@ public class CreateEventViewModel extends AbstractViewModel {
 
     public void createEvent(Event event) {
         state.postValue(FragmentState.loading());
-        MultipartBody.Part bodyImage = createMultipartBodyWithImage(event.getImagePath());
+        MultipartBody.Part bodyImage = createMultipartBodyWithImage(event.getImage());
 
         CreateEvent createEvent = mapEventToCreateEventDto(event);
         RequestBody bodyCreateEvent =
@@ -74,11 +74,10 @@ public class CreateEventViewModel extends AbstractViewModel {
         sendCreateEventRequest(bodyCreateEvent, bodyImage, token);
     }
 
-    private MultipartBody.Part createMultipartBodyWithImage(String imagePath) {
-        if (imagePath == null) {
+    private MultipartBody.Part createMultipartBodyWithImage(File image) {
+        if (image == null) {
             return null;
         }
-        File image = new File(imagePath);
         RequestBody requestImage =
                 RequestBody.create(
                         MediaType.parse("image/*"),

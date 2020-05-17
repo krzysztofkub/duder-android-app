@@ -5,7 +5,7 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.net.Uri;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -32,6 +32,7 @@ import org.duder.util.FileUtils;
 import org.duder.viewModel.CreateEventViewModel;
 import org.duder.viewModel.state.FragmentState;
 
+import java.io.IOException;
 import java.util.Calendar;
 
 import static org.duder.util.BusyIndicator.hideBusyIndicator;
@@ -53,7 +54,7 @@ public class CreateEventActivity extends BaseActivity {
     private ImageView addImageView;
     private RelativeLayout createEventForm;
     private PopupWindow busyIndicator;
-    private Uri imageUri;
+    private Bitmap eventImage;
     private CreateEventViewModel createEventViewModel;
 
     @Override
@@ -200,7 +201,7 @@ public class CreateEventActivity extends BaseActivity {
         Event event = new Event(
                 name, desc, date, time,
                 isPrivateChbox.isChecked(),
-                FileUtils.getRealPath(this, imageUri)
+                FileUtils.mapBitmapToFile(this, eventImage)
         );
         createEventViewModel.createEvent(event);
     }
@@ -238,8 +239,13 @@ public class CreateEventActivity extends BaseActivity {
         if (resultCode == RESULT_OK
                 && requestCode == IMAGE_PICK_CODE
                 && data != null) {
-            imageUri = data.getData();
-            addImageView.setImageURI(imageUri);
+            try {
+                eventImage = FileUtils.resizeImage(this, data.getData());
+                addImageView.setImageBitmap(eventImage);
+            } catch (IOException e) {
+                Log.e(TAG, "Error while adding image!", e);
+                Toast.makeText(this, "Error while adding image!", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 }

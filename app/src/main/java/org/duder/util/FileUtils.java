@@ -3,12 +3,22 @@ package org.duder.util;
 import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+
 public class FileUtils {
+
+    private static final int IMAGE_SIZE = 800;
 
     private FileUtils() {
     }
@@ -122,5 +132,60 @@ public class FileUtils {
 
     private static boolean isGooglePhotosUri(Uri uri) {
         return "com.google.android.apps.photos.content".equals(uri.getAuthority());
+    }
+
+    public static Bitmap resizeImage(Context context, Uri uri) throws IOException {
+        InputStream input = context.getContentResolver().openInputStream(uri);
+
+        BitmapFactory.Options onlyBoundsOptions = new BitmapFactory.Options();
+        onlyBoundsOptions.inJustDecodeBounds = true;
+        BitmapFactory.decodeStream(input, null, onlyBoundsOptions);
+        input.close();
+
+        if ((onlyBoundsOptions.outWidth == -1) || (onlyBoundsOptions.outHeight == -1)) {
+            return null;
+        }
+
+        int originalSize = Math.max(onlyBoundsOptions.outHeight, onlyBoundsOptions.outWidth);
+
+        double ratio = (originalSize > IMAGE_SIZE) ? (originalSize / IMAGE_SIZE) : 1.0;
+
+        BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
+        bitmapOptions.inSampleSize = getPowerOfTwoForSampleRatio(ratio);
+        bitmapOptions.inPreferredConfig = Bitmap.Config.ARGB_8888;//
+        input = context.getContentResolver().openInputStream(uri);
+        Bitmap bitmap = BitmapFactory.decodeStream(input, null, bitmapOptions);
+        input.close();
+        return bitmap;
+    }
+
+    private static int getPowerOfTwoForSampleRatio(double ratio) {
+        int k = Integer.highestOneBit((int) Math.floor(ratio));
+        if (k == 0) return 1;
+        else return k;
+    }
+
+    public static File mapBitmapToFile(Context context, Bitmap bitmap) {
+        try {
+            //create a file to write bitmap data
+            File f = new File(context.getCacheDir(), "name");
+            f.createNewFile();
+
+            //Convert bitmap to byte array
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 70, bos);
+            byte[] bitmapdata = bos.toByteArray();
+
+            //write the bytes in file
+            FileOutputStream fos = null;
+            fos = new FileOutputStream(f);
+            fos.write(bitmapdata);
+            fos.flush();
+            fos.close();
+            return f;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }
