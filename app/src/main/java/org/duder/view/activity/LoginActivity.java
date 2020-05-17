@@ -6,10 +6,10 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.PopupWindow;
 import android.widget.Toast;
+
+import androidx.databinding.DataBindingUtil;
 
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -19,6 +19,7 @@ import com.facebook.login.LoginResult;
 import com.google.gson.Gson;
 
 import org.duder.R;
+import org.duder.databinding.ActivityLoginBinding;
 import org.duder.dto.user.LoginResponse;
 import org.duder.model.LoggedAccount;
 import org.duder.service.ApiClient;
@@ -47,16 +48,10 @@ public class LoginActivity extends BaseActivity {
     private final static String TAG = "LoginActivity";
     private static final int LOGIN_SUCCEEDED = 1;
     private static final int BAD_CREDENTIALS = 0;
-    private EditText txtLogin;
-    private EditText txtPassword;
-    private Button btnLogin;
-    private Button btnSignUp;
-    private Button btnForgotPassword;
+    private ActivityLoginBinding binding;
     private PopupWindow busyIndicator;
-    private View loginView;
     private LoggedAccount account;
     private ExecutorService executor;
-    private Button fbLoginButton;
     private CallbackManager callbackManager;
     private Handler handler;
     private ApiClient apiClient = ApiClient.getApiClient();
@@ -64,31 +59,20 @@ public class LoginActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
-        this.initializeLayout();
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_login);
 
         String login = this.getIntent().getStringExtra("login");
         if (login != null) {
-            txtLogin.setText(login);
+            binding.loginTxt.setText(login);
         } else {
-            txtLogin.setText("dude");
-            txtPassword.setText("duderowsky");
+            binding.loginTxt.setText("dude");
+            binding.passwordTxt.setText("duderowski");
         }
 
-        btnLogin.setOnClickListener(this::onLoginClicked);
-        fbLoginButton.setOnClickListener(this::onFbLoginClicked);
-        btnSignUp.setOnClickListener(this::onSignUpClicked);
+        binding.loginBtn.setOnClickListener(this::onLoginClicked);
+        binding.facebookBtn.setOnClickListener(this::onFbLoginClicked);
+        binding.signUpBtn.setOnClickListener(this::onSignUpClicked);
         registerFacebookCallback();
-    }
-
-    private void initializeLayout() {
-        txtLogin = findViewById(R.id.login_text_login);
-        txtPassword = findViewById(R.id.login_text_password);
-        btnLogin = findViewById(R.id.login_button_login);
-        btnSignUp = findViewById(R.id.login_button_sign_up);
-        btnForgotPassword = findViewById(R.id.login_button_forgot_password);
-        fbLoginButton = findViewById(R.id.login_button_facebook);
-        loginView = findViewById(R.id.login_layout_main);
     }
 
     private void registerFacebookCallback() {
@@ -105,14 +89,14 @@ public class LoginActivity extends BaseActivity {
                     @Override
                     public void onCancel() {
                         // App code
-                        loginView.setVisibility(View.VISIBLE);
+                        binding.loginLayout.setVisibility(View.VISIBLE);
                         hideBusyIndicator(busyIndicator);
                     }
 
                     @Override
                     public void onError(FacebookException exception) {
                         // App code
-                        loginView.setVisibility(View.VISIBLE);
+                        binding.loginLayout.setVisibility(View.VISIBLE);
                         hideBusyIndicator(busyIndicator);
                         Log.e(TAG, "Error during fb login", exception);
                     }
@@ -126,14 +110,14 @@ public class LoginActivity extends BaseActivity {
 
     private void onLoginClicked(View view) {
         boolean hasErrors = false;
-        final String login = txtLogin.getText().toString();
+        final String login = binding.loginTxt.getText().toString();
         if (login.trim().isEmpty()) {
-            txtLogin.setError("Dude, gimme SOMETHING...");
+            binding.loginTxt.setError("Dude, gimme SOMETHING...");
             hasErrors = true;
         }
-        final String password = txtPassword.getText().toString();
+        final String password = binding.passwordTxt.getText().toString();
         if (password.trim().isEmpty()) {
-            txtPassword.setError("No password? Seriously, Dude?");
+            binding.passwordTxt.setError("No password? Seriously, Dude?");
             hasErrors = true;
         }
         if (hasErrors) {
@@ -147,7 +131,7 @@ public class LoginActivity extends BaseActivity {
 
     private void onFbLoginClicked(View view) {
         busyIndicator = showBusyIndicator(this, busyIndicator);
-        loginView.setVisibility(View.GONE);
+        binding.loginLayout.setVisibility(View.GONE);
         LoginManager.getInstance().logInWithReadPermissions(this, Collections.singletonList("email"));
     }
 
@@ -168,7 +152,7 @@ public class LoginActivity extends BaseActivity {
                         case 422:
                             hideBusyIndicator(busyIndicator);
                             Toast.makeText(this, "Bad credentials", Toast.LENGTH_SHORT).show();
-                            txtLogin.setError("Baaad login or password, try again DUuuuude");
+                            binding.loginTxt.setError("Baaad login or password, try again DUuuuude");
                             break;
                         default:
                             hideBusyIndicator(busyIndicator);

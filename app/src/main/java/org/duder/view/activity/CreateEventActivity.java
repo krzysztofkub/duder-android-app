@@ -9,24 +9,20 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.ImageView;
 import android.widget.PopupWindow;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.flexbox.FlexDirection;
 import com.google.android.flexbox.FlexboxLayoutManager;
 import com.google.android.flexbox.JustifyContent;
 
 import org.duder.R;
+import org.duder.databinding.ActivityCreateEventBinding;
 import org.duder.model.Event;
 import org.duder.util.FileUtils;
 import org.duder.viewModel.CreateEventViewModel;
@@ -44,15 +40,7 @@ public class CreateEventActivity extends BaseActivity {
     private static final String TAG = CreateEventActivity.class.getSimpleName();
     private static final int IMAGE_PICK_CODE = 1000;
     private static final int PERMISSION_CODE = 1001;
-    private TextView txtDate;
-    private TextView txtTime;
-    private TextView txtName;
-    private TextView txtDesc;
-    private RecyclerView hobbies;
-    private CheckBox isPrivateChbox;
-    private Button createEventBtn;
-    private ImageView addImageView;
-    private RelativeLayout createEventForm;
+    private ActivityCreateEventBinding binding;
     private PopupWindow busyIndicator;
     private Bitmap eventImage;
     private CreateEventViewModel createEventViewModel;
@@ -60,14 +48,14 @@ public class CreateEventActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_event);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_create_event);
         init();
         createEventViewModel.loadHobbies();
+        setTitle("Create Event");
     }
 
     private void init() {
         initViewModel();
-        initLayout();
         initSubscriptions();
         initListeners();
     }
@@ -76,34 +64,20 @@ public class CreateEventActivity extends BaseActivity {
         createEventViewModel = ViewModelProviders.of(this).get(CreateEventViewModel.class);
     }
 
-    private void initLayout() {
-        txtDate = findViewById(R.id.in_date);
-        txtTime = findViewById(R.id.in_time);
-        txtName = findViewById(R.id.event_name);
-        txtDesc = findViewById(R.id.event_description);
-        hobbies = findViewById(R.id.hobby_list);
-        isPrivateChbox = findViewById(R.id.private_checkbox);
-        createEventBtn = findViewById(R.id.create_event_button);
-        addImageView = findViewById(R.id.add_image_view);
-        createEventForm = findViewById(R.id.layout_create_event_form);
-        setTitle("Create Event");
-    }
-
     private void initSubscriptions() {
         FlexboxLayoutManager layoutManager = new FlexboxLayoutManager(this);
         layoutManager.setFlexDirection(FlexDirection.ROW);
         layoutManager.setJustifyContent(JustifyContent.CENTER);
-        hobbies.setLayoutManager(layoutManager);
-        hobbies.setAdapter(createEventViewModel.getHobbyAdapter());
-
+        binding.hobbies.setLayoutManager(layoutManager);
+        binding.hobbies.setAdapter(createEventViewModel.getHobbyAdapter());
         createEventViewModel.getState().observe(this, this::update);
     }
 
     private void initListeners() {
-        txtDate.setOnClickListener(v -> onDateClicked());
-        txtTime.setOnClickListener(v -> onTimeClicked());
-        createEventBtn.setOnClickListener(v -> onCreateEventClicked());
-        addImageView.setOnClickListener(v -> onAddImageClicked());
+        binding.dateTxt.setOnClickListener(v -> onDateClicked());
+        binding.timeTxt.setOnClickListener(v -> onTimeClicked());
+        binding.createEventBtn.setOnClickListener(v -> onCreateEventClicked());
+        binding.addImageView.setOnClickListener(v -> onAddImageClicked());
     }
 
     private void update(FragmentState state) {
@@ -149,7 +123,7 @@ public class CreateEventActivity extends BaseActivity {
         DatePickerDialog datePickerDialog = new DatePickerDialog(this,
                 (view, year, monthOfYear, dayOfMonth) -> {
                     String text = dayOfMonth + "-" + (monthOfYear + 1) + "-" + year;
-                    txtDate.setText(text);
+                    binding.dateTxt.setText(text);
                 }, mYear, mMonth, mDay);
         datePickerDialog.show();
     }
@@ -164,31 +138,31 @@ public class CreateEventActivity extends BaseActivity {
         TimePickerDialog timePickerDialog = new TimePickerDialog(this,
                 (view, hourOfDay, minute) -> {
                     String text = hourOfDay + ":" + minute;
-                    txtTime.setText(text);
+                    binding.timeTxt.setText(text);
                 }, mHour, mMinute, true);
         timePickerDialog.show();
     }
 
     private void onCreateEventClicked() {
         boolean hasErrors = false;
-        String name = txtName.getText().toString();
+        String name = binding.eventName.getText().toString();
         if (name.trim().isEmpty()) {
-            txtName.setError("Give it a name Bro?");
+            binding.eventName.setError("Give it a name Bro?");
             hasErrors = true;
         }
-        String desc = txtDesc.getText().toString();
+        String desc = binding.eventDescription.getText().toString();
         if (desc.trim().isEmpty()) {
-            txtDesc.setError("WHAT YOU WANT TO DO?");
+            binding.eventDescription.setError("WHAT YOU WANT TO DO?");
             hasErrors = true;
         }
-        String date = txtDate.getText().toString();
+        String date = binding.dateTxt.getText().toString();
         if (date.trim().isEmpty()) {
-            txtDate.setError("dude... when?");
+            binding.dateTxt.setError("dude... when?");
             hasErrors = true;
         }
-        String time = txtTime.getText().toString();
+        String time = binding.timeTxt.getText().toString();
         if (time.trim().isEmpty()) {
-            txtTime.setError("what time?");
+            binding.timeTxt.setError("what time?");
             hasErrors = true;
         }
         if (createEventViewModel.getHobbyAdapter().getSelectedHobbies().isEmpty()) {
@@ -200,7 +174,7 @@ public class CreateEventActivity extends BaseActivity {
         }
         Event event = new Event(
                 name, desc, date, time,
-                isPrivateChbox.isChecked(),
+                binding.privateCheckbox.isChecked(),
                 FileUtils.mapBitmapToFile(this, eventImage)
         );
         createEventViewModel.createEvent(event);
@@ -241,7 +215,7 @@ public class CreateEventActivity extends BaseActivity {
                 && data != null) {
             try {
                 eventImage = FileUtils.resizeImage(this, data.getData());
-                addImageView.setImageBitmap(eventImage);
+                binding.addImageView.setImageBitmap(eventImage);
             } catch (IOException e) {
                 Log.e(TAG, "Error while adding image!", e);
                 Toast.makeText(this, "Error while adding image!", Toast.LENGTH_SHORT).show();

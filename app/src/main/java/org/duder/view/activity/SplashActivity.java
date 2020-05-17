@@ -47,10 +47,10 @@ public class SplashActivity extends BaseActivity {
         viewModel.getTokenValidation().observe(this, this::handleTokenValidityResult);
     }
 
-    private void handleTokenValidityResult(Boolean isValid) {
+    private void handleTokenValidityResult(boolean isValid) {
         if (isValid) {
             CompletableFuture<ConnectionResponse> websocketConn = doLoginToWebsocket();
-            websocketConn.thenAccept((r) -> gotoActivity(MainActivity.class));
+            websocketConn.thenAccept(r -> gotoActivity(MainActivity.class));
 
         } else {
             UserSession.logOut(sharedPreferences, LoginManager.getInstance());

@@ -4,6 +4,7 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
 android {
+    dataBinding.enabled = true
     compileSdkVersion 28
     defaultConfig {
         applicationId "org.duder"

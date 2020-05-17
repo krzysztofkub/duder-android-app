@@ -1,122 +1,127 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/create.event.layout"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:gravity="center_horizontal"
-    android:orientation="vertical"
-    tools:context="org.duder.view.activity.CreateEventActivity">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <ScrollView
+    <RelativeLayout
+        android:id="@+id/create.event.layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        tools:context="org.duder.view.activity.CreateEventActivity">
 
-        <RelativeLayout
-            android:id="@+id/layout.create_event_form"
+        <ScrollView
+            android:id="@+id/scroll_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <ImageView
-                android:id="@+id/add_image_view"
-                android:layout_width="match_parent"
-                android:layout_height="350dp"
-                android:layout_alignParentTop="true"
-                android:background="@color/grey"
-                android:scaleType="centerCrop"
-                android:src="@drawable/add_image"
-                android:text="Add image" />
-
-
             <RelativeLayout
+                android:id="@+id/create_event_form"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/add_image_view"
-                android:padding="@dimen/eventCreateFormPadding">
+                android:layout_height="wrap_content">
 
-                <EditText
-                    android:id="@+id/event_name"
+                <ImageView
+                    android:id="@+id/add_image_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="350dp"
+                    android:layout_alignParentTop="true"
+                    android:background="@color/grey"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/add_image"
+                    android:text="Add image" />
+
+
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/eventCreateFormMargin"
-                    android:hint="@string/eventNameHint"
-                    android:textSize="@dimen/body_text_size_large" />
-
-                <EditText
-                    android:id="@+id/event_description"
-                    style="@android:style/Widget.EditText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/event_name"
-                    android:layout_margin="@dimen/eventCreateFormMargin"
-                    android:hint="@string/eventCreateDescription" />
-
-                <LinearLayout
-                    android:id="@+id/pick_date_time"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/event_description"
-                    android:layout_margin="@dimen/eventCreateFormMargin">
+                    android:layout_below="@id/add_image_view"
+                    android:padding="@dimen/eventCreateFormPadding">
 
                     <EditText
-                        android:id="@+id/in_date"
-                        android:layout_width="wrap_content"
+                        android:id="@+id/event_name"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:focusable="false"
-                        android:hint="@string/dateHint"
-                        android:inputType="none"
-                        android:textAlignment="center"
-                        app:layout_constraintBottom_toTopOf="@+id/hobby_list"
-                        app:layout_constraintLeft_toLeftOf="parent" />
+                        android:layout_margin="@dimen/eventCreateFormMargin"
+                        android:hint="@string/eventNameHint"
+                        android:textSize="@dimen/body_text_size_large" />
 
                     <EditText
-                        android:id="@+id/in_time"
+                        android:id="@+id/event_description"
+                        style="@android:style/Widget.EditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/event_name"
+                        android:layout_margin="@dimen/eventCreateFormMargin"
+                        android:hint="@string/eventCreateDescription" />
+
+                    <LinearLayout
+                        android:id="@+id/pick_date_time"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/event_description"
+                        android:layout_margin="@dimen/eventCreateFormMargin">
+
+                        <EditText
+                            android:id="@+id/date_txt"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:focusable="false"
+                            android:hint="@string/dateHint"
+                            android:inputType="none"
+                            android:textAlignment="center"
+                            app:layout_constraintBottom_toTopOf="@+id/hobbies"
+                            app:layout_constraintLeft_toLeftOf="parent" />
+
+                        <EditText
+                            android:id="@+id/time_txt"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:focusable="false"
+                            android:hint="@string/timeHint"
+                            android:inputType="none"
+                            android:textAlignment="center"
+                            app:layout_constraintLeft_toRightOf="@+id/date_txt" />
+
+                    </LinearLayout>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/hobbies"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:focusable="false"
-                        android:hint="@string/timeHint"
-                        android:inputType="none"
-                        android:textAlignment="center"
-                        app:layout_constraintLeft_toRightOf="@+id/in_date" />
+                        android:layout_below="@+id/pick_date_time"
+                        android:layout_centerHorizontal="true"
+                        android:layout_margin="@dimen/eventCreateFormMargin"
+                        android:layout_marginLeft="@dimen/element_spacing_normal"
+                        android:layout_marginRight="@dimen/element_spacing_normal"
+                        android:clipToPadding="false"
+                        android:nestedScrollingEnabled="false" />
 
-                </LinearLayout>
+                    <CheckBox
+                        android:id="@+id/private_checkbox"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/hobbies"
+                        android:layout_marginBottom="50dp"
+                        android:text="Visible only for my dudez" />
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/hobby_list"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/pick_date_time"
-                    android:layout_centerHorizontal="true"
-                    android:layout_margin="@dimen/eventCreateFormMargin"
-                    android:layout_marginLeft="@dimen/element_spacing_normal"
-                    android:layout_marginRight="@dimen/element_spacing_normal"
-                    android:clipToPadding="false"
-                    android:nestedScrollingEnabled="false" />
-
-                <CheckBox
-                    android:id="@+id/private_checkbox"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/hobby_list"
-                    android:layout_marginBottom="50dp"
-                    android:text="Visible only for my dudez" />
+                </RelativeLayout>
 
             </RelativeLayout>
 
-        </RelativeLayout>
+        </ScrollView>
 
-    </ScrollView>
+        <Button
+            android:id="@+id/create_event_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@color/primary"
+            android:text="@string/eventCreateText"
+            android:textColor="@color/white" />
 
-    <Button
-        android:id="@+id/create_event_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="@color/primary"
-        android:text="@string/eventCreateText"
-        android:textColor="@color/white" />
-
-</RelativeLayout>
+    </RelativeLayout>
+</layout>

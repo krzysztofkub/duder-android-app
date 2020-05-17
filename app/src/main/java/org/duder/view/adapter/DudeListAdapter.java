@@ -15,7 +15,6 @@ import com.squareup.picasso.Picasso;
 
 import org.duder.R;
 import org.duder.dto.user.Dude;
-import org.duder.model.EventItem;
 
 import java.util.ArrayList;
 import java.util.Collections;

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true"
+        tools:context=".view.activity.EventDetailActivity">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:id="@+id/parent_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+                <ImageView
+                    android:id="@+id/image_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="350dp"
+                    android:layout_alignParentTop="true"
+                    android:scaleType="centerCrop"
+                    android:transitionName="@string/transition_name" />
+
+                <TextView
+                    android:id="@+id/title_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/image_view"
+                    android:padding="@dimen/element_spacing_normal"
+                    android:textColor="@color/secondary_text"
+                    android:textSize="@dimen/header_text_size_normal"
+                    tools:text="Really great title Really great" />
+
+                <TextView
+                    android:id="@+id/description_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/title_text"
+                    android:padding="@dimen/element_spacing_normal"
+                    android:textColor="@color/secondary_text"
+                    android:textSize="@dimen/header_text_size_normal"
+                    tools:text="Really great title Really great" />
+
+            </RelativeLayout>
+        </ScrollView>
+    </FrameLayout>
+</layout>

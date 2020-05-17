@@ -1,115 +1,120 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/login.layout.main"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="12dp"
-    tools:context="org.duder.view.activity.LoginActivity">
-
-    <Button
-        android:id="@+id/login.button.sign_up"
-        style="?android:attr/borderlessButtonStyle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/loginFormMargin"
-        android:background="@color/background"
-        android:paddingHorizontal="50dp"
-        android:text="@string/sign_up"
-        android:textColor="@color/secondary_text"
-        app:layout_constraintBottom_toBottomOf="@+id/login.layout.main"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
-
-    <ImageView
-        android:id="@+id/login.image.logo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:src="@drawable/duder_logo"
-        android:tint="@color/primary"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/login.layout.main" />
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/login.layout.login_form"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/login_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/loginFormPadding"
-        app:layout_constraintLeft_toLeftOf="@+id/login.layout.main"
-        app:layout_constraintRight_toRightOf="@+id/login.layout.main"
-        app:layout_constraintTop_toBottomOf="@+id/login.image.logo">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="12dp"
+        tools:context="org.duder.view.activity.LoginActivity">
 
-        <EditText
-            android:id="@+id/login.text.login"
-            style="@android:style/Widget.EditText"
-            android:layout_width="match_parent"
+        <ImageView
+            android:id="@+id/image_logo"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/loginFormMargin"
-            android:hint="@string/loginHint"
-            android:inputType="textPersonName"
-            app:layout_constraintBottom_toTopOf="@+id/login.text.password"
+            android:layout_margin="10dp"
+            android:src="@drawable/duder_logo"
+            android:tint="@color/primary"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="@+id/login.layout.main" />
 
-        <EditText
-            android:id="@+id/login.text.password"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/login_form"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/loginFormMargin"
-            android:hint="@string/passwordHint"
-            android:inputType="textPassword"
-            app:layout_constraintBottom_toTopOf="@+id/login.button.login"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/login.text.login" />
+            android:padding="@dimen/loginFormPadding"
+            app:layout_constraintLeft_toLeftOf="@+id/login.layout.main"
+            app:layout_constraintRight_toRightOf="@+id/login.layout.main"
+            app:layout_constraintTop_toBottomOf="@+id/image_logo">
+
+            <EditText
+                android:id="@+id/login_txt"
+                style="@android:style/Widget.EditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/loginFormMargin"
+                android:hint="@string/loginHint"
+                android:inputType="textPersonName"
+                app:layout_constraintBottom_toTopOf="@+id/password_txt"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/password_txt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/loginFormMargin"
+                android:hint="@string/passwordHint"
+                android:inputType="textPassword"
+                app:layout_constraintBottom_toTopOf="@+id/login_btn"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/login_txt" />
+
+            <Button
+                android:id="@+id/login_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/loginFormMargin"
+                android:background="@color/success"
+                android:paddingHorizontal="50dp"
+                android:text="@string/loginText"
+                android:textColor="@color/cardview_light_background"
+                app:layout_constraintBottom_toTopOf="@id/forgot_password_btn"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/password_txt" />
+
+            <Button
+                android:id="@+id/forgot_password_btn"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/loginFormMargin"
+                android:background="@color/background"
+                android:paddingHorizontal="50dp"
+                android:text="@string/forgot_password"
+                android:textColor="@color/secondary_text"
+                app:layout_constraintBottom_toTopOf="@+id/facebook_btn"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/password_txt" />
+
+            <Button
+                android:id="@+id/facebook_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/loginFormMargin"
+                android:background="@color/primary_dark"
+                android:paddingHorizontal="50dp"
+                android:text="@string/fbLoginText"
+                android:textColor="@color/cardview_light_background"
+                app:layout_constraintBottom_toBottomOf="@+id/login_form"
+                app:layout_constraintBottom_toTopOf="@id/forgot_password_btn"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/forgot_password_btn" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <Button
-            android:id="@+id/login.button.login"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/loginFormMargin"
-            android:background="@color/success"
-            android:paddingHorizontal="50dp"
-            android:text="@string/loginText"
-            android:textColor="@color/cardview_light_background"
-            app:layout_constraintBottom_toTopOf="@id/login.button.forgot_password"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/login.text.password" />
-
-        <Button
-            android:id="@+id/login.button.forgot_password"
+            android:id="@+id/sign_up_btn"
             style="?android:attr/borderlessButtonStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/loginFormMargin"
             android:background="@color/background"
             android:paddingHorizontal="50dp"
-            android:text="@string/forgot_password"
+            android:text="@string/sign_up"
             android:textColor="@color/secondary_text"
-            app:layout_constraintBottom_toTopOf="@+id/login.button.facebook"
+            app:layout_constraintBottom_toBottomOf="@+id/login.layout.main"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/login.text.password" />
-
-        <Button
-            android:id="@+id/login.button.facebook"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/loginFormMargin"
-            android:background="@color/primary_dark"
-            android:paddingHorizontal="50dp"
-            android:text="@string/fbLoginText"
-            android:textColor="@color/cardview_light_background"
-            app:layout_constraintBottom_toBottomOf="@+id/login.layout.login_form"
-            app:layout_constraintBottom_toTopOf="@id/login.button.forgot_password"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/login.button.forgot_password" />
+            app:layout_constraintRight_toRightOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

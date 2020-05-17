@@ -5,13 +5,14 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
-import android.widget.ImageView;
-import android.widget.TextView;
+
+import androidx.databinding.DataBindingUtil;
 
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import org.duder.R;
+import org.duder.databinding.ActivityEventDetailBinding;
 
 import static org.duder.view.fragment.event.EventFragment.EVENT_DESCRIPTION;
 import static org.duder.view.fragment.event.EventFragment.EVENT_IMAGE;
@@ -20,19 +21,20 @@ import static org.duder.view.fragment.event.EventFragment.EVENT_NAME;
 
 public class EventDetailActivity extends BaseActivity {
 
-    private String imageUrl = "";
-    private String title = "";
-    private String description = "";
-
-    private ImageView image_view;
-    private TextView title_text;
-    private TextView description_text;
+    ActivityEventDetailBinding binding;
+    private String imageUrl;
+    private String title;
+    private String description;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_image_detail);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_event_detail);
         Bundle extras = this.getIntent().getExtras();
+        if (extras == null) {
+            finish();
+            return;
+        }
         imageUrl = extras.getString(EVENT_IMAGE, "");
         title = extras.getString(EVENT_NAME, "");
         description = extras.getString(EVENT_DESCRIPTION, "");
@@ -41,10 +43,8 @@ public class EventDetailActivity extends BaseActivity {
     }
 
     private void init() {
-        image_view = findViewById(R.id.image_view);
-        title_text = findViewById(R.id.title_text);
-        description_text = findViewById(R.id.description_text);
-        passLayoutValues();
+        binding.titleText.setText(title);
+        binding.descriptionText.setText(description);
         if (!imageUrl.isEmpty()) {
             loadImage();
         }
@@ -54,10 +54,10 @@ public class EventDetailActivity extends BaseActivity {
         Picasso.get()
                 .load(imageUrl)
                 .placeholder(R.drawable.ic_image_24dp)
-                .into(image_view, new Callback() {
+                .into(binding.imageView, new Callback() {
                     @Override
                     public void onSuccess() {
-                        scheduleTransition(image_view);
+                        scheduleTransition(binding.imageView);
                     }
 
                     @Override
@@ -65,11 +65,6 @@ public class EventDetailActivity extends BaseActivity {
                         Log.e("HI", "HI", error);
                     }
                 });
-    }
-
-    private void passLayoutValues() {
-        title_text.setText(title);
-        description_text.setText(description);
     }
 
     private void scheduleTransition(View sharedElement) {
