@@ -34,6 +34,9 @@
     <string name="eventDescription">AFflkasjdflaksjdf sldkfj asldkfj asldkfja lskdfjaslkd fjasldkf jasdfka sdlfkjasdlkjasfs;lkd f</string>
     <string name="dateHint">Event start date</string>
     <string name="timeHint">Event start time</string>
+    <!-- Dudes -->
+    <string name="invitationSent">"Invitation is sent"</string>
+    <string name="dudeAdded">"Added new dude"</string>
 
     <!--    Facebook-->
     <string name="facebook_app_id">682883292526178</string>

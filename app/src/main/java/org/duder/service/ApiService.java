@@ -4,6 +4,7 @@ import org.duder.dto.chat.ChatMessage;
 import org.duder.dto.event.EventLoadingMode;
 import org.duder.dto.event.EventPreview;
 import org.duder.dto.user.Dude;
+import org.duder.dto.user.FriendshipStatus;
 import org.duder.dto.user.RegisterAccount;
 import org.duder.util.Const;
 
@@ -21,6 +22,7 @@ import retrofit2.http.Header;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 import retrofit2.http.Url;
 
@@ -62,4 +64,8 @@ public interface ApiService {
 
     @GET(Const.HOBBIES)
     Single<List<String>> findHobbies(@Header("Authorization") String sessionToken);
+
+    @POST(Const.INVITE_DUDE)
+    Single<FriendshipStatus> inviteDude(@Path(value = "dude_id") String duderId,
+                                        @Header("Authorization") String sessionToken);
 }

@@ -1,6 +1,7 @@
 package org.duder.viewModel;
 
 import android.app.Application;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
@@ -25,7 +26,10 @@ public class TokenValidator extends AbstractViewModel {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(isValid -> tokenValidation.postValue(isValid),
-                        error -> tokenValidation.postValue(false))
+                        error -> {
+                            tokenValidation.postValue(false);
+                            Log.e("TokenValidator", "error during token validation", error);
+                        })
         );
     }
 

@@ -5,15 +5,21 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModelProviders;
 
 import org.duder.R;
+import org.duder.model.DudeInvitation;
+import org.duder.model.DudeItem;
+import org.duder.view.adapter.DudeListAdapter;
 import org.duder.view.fragment.RecyclerFragment;
 import org.duder.viewModel.DudesViewModel;
 import org.duder.viewModel.state.FragmentState;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
 
 public class DudesFragment extends RecyclerFragment {
 
@@ -41,10 +47,22 @@ public class DudesFragment extends RecyclerFragment {
     }
 
     private void initSubscriptions() {
-        viewModel.getState().observe(getViewLifecycleOwner(), this::update);
+        viewModel.getState().observe(getViewLifecycleOwner(), this::updateState);
+        ((DudesViewModel) viewModel).getDudeInvitation().observe(getViewLifecycleOwner(), this::updateDude);
+        attachListenerToAddDudeBtn();
     }
 
-    private void update(FragmentState state) {
+    private void attachListenerToAddDudeBtn() {
+        addSub(
+                ((DudeListAdapter) viewModel.getListAdapter())
+                        .getClickStream()
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(this::accept,
+                                e -> Log.e(TAG, "Error", e))
+        );
+    }
+
+    private void updateState(FragmentState state) {
         switch (state.getStatus()) {
             case LOADING:
                 if (!swipeLayout.isRefreshing()) {
@@ -65,5 +83,24 @@ public class DudesFragment extends RecyclerFragment {
                 finishLoading();
                 break;
         }
+    }
+
+    private void updateDude(DudeInvitation dudeInvitation) {
+        Button button = dudeInvitation.getmInvFriendBtn();
+        switch (dudeInvitation.getFriendshipStatus()) {
+            case INVITATION_SENT:
+                button.setBackground(mContext.getResources().getDrawable(R.drawable.add_dude_in_process));
+                button.setClickable(false);
+                Toast.makeText(mContext, R.string.invitationSent, Toast.LENGTH_SHORT).show();
+                break;
+            case FRIENDS:
+                button.setVisibility(View.GONE);
+                Toast.makeText(mContext, R.string.dudeAdded, Toast.LENGTH_SHORT).show();
+                break;
+        }
+    }
+
+    private void accept(DudeItem dudeItem) {
+        ((DudesViewModel) viewModel).inviteDude(dudeItem);
     }
 }

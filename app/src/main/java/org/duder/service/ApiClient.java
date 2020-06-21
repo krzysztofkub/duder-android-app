@@ -4,6 +4,7 @@ import org.duder.dto.chat.ChatMessage;
 import org.duder.dto.event.EventLoadingMode;
 import org.duder.dto.event.EventPreview;
 import org.duder.dto.user.Dude;
+import org.duder.dto.user.FriendshipStatus;
 import org.duder.dto.user.RegisterAccount;
 import org.duder.util.Const;
 
@@ -78,5 +79,9 @@ public class ApiClient {
 
     public Single<List<String>> getHobbies(String sessionToken) {
         return apiService.findHobbies(sessionToken);
+    }
+
+    public Single<FriendshipStatus> inviteDude(String dudeId, String sessionToken) {
+        return apiService.inviteDude(dudeId, sessionToken);
     }
 }

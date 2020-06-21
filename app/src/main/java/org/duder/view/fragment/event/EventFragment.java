@@ -94,35 +94,37 @@ public class EventFragment extends RecyclerFragment {
             startActivityForResult(intent, CREATE_EVENT_REQUEST);
         });
 
-        attachClickListenerToImageAdapter();
-    }
 
-    private void attachClickListenerToImageAdapter() {
-        addSub(((EventListAdapter) viewModel.getListAdapter())
-                .getClickStream()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(e -> {
-                            Intent intent = new Intent(getActivity(), EventDetailActivity.class);
-                            intent.putExtra(EVENT_NAME, e.getEventPreview().getName());
-                            intent.putExtra(EVENT_DESCRIPTION, e.getEventPreview().getDescription());
-                            String imageUrl = e.getEventPreview().getImageUrl();
-                            if (imageUrl != null) {
-                                intent.putExtra(EVENT_IMAGE, imageUrl);
-                                ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(getActivity(),
-                                        e.getImageView(), ViewCompat.getTransitionName(e.getImageView()));
-                                startActivity(intent, options.toBundle());
-                            } else {
-                                startActivity(intent);
-                            }
-
-
-                        },
-                        e -> Log.e(TAG, "Error", e))
-        );
     }
 
     private void initSubscriptions() {
         viewModel.getState().observe(getViewLifecycleOwner(), this::update);
+        attachClickListenerToImageAdapter();
+    }
+
+    private void attachClickListenerToImageAdapter() {
+        addSub(
+                ((EventListAdapter) viewModel.getListAdapter())
+                        .getClickStream()
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(e -> {
+                                    Intent intent = new Intent(getActivity(), EventDetailActivity.class);
+                                    intent.putExtra(EVENT_NAME, e.getEventPreview().getName());
+                                    intent.putExtra(EVENT_DESCRIPTION, e.getEventPreview().getDescription());
+                                    String imageUrl = e.getEventPreview().getImageUrl();
+                                    if (imageUrl != null) {
+                                        intent.putExtra(EVENT_IMAGE, imageUrl);
+                                        ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(getActivity(),
+                                                e.getImageView(), ViewCompat.getTransitionName(e.getImageView()));
+                                        startActivity(intent, options.toBundle());
+                                    } else {
+                                        startActivity(intent);
+                                    }
+
+
+                                },
+                                e -> Log.e(TAG, "Error", e))
+        );
     }
 
     private void update(FragmentState state) {

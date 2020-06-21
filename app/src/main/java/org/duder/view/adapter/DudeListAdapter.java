@@ -15,6 +15,7 @@ import com.squareup.picasso.Picasso;
 
 import org.duder.R;
 import org.duder.dto.user.Dude;
+import org.duder.model.DudeItem;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -29,8 +30,8 @@ public class DudeListAdapter extends RecyclerView.Adapter<DudeListAdapter.ViewHo
     private final List<Dude> dudes;
     private final Context mContext;
 
-    private PublishSubject<Dude> onClickSubject = PublishSubject.create();
-    private Observable<Dude> clickStream = onClickSubject.hide();
+    private PublishSubject<DudeItem> onClickSubject = PublishSubject.create();
+    private Observable<DudeItem> clickStream = onClickSubject.hide();
 
     public DudeListAdapter(Context mContext, List<Dude> dudes) {
         this.mContext = mContext;
@@ -66,6 +67,10 @@ public class DudeListAdapter extends RecyclerView.Adapter<DudeListAdapter.ViewHo
         notifyDataSetChanged();
     }
 
+    public Observable<DudeItem> getClickStream() {
+        return clickStream;
+    }
+
     class ViewHolder extends RecyclerView.ViewHolder {
         private ImageView view_profile;
         private TextView nickname_text;
@@ -78,30 +83,36 @@ public class DudeListAdapter extends RecyclerView.Adapter<DudeListAdapter.ViewHo
             invite_friend_button = itemView.findViewById(R.id.invite_friend_btn);
         }
 
-        private void bind(Dude dude, Consumer<Dude> consumer) {
-            Picasso
-                    .get()
+        private void bind(Dude dude, Consumer<DudeItem> consumer) {
+            Picasso.get()
                     .cancelRequest(view_profile);
+
             view_profile.setImageResource(R.drawable.profile);
+
             if (dude.getImageUrl() != null) {
-                Picasso
-                        .get()
+                Picasso.get()
                         .load(dude.getImageUrl())
                         .noFade()
                         .into(view_profile);
             }
+
             nickname_text.setText(dude.getNickname());
 
             invite_friend_button.setBackground(mContext.getResources().getDrawable(R.drawable.add_dude));
             invite_friend_button.setVisibility(View.VISIBLE);
-            if (dude.getIsFriend()) {
-                invite_friend_button.setVisibility(View.GONE);
-            } else if (dude.getIsInvitationSent()) {
-                invite_friend_button.setBackground(mContext.getResources().getDrawable(R.drawable.add_dude_in_process));
-                invite_friend_button.setClickable(false);
+            switch (dude.getFriendshipStatus()) {
+                case FRIENDS:
+                    invite_friend_button.setVisibility(View.GONE);
+                    break;
+                case INVITATION_RECEIVED:
+                    invite_friend_button.setBackground(mContext.getResources().getDrawable(R.drawable.add_dude_in_process));
+                    break;
+                case INVITATION_SENT:
+                    invite_friend_button.setBackground(mContext.getResources().getDrawable(R.drawable.add_dude_in_process));
+                    invite_friend_button.setClickable(false);
+                    break;
             }
-
-            invite_friend_button.setOnClickListener(v -> consumer.accept(dude));
+            invite_friend_button.setOnClickListener(v -> consumer.accept(new DudeItem(dude, invite_friend_button)));
         }
     }
 }
