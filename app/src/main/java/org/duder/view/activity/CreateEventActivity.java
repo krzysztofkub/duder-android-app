@@ -28,6 +28,7 @@ import org.duder.util.FileUtils;
 import org.duder.viewModel.CreateEventViewModel;
 import org.duder.viewModel.state.FragmentState;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Calendar;
 
@@ -172,10 +173,16 @@ public class CreateEventActivity extends BaseActivity {
         if (hasErrors) {
             return;
         }
+
+        File file = null;
+        if (eventImage != null) {
+            file = FileUtils.mapBitmapToFile(this, eventImage);
+        }
+
         Event event = new Event(
                 name, desc, date, time,
                 binding.privateCheckbox.isChecked(),
-                FileUtils.mapBitmapToFile(this, eventImage)
+                file
         );
         createEventViewModel.createEvent(event);
     }
