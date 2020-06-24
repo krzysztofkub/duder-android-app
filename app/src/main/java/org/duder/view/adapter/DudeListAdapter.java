@@ -11,6 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.button.MaterialButton;
 import com.squareup.picasso.Picasso;
 
 import org.duder.R;
@@ -25,6 +26,8 @@ import java.util.function.Consumer;
 
 import io.reactivex.Observable;
 import io.reactivex.subjects.PublishSubject;
+
+import static org.duder.util.InviteButtonUtil.setInviteButtonProperties;
 
 public class DudeListAdapter extends RecyclerView.Adapter<DudeListAdapter.ViewHolder> {
     private final List<Dude> dudes;
@@ -97,21 +100,7 @@ public class DudeListAdapter extends RecyclerView.Adapter<DudeListAdapter.ViewHo
             }
 
             nickname_text.setText(dude.getNickname());
-
-            invite_friend_button.setBackground(mContext.getResources().getDrawable(R.drawable.add_dude));
-            invite_friend_button.setVisibility(View.VISIBLE);
-            switch (dude.getFriendshipStatus()) {
-                case FRIENDS:
-                    invite_friend_button.setVisibility(View.GONE);
-                    break;
-                case INVITATION_RECEIVED:
-                    invite_friend_button.setBackground(mContext.getResources().getDrawable(R.drawable.add_dude_in_process));
-                    break;
-                case INVITATION_SENT:
-                    invite_friend_button.setBackground(mContext.getResources().getDrawable(R.drawable.add_dude_in_process));
-                    invite_friend_button.setClickable(false);
-                    break;
-            }
+            setInviteButtonProperties(mContext, dude.getFriendshipStatus(), (MaterialButton) invite_friend_button);
             invite_friend_button.setOnClickListener(v -> consumer.accept(new DudeItem(dude, invite_friend_button)));
         }
     }

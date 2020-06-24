@@ -33,14 +33,22 @@
             android:textSize="@dimen/body_text_size_title"
             tools:text="Jan Kowalski" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
+            style="@style/Widget.AppCompat.Button.Borderless"
             android:id="@+id/invite_friend_btn"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
+            app:backgroundTint="@android:color/transparent"
+            app:strokeColor="@color/secondary"
+            app:strokeWidth="2dp"
+            app:cornerRadius="8dp"
+            app:rippleColor="#33AAAAAA"
             android:layout_centerVertical="true"
-            android:background="@drawable/add_dude"
-            android:stateListAnimator="@null" />
+            android:stateListAnimator="@null"
+            android:textColor="@color/secondary"
+            android:textSize="12sp"
+            android:text="INVITE"/>
     </RelativeLayout>
 </androidx.cardview.widget.CardView>
 

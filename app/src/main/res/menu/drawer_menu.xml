@@ -5,14 +5,12 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_profile"
-            android:icon="@drawable/add_dude"
             android:title="Profile" />
     </group>
     <item android:title="Actions">
         <menu>
             <item
                 android:id="@+id/nav_logout"
-                android:icon="@drawable/add_dude"
                 android:title="Logout" />
         </menu>
     </item>

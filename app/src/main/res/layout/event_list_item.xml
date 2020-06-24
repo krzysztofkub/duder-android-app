@@ -126,7 +126,7 @@
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:layout_below="@+id/above_image_view"
-            android:background="@color/grey"
+            android:background="@color/gray"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_image_24dp"
             android:transitionName="@string/transition_name" />
@@ -210,7 +210,7 @@
                     android:minHeight="0dp"
                     android:text="Participate"
                     android:textAllCaps="false"
-                    android:textColor="@color/grey" />
+                    android:textColor="@color/gray" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -227,7 +227,7 @@
                     android:minHeight="0dp"
                     android:text="Observe"
                     android:textAllCaps="false"
-                    android:textColor="@color/grey" />
+                    android:textColor="@color/gray" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -244,7 +244,7 @@
                     android:minHeight="0dp"
                     android:text="Share"
                     android:textAllCaps="false"
-                    android:textColor="@color/grey" />
+                    android:textColor="@color/gray" />
             </RelativeLayout>
         </RelativeLayout>
 

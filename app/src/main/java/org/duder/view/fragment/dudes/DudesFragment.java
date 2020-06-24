@@ -11,9 +11,12 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.google.android.material.button.MaterialButton;
+
 import org.duder.R;
 import org.duder.model.DudeInvitation;
 import org.duder.model.DudeItem;
+import org.duder.util.InviteButtonUtil;
 import org.duder.view.adapter.DudeListAdapter;
 import org.duder.view.fragment.RecyclerFragment;
 import org.duder.viewModel.DudesViewModel;
@@ -86,15 +89,13 @@ public class DudesFragment extends RecyclerFragment {
     }
 
     private void updateDude(DudeInvitation dudeInvitation) {
-        Button button = dudeInvitation.getmInvFriendBtn();
+        MaterialButton button = (MaterialButton) dudeInvitation.getmInvFriendBtn();
+        InviteButtonUtil.setInviteButtonProperties(mContext, dudeInvitation.getFriendshipStatus(), button);
         switch (dudeInvitation.getFriendshipStatus()) {
             case INVITATION_SENT:
-                button.setBackground(mContext.getResources().getDrawable(R.drawable.add_dude_in_process));
-                button.setClickable(false);
                 Toast.makeText(mContext, R.string.invitationSent, Toast.LENGTH_SHORT).show();
                 break;
             case FRIENDS:
-                button.setVisibility(View.GONE);
                 Toast.makeText(mContext, R.string.dudeAdded, Toast.LENGTH_SHORT).show();
                 break;
         }
