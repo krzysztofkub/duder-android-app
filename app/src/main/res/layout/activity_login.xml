@@ -20,15 +20,13 @@
             android:tint="@color/primary"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/login.layout.main" />
+            app:layout_constraintBottom_toTopOf="@+id/login_form" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/login_form"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="@dimen/loginFormPadding"
-            app:layout_constraintLeft_toLeftOf="@+id/login.layout.main"
-            app:layout_constraintRight_toRightOf="@+id/login.layout.main"
             app:layout_constraintTop_toBottomOf="@+id/image_logo">
 
             <EditText
@@ -99,8 +97,6 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/forgot_password_btn" />
-
-
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <Button
@@ -113,7 +109,7 @@
             android:paddingHorizontal="50dp"
             android:text="@string/sign_up"
             android:textColor="@color/secondary_text"
-            app:layout_constraintBottom_toBottomOf="@+id/login.layout.main"
+            app:layout_constraintTop_toBottomOf="@+id/login_form"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
